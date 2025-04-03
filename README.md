@@ -1,79 +1,87 @@
 # Critter
 
-<h4 align="center">
-  <a href="https://docs.scaffoldeth.io">Documentation</a> |
-  <a href="https://scaffoldeth.io">Website</a>
-</h4>
+_(codename, will change)_
 
-🧪 An open-source, up-to-date toolkit for building decentralized applications (dapps) on the Ethereum blockchain. It's designed to make it easier for developers to create and deploy smart contracts and build user interfaces that interact with those contracts.
+## About
 
-⚙️ Built using NextJS, RainbowKit, Hardhat, Wagmi, Viem, and Typescript.
-
-- ✅ **Contract Hot Reload**: Your frontend auto-adapts to your smart contract as you edit it.
-- 🪝 **[Custom hooks](https://docs.scaffoldeth.io/hooks/)**: Collection of React hooks wrapper around [wagmi](https://wagmi.sh/) to simplify interactions with smart contracts with typescript autocompletion.
-- 🧱 [**Components**](https://docs.scaffoldeth.io/components/): Collection of common web3 components to quickly build your frontend.
-- 🔥 **Burner Wallet & Local Faucet**: Quickly test your application with a burner wallet and local faucet.
-- 🔐 **Integration with Wallet Providers**: Connect to different wallet providers and interact with the Ethereum network.
-
-![Debug Contracts tab](https://github.com/scaffold-eth/scaffold-eth-2/assets/55535804/b237af0c-5027-4849-a5c1-2e31495cccb1)
+This project is a proof of concept (POC) for a fully decentralized betting game on Ethereum that doesn't rely on external parties.
 
 ## Requirements
 
-Before you begin, you need to install the following tools:
+Before you begin, install the following tools:
 
-- [Node (>= v18.18)](https://nodejs.org/en/download/)
+- [Node.js (>= v18.18)](https://nodejs.org/en/download/)
 - Yarn ([v1](https://classic.yarnpkg.com/en/docs/install/) or [v2+](https://yarnpkg.com/getting-started/install))
 - [Git](https://git-scm.com/downloads)
 
 ## Quickstart
 
-To get started with Scaffold-ETH 2, follow the steps below:
+### 1. Install dependencies
 
-1. Install dependencies if it was skipped in CLI:
-
-```
-cd my-dapp-example
+```sh
 yarn install
 ```
 
-2. Run a local network in the first terminal:
+### 2. Run a local network
 
-```
+In the first terminal:
+
+```sh
 yarn chain
 ```
 
-This command starts a local Ethereum network using Hardhat. The network runs on your local machine and can be used for testing and development. You can customize the network configuration in `packages/hardhat/hardhat.config.ts`.
+This starts a local Ethereum network using Hardhat. The network runs on your machine and can be used for testing and development. You can customize the configuration in `packages/hardhat/hardhat.config.ts`.
 
-3. On a second terminal, deploy the test contract:
+### 3. Deploy the contract
 
-```
+In a second terminal:
+
+```sh
 yarn deploy
 ```
 
-This command deploys a test smart contract to the local network. The contract is located in `packages/hardhat/contracts` and can be modified to suit your needs. The `yarn deploy` command uses the deploy script located in `packages/hardhat/deploy` to deploy the contract to the network. You can also customize the deploy script.
+This deploys the smart contract to the local network. Contracts are located in `packages/hardhat/contracts`, and the deployment script is in `packages/hardhat/deploy`.
 
-4. On a third terminal, start your NextJS app:
+### 4. Start the Next.js app
 
-```
+In a third terminal:
+
+```sh
 yarn start
 ```
 
-Visit your app on: `http://localhost:3000`. You can interact with your smart contract using the `Debug Contracts` page. You can tweak the app config in `packages/nextjs/scaffold.config.ts`.
+Then visit: [http://localhost:3000](http://localhost:3000)
 
-Run smart contract test with `yarn hardhat:test`
+To run smart contract tests:
 
-- Edit your smart contracts in `packages/hardhat/contracts`
-- Edit your frontend homepage at `packages/nextjs/app/page.tsx`. For guidance on [routing](https://nextjs.org/docs/app/building-your-application/routing/defining-routes) and configuring [pages/layouts](https://nextjs.org/docs/app/building-your-application/routing/pages-and-layouts) checkout the Next.js documentation.
-- Edit your deployment scripts in `packages/hardhat/deploy`
+```sh
+yarn hardhat:test
+```
 
-## Documentation
+### 5. Mock other bettors
 
-Visit our [docs](https://docs.scaffoldeth.io) to learn how to start building with Scaffold-ETH 2.
+To simulate additional bettors, run:
 
-To know more about its features, check out our [website](https://scaffoldeth.io).
+```sh
+yarn fillgame --game-id 1
+```
 
-## Contributing to Scaffold-ETH 2
+This script places a bet on each empty option.
 
-We welcome contributions to Scaffold-ETH 2!
+### 6. End the betting period
 
-Please see [CONTRIBUTING.MD](https://github.com/scaffold-eth/scaffold-eth-2/blob/main/CONTRIBUTING.md) for more information and guidelines for contributing to Scaffold-ETH 2.
+There are two ways to end the betting period:
+
+#### a) Manually
+
+While logged in with a burner wallet, a "Close Game" button appears when the game reaches the minimum block. Click it and wait.
+
+#### b) Automatically
+
+Run the game recycler bot:
+
+```sh
+yarn gamerecycler
+```
+
+This bot automatically closes eligible games and creates new ones if no public open games exist.
