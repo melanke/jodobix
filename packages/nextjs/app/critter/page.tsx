@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { CreateGameModal } from "./_components/CreateGameModal";
 import { DismissibleAlert } from "./_components/DismissibleAlert";
@@ -9,7 +9,12 @@ import { GameDetailsModal } from "./_components/GameDetailsModal";
 import { Abi } from "viem";
 import { parseEventLogs } from "viem";
 import { useAccount } from "wagmi";
-import { useDeployedContractInfo, useScaffoldReadContract, useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
+import {
+  useDeployedContractInfo,
+  useScaffoldEventHistory,
+  useScaffoldReadContract,
+  useScaffoldWriteContract,
+} from "~~/hooks/scaffold-eth";
 
 const CritterPage: React.FC = () => {
   const router = useRouter();
@@ -25,17 +30,30 @@ const CritterPage: React.FC = () => {
     watch: true,
   });
 
-  const { data: myCreatedGames, refetch: refetchMyCreatedGames } = useScaffoldReadContract({
+  const { data: gameCreatedEvents, refetch: refetchMyCreatedGames } = useScaffoldEventHistory({
     contractName: "Critter",
-    functionName: "getGamesByCreator",
-    args: [address],
+    eventName: "GameCreated",
+    fromBlock: 0n,
+    filters: {
+      creator: address,
+    },
   });
 
-  const { data: gamesIHaveBet, refetch: refetchGamesIHaveBet } = useScaffoldReadContract({
+  const myCreatedGames = gameCreatedEvents?.map(event => event.args.gameId).filter(gameId => gameId !== undefined);
+
+  const { data: betPlacedEvents } = useScaffoldEventHistory({
     contractName: "Critter",
-    functionName: "getGamesByBettor",
-    args: [address],
+    eventName: "BetPlaced",
+    fromBlock: 0n,
+    filters: {
+      bettor: address,
+    },
   });
+
+  const gamesIHaveBet = useMemo(
+    () => [...new Set((betPlacedEvents ?? []).map(event => event.args.gameId).filter(gameId => gameId !== undefined))],
+    [betPlacedEvents],
+  );
 
   const { data: privateGameInvitations } = useScaffoldReadContract({
     contractName: "Critter",
@@ -78,7 +96,7 @@ const CritterPage: React.FC = () => {
   };
 
   const handleGameBet = (gameId: bigint) => {
-    refetchGamesIHaveBet();
+    refetchMyCreatedGames();
   };
 
   const handleOpenGame = (gameId: bigint | undefined) => {

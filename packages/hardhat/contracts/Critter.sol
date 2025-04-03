@@ -92,10 +92,7 @@ contract Critter {
     uint256 public gameCount = 0; // total number of games (also used to calculate the next game id)
     uint256 public betCount = 0; // total number of bets (also used to calculate the next bet id)
     uint256 public publicAvailableGamesCount = 0; // total number of public games
-    mapping(address => uint256[]) public gamesByCreator; // games by the address of the creator, important to list all games created by an address
-    mapping(address => mapping(uint256 => uint256[])) public betsByGameByBettor; // bets by game and bettor, important to list all bets of a bettor in a game
-    mapping(address => uint256[]) public gamesByBettor; // games by the address of the bettor, important to list all games a bettor has betted
-    mapping(address => uint256[]) public privateGamesInvitations; // private games invitations by participant address, important to list all private games a bettor has been invited to
+    mapping(address => uint256[]) public privateGamesInvitations; // private games invitations by participant address, important to list all private games a bettor has been invited to. Reading events is not possible because the participants array is not indexed.
     // #endregion
 
     // #region Errors
@@ -222,12 +219,6 @@ contract Critter {
         bet.number = number;
         bet.prizeClaimed = false;
 
-        if (betsByGameByBettor[msg.sender][gameId].length == 0) {
-            gamesByBettor[msg.sender].push(gameId);
-        }
-
-        betsByGameByBettor[msg.sender][gameId].push(betId);
-
         emit BetPlaced(
             gameId,
             msg.sender,
@@ -309,8 +300,6 @@ contract Critter {
         game.numberOfBets = 0;
         game.valueProvidedToWinners = 0;
         game.minBetValue = minBetValue;
-
-        gamesByCreator[msg.sender].push(gameId);
 
         emit GameCreated(
             gameId,
@@ -459,34 +448,6 @@ contract Critter {
             return 0;
         }
         return game.minEndingBlock - block.number;
-    }
-
-    /**
-     * @notice Get the games created by a creator
-     * @param creator The creator address
-     * @return The games ids
-     */
-    function getGamesByCreator(address creator) external view returns (uint256[] memory) {
-        return gamesByCreator[creator];
-    }
-
-    /**
-     * @notice Get the games a bettor has betted
-     * @param bettor The bettor address
-     * @return The games ids
-     */
-    function getGamesByBettor(address bettor) external view returns (uint256[] memory) {
-        return gamesByBettor[bettor];
-    }
-
-    /**
-     * @notice Get the bets of a game by a bettor
-     * @param gameId The game id
-     * @param bettor The bettor address
-     * @return The bets ids
-     */
-    function getBetsByGameAndBettor(uint256 gameId, address bettor) external view returns (uint256[] memory) {
-        return betsByGameByBettor[bettor][gameId];
     }
 
     /**

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useCloseGame } from "../_hooks/useCloseGame";
 import { AnimalSelector } from "./AnimalSelector";
 import { BetCard } from "./BetCard";
@@ -10,7 +10,7 @@ import { formatEther, parseEther } from "viem";
 import { useAccount } from "wagmi";
 import { InformationCircleIcon, ShareIcon } from "@heroicons/react/24/outline";
 import { Address } from "~~/components/scaffold-eth";
-import { useScaffoldReadContract, useWatchBalance } from "~~/hooks/scaffold-eth";
+import { useScaffoldEventHistory, useScaffoldReadContract, useWatchBalance } from "~~/hooks/scaffold-eth";
 
 interface GameDetailsModalProps {
   gameId?: bigint; // undefined if not open
@@ -39,11 +39,20 @@ export const GameDetailsModal: React.FC<GameDetailsModalProps> = ({ gameId, onCl
     watch: true,
   });
 
-  const { data: myBets, refetch: refetchMyBets } = useScaffoldReadContract({
+  const { data: betPlacedEvents, refetch: refetchMyBets } = useScaffoldEventHistory({
     contractName: "Critter",
-    functionName: "getBetsByGameAndBettor",
-    args: [gameId, address],
+    eventName: "BetPlaced",
+    fromBlock: 0n,
+    filters: {
+      gameId: gameId,
+      bettor: address,
+    },
   });
+
+  const myBets = useMemo(
+    () => (betPlacedEvents ?? []).map(event => event.args.betId).filter(betId => betId !== undefined),
+    [betPlacedEvents],
+  );
 
   const { closeGame, closingGame, lastTwoChars } = useCloseGame(gameId ?? 0n, game?.minBetValue, reward => {
     toast.success(`Game closed! Reward: ${formatEther(reward)} ETH`);
