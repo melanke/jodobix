@@ -8,7 +8,7 @@ import { BetForm } from "./BetForm";
 import { toast } from "react-hot-toast";
 import { formatEther, parseEther } from "viem";
 import { useAccount } from "wagmi";
-import { InformationCircleIcon } from "@heroicons/react/24/outline";
+import { InformationCircleIcon, ShareIcon } from "@heroicons/react/24/outline";
 import { Address } from "~~/components/scaffold-eth";
 import { useScaffoldReadContract, useWatchBalance } from "~~/hooks/scaffold-eth";
 
@@ -117,17 +117,17 @@ export const GameDetailsModal: React.FC<GameDetailsModalProps> = ({ gameId, onCl
       <div className="modal-box w-11/12 max-w-5xl h-full flex flex-col">
         <div className="flex justify-between items-center mb-4">
           <h3 className="font-bold text-lg">Game #{gameId.toString()}</h3>
-          <div className="flex gap-2">
-            <button onClick={handleShare} className="btn btn-sm btn-secondary">
-              Share
-            </button>
-            <button onClick={handleClose} className="btn btn-sm btn-circle btn-ghost">
-              ✕
-            </button>
-          </div>
+
+          <button onClick={handleShare} className="btn btn-sm btn-secondary">
+            <ShareIcon className="h-4 w-4" />
+            Share
+          </button>
+          <button onClick={handleClose} className="btn btn-sm btn-circle btn-ghost">
+            ✕
+          </button>
         </div>
 
-        <div className="flex gap-8 h-[calc(100%-3.3rem)] items-start">
+        <div className="flex gap-8 md:h-[calc(100%-3.3rem)] items-start flex-col md:flex-row">
           <AnimalSelector
             selectedNumber={selectedNumber}
             onSelectNumber={setSelectedNumber}
@@ -135,7 +135,7 @@ export const GameDetailsModal: React.FC<GameDetailsModalProps> = ({ gameId, onCl
             drawnNumber={game?.bettingPeriodEnded ? game?.drawnNumber : undefined}
           />
 
-          <div className="flex flex-col gap-2 h-full overflow-y-auto overflow-x-hidden">
+          <div className="flex flex-col gap-2 h-full overflow-y-auto overflow-x-hidden self-center">
             <div>
               Total Value: {formatEther(game?.totalValue || 0n)} ETH ({game?.numberOfBets.toString()} bets)
             </div>

@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { CreateGameModal } from "./_components/CreateGameModal";
+import { DismissibleAlert } from "./_components/DismissibleAlert";
 import { GameCard } from "./_components/GameCard";
 import { GameDetailsModal } from "./_components/GameDetailsModal";
 import { Abi } from "viem";
@@ -91,7 +92,7 @@ const CritterPage: React.FC = () => {
 
   return (
     <div className="w-full max-w-7xl mx-auto flex flex-col px-6 lg:px-10 py-8 lg:py-12">
-      <div className="flex justify-between items-center mb-8">
+      <div className="flex flex-wrap justify-between items-center mb-8">
         <h1 className="text-4xl font-bold">Critter</h1>
         <div className="flex gap-2">
           <button
@@ -107,7 +108,7 @@ const CritterPage: React.FC = () => {
         </div>
       </div>
 
-      <div className="bg-base-200 rounded-lg mb-8">
+      <DismissibleAlert id="how-it-works" className="bg-base-300/50 rounded-lg mb-8 border border-primary/50">
         <h2 className="text-xl font-bold mb-2">How it works?</h2>
         <p className="mb-2">
           Critter is a betting game where you choose one of the 25 available animals. When all animals have received at
@@ -117,7 +118,7 @@ const CritterPage: React.FC = () => {
         <p className="text-primary">
           Click on any game below to see the details and make your bet. The minimum bet is 0.001 ETH.
         </p>
-      </div>
+      </DismissibleAlert>
 
       {publicAvailableGames?.length ? (
         <>
