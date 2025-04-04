@@ -2,6 +2,70 @@
 @import "tailwindcss/components";
 @import "tailwindcss/utilities";
 
+@layer base {
+  :root {
+    --background: #fffcf0;
+    --foreground: #844208;
+
+    --card: #fffcf0;
+    --card-foreground: #844208;
+
+    --popover: #fffcf0;
+    --popover-foreground: #844208;
+
+    --primary: #622902;
+    --primary-content: #fff5c8;
+
+    --secondary: #f0dd8d;
+    --secondary-content: #844208;
+
+    --muted: #f0ebd9;
+    --muted-foreground: #844208;
+
+    --accent: #622902;
+    --accent-content: #fffbe9;
+
+    --destructive: #ff8863;
+    --destructive-foreground: #fff5c8;
+
+    --border: #fff5c8;
+    --input: #fff5c8;
+    --ring: #844208;
+
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    --background: #150500;
+    --foreground: #fffbe9;
+
+    --card: #200e02;
+    --card-foreground: #fffbe9;
+
+    --popover: #200e02;
+    --popover-foreground: #fffbe9;
+
+    --primary: #f4e7b0;
+    --primary-content: #1a0801;
+
+    --secondary: #110000;
+    --secondary-content: #fffbe9;
+
+    --muted: #150500;
+    --muted-foreground: #fffbe9;
+
+    --accent: #ffdd99;
+    --accent-content: #1a0801;
+
+    --destructive: #ff8863;
+    --destructive-foreground: #fffbe9;
+
+    --border: #331b04;
+    --input: #331b04;
+    --ring: #fffbe9;
+  }
+}
+
 :root,
 [data-theme] {
   background: oklch(var(--b2));

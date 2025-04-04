@@ -70,6 +70,7 @@ contract Critter {
     // Event when a bettor claims the prize
     event PrizeClaimed(
         uint256 indexed gameId,
+        uint256 indexed betId,
         address indexed bettor,
         uint8 drawnNumber,
         uint256 prizeValue,
@@ -256,6 +257,7 @@ contract Critter {
 
         emit PrizeClaimed(
             bet.gameId,
+            betId,
             msg.sender,
             _calculateDrawnNumber(game),
             prizeToTransfer,

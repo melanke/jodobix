@@ -10,6 +10,7 @@ import { formatEther, parseEther } from "viem";
 import { useAccount } from "wagmi";
 import { InformationCircleIcon, ShareIcon } from "@heroicons/react/24/outline";
 import { Address } from "~~/components/scaffold-eth";
+import { HoverCard, HoverCardContent, HoverCardTrigger } from "~~/components/ui/hover-card";
 import { useScaffoldEventHistory, useScaffoldReadContract, useWatchBalance } from "~~/hooks/scaffold-eth";
 
 interface GameDetailsModalProps {
@@ -72,6 +73,25 @@ export const GameDetailsModal: React.FC<GameDetailsModalProps> = ({ gameId, onCl
     setBetAmount("");
   };
 
+  const handleSelectNumber = (number: number) => {
+    if (game?.bettingPeriodEnded && game?.drawnNumber) {
+      toast.error("Game already ended");
+      return;
+    }
+
+    if (!address) {
+      toast.error("Please connect your wallet");
+      return;
+    }
+
+    if (!!game?.participants.length && !game?.participants.includes(address)) {
+      toast.error("You are not a participant in this game");
+      return;
+    }
+
+    setSelectedNumber(number);
+  };
+
   const handleBetPlaced = (betId: bigint) => {
     resetBetForm();
     refetchMyBets();
@@ -125,7 +145,22 @@ export const GameDetailsModal: React.FC<GameDetailsModalProps> = ({ gameId, onCl
     <div className="modal modal-open">
       <div className="modal-box w-11/12 max-w-5xl h-full flex flex-col">
         <div className="flex justify-between items-center mb-4">
-          <h3 className="font-bold text-lg">Game #{gameId.toString()}</h3>
+          <h3 className="font-bold text-lg">
+            Game #{gameId.toString()}
+            {!!game?.participants.length && (
+              <HoverCard>
+                <HoverCardTrigger className="cursor-pointer text-sm text-base-content/60 ml-2 hover:underline">
+                  ({game?.participants.length} participants{" "}
+                  <InformationCircleIcon className="inline h-4 w-4 text-base-content/60" />)
+                </HoverCardTrigger>
+                <HoverCardContent className="w-50 bg-base-100 text-base-content border-base-300">
+                  <div className="flex flex-col gap-2">
+                    {game?.participants.map(participant => <Address key={participant} address={participant} />)}
+                  </div>
+                </HoverCardContent>
+              </HoverCard>
+            )}
+          </h3>
 
           <button onClick={handleShare} className="btn btn-sm btn-secondary">
             <ShareIcon className="h-4 w-4" />
@@ -139,7 +174,7 @@ export const GameDetailsModal: React.FC<GameDetailsModalProps> = ({ gameId, onCl
         <div className="flex gap-8 md:h-[calc(100%-3.3rem)] items-start flex-col md:flex-row">
           <AnimalSelector
             selectedNumber={selectedNumber}
-            onSelectNumber={setSelectedNumber}
+            onSelectNumber={handleSelectNumber}
             betsPerNumber={Array.from(game?.betsPerNumber || [])}
             drawnNumber={game?.bettingPeriodEnded ? game?.drawnNumber : undefined}
           />

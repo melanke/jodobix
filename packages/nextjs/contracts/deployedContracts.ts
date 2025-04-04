@@ -201,6 +201,12 @@ const deployedContracts = {
             },
             {
               indexed: true,
+              internalType: "uint256",
+              name: "betId",
+              type: "uint256",
+            },
+            {
+              indexed: true,
               internalType: "address",
               name: "bettor",
               type: "address",

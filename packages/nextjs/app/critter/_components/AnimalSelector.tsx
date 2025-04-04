@@ -16,14 +16,6 @@ export const AnimalSelector: React.FC<AnimalSelectorProps> = ({
   betsPerNumber,
   drawnNumber,
 }) => {
-  const handleSelectNumber = (number: number) => {
-    if (drawnNumber) {
-      toast.error("Game already ended");
-      return;
-    }
-    onSelectNumber(number);
-  };
-
   return (
     <div className="grid grid-cols-5 gap-1 md:gap-2 flex-1">
       {[...Array(25)].map((_, index) => {
@@ -32,7 +24,7 @@ export const AnimalSelector: React.FC<AnimalSelectorProps> = ({
 
         return (
           <button
-            onClick={() => handleSelectNumber(number)}
+            onClick={() => onSelectNumber(number)}
             key={number}
             className={`group flex flex-col items-center rounded-lg p-1 transition
               outline  

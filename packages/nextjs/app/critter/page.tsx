@@ -37,6 +37,7 @@ const CritterPage: React.FC = () => {
     filters: {
       creator: address,
     },
+    enabled: !!address,
   });
 
   const myCreatedGames = gameCreatedEvents?.map(event => event.args.gameId).filter(gameId => gameId !== undefined);
@@ -48,6 +49,7 @@ const CritterPage: React.FC = () => {
     filters: {
       bettor: address,
     },
+    enabled: !!address,
   });
 
   const gamesIHaveBet = useMemo(

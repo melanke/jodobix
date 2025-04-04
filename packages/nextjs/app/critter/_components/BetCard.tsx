@@ -1,6 +1,9 @@
 import React from "react";
 import Image from "next/image";
+import { PrizeClaimInfo } from "./PrizeClaimInfo";
 import { formatEther } from "viem";
+import { InformationCircleIcon } from "@heroicons/react/24/outline";
+import { HoverCard, HoverCardContent, HoverCardTrigger } from "~~/components/ui/hover-card";
 import { useScaffoldReadContract, useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
 
 interface BetCardProps {
@@ -69,7 +72,16 @@ export const BetCard: React.FC<BetCardProps> = ({ betId, drawnNumber }) => {
           Claim {formatEther(prize || 0n)} ETH
         </button>
       )}
-      {bet?.prizeClaimed && <span className="text-sm">Prize claimed</span>}
+      {bet?.prizeClaimed && (
+        <HoverCard>
+          <HoverCardTrigger className="cursor-pointer text-sm hover:underline">
+            Prize claimed <InformationCircleIcon className="inline h-4 w-4" />
+          </HoverCardTrigger>
+          <HoverCardContent side="left" className="w-50">
+            <PrizeClaimInfo betId={betId} />
+          </HoverCardContent>
+        </HoverCard>
+      )}
     </div>
   );
 };
