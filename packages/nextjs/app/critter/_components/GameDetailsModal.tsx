@@ -8,10 +8,10 @@ import { BetForm } from "./BetForm";
 import { toast } from "react-hot-toast";
 import { formatEther, parseEther } from "viem";
 import { useAccount } from "wagmi";
-import { InformationCircleIcon, ShareIcon } from "@heroicons/react/24/outline";
+import { ArrowPathIcon, InformationCircleIcon, ShareIcon } from "@heroicons/react/24/outline";
 import { Address } from "~~/components/scaffold-eth";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "~~/components/ui/hover-card";
-import { CRITTER_DEPLOYMENT_BLOCK } from "~~/const/critterConstants";
+import chainConstants from "~~/const/chainConstants";
 import { useScaffoldEventHistory, useScaffoldReadContract, useWatchBalance } from "~~/hooks/scaffold-eth";
 
 interface GameDetailsModalProps {
@@ -23,7 +23,7 @@ interface GameDetailsModalProps {
 export const GameDetailsModal: React.FC<GameDetailsModalProps> = ({ gameId, onClose, onBetPlaced }) => {
   const [selectedNumber, setSelectedNumber] = useState<number | null>(null);
   const [betAmount, setBetAmount] = useState("");
-  const { address, connector } = useAccount();
+  const { address, connector, chainId } = useAccount();
   const { data: balance } = useWatchBalance({
     address,
   });
@@ -41,14 +41,22 @@ export const GameDetailsModal: React.FC<GameDetailsModalProps> = ({ gameId, onCl
     watch: true,
   });
 
-  const { data: betPlacedEvents, refetch: refetchMyBets } = useScaffoldEventHistory({
+  const deploymentBlock = chainConstants[chainId as keyof typeof chainConstants]?.Critter?.deploymentBlock ?? 10n;
+
+  const {
+    data: betPlacedEvents,
+    refetch: refetchMyBets,
+    isLoading: isLoadingMyBets,
+    error: errorMyBets,
+  } = useScaffoldEventHistory({
     contractName: "Critter",
     eventName: "BetPlaced",
-    fromBlock: CRITTER_DEPLOYMENT_BLOCK - 10n,
+    fromBlock: deploymentBlock - 10n,
     filters: {
       gameId: gameId,
       bettor: address,
     },
+    enabled: !!gameId && !!address,
   });
 
   const myBets = useMemo(
@@ -217,24 +225,38 @@ export const GameDetailsModal: React.FC<GameDetailsModalProps> = ({ gameId, onCl
               )}
             </div>
 
-            <BetForm
-              gameId={gameId}
-              selectedNumber={selectedNumber}
-              onBetPlaced={handleBetPlaced}
-              betAmount={betAmount}
-              setBetAmount={setBetAmount}
-            />
-
-            {(myBets?.length ?? 0) > 0 && (
+            {game?.creator === "0x0000000000000000000000000000000000000000" ? (
+              <div className="w-56 bg-error/50 rounded-lg mb-8 p-2 mt-8">Game not found!</div>
+            ) : isLoadingMyBets ? (
+              <div className="self-center mt-8">
+                <ArrowPathIcon className="h-6 w-6 animate-spin" />
+              </div>
+            ) : !!errorMyBets ? (
+              <div className="w-56 bg-error/50 rounded-lg mb-8 p-2 mt-8">
+                Error loading bets information: {JSON.parse((errorMyBets as any).details).message}
+              </div>
+            ) : (
               <>
-                <h3 className="font-bold text-lg mt-6 mb-1">My Bets</h3>
-                {myBets?.map((betId, index) => (
-                  <BetCard
-                    key={index}
-                    betId={betId}
-                    drawnNumber={game?.bettingPeriodEnded ? game?.drawnNumber : undefined}
-                  />
-                ))}
+                <BetForm
+                  gameId={gameId}
+                  selectedNumber={selectedNumber}
+                  onBetPlaced={handleBetPlaced}
+                  betAmount={betAmount}
+                  setBetAmount={setBetAmount}
+                />
+
+                {(myBets?.length ?? 0) > 0 && (
+                  <>
+                    <h3 className="font-bold text-lg mt-6 mb-1">My Bets</h3>
+                    {myBets?.map((betId, index) => (
+                      <BetCard
+                        key={index}
+                        betId={betId}
+                        drawnNumber={game?.bettingPeriodEnded ? game?.drawnNumber : undefined}
+                      />
+                    ))}
+                  </>
+                )}
               </>
             )}
           </div>

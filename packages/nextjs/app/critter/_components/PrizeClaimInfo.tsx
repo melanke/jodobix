@@ -1,5 +1,6 @@
+import { useAccount } from "wagmi";
 import { TransactionHash } from "~~/app/blockexplorer/_components";
-import { CRITTER_DEPLOYMENT_BLOCK } from "~~/const/critterConstants";
+import chainConstants from "~~/const/chainConstants";
 import { useScaffoldEventHistory } from "~~/hooks/scaffold-eth";
 
 interface PrizeClaimInfoProps {
@@ -7,15 +8,19 @@ interface PrizeClaimInfoProps {
 }
 
 export const PrizeClaimInfo = ({ betId }: PrizeClaimInfoProps) => {
+  const { chainId } = useAccount();
+  const deploymentBlock = chainConstants[chainId as keyof typeof chainConstants]?.Critter?.deploymentBlock ?? 10n;
+
   const { data: prizeClaimedEvents, isLoading } = useScaffoldEventHistory({
     contractName: "Critter",
     eventName: "PrizeClaimed",
-    fromBlock: CRITTER_DEPLOYMENT_BLOCK - 10n,
+    fromBlock: deploymentBlock - 10n,
     filters: { betId },
+    enabled: !!betId,
   });
 
   if (isLoading) {
-    return <div>Carregando...</div>;
+    return <div>Loading...</div>;
   }
 
   if (!prizeClaimedEvents || prizeClaimedEvents.length === 0) {

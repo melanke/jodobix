@@ -9,7 +9,8 @@ import { GameDetailsModal } from "./_components/GameDetailsModal";
 import { Abi } from "viem";
 import { parseEventLogs } from "viem";
 import { useAccount } from "wagmi";
-import { CRITTER_DEPLOYMENT_BLOCK } from "~~/const/critterConstants";
+import { ArrowPathIcon } from "@heroicons/react/24/outline";
+import chainConstants from "~~/const/chainConstants";
 import {
   useDeployedContractInfo,
   useScaffoldEventHistory,
@@ -23,18 +24,25 @@ const CritterPage: React.FC = () => {
   const gameIdParam = searchParams.get("gameId");
   const [isCreateGameModalOpen, setIsCreateGameModalOpen] = useState(false);
   const [openGameId, setOpenGameId] = useState<bigint | undefined>(gameIdParam ? BigInt(gameIdParam) : undefined);
-  const { address } = useAccount();
+  const { address, chainId } = useAccount();
 
-  const { data: publicAvailableGames } = useScaffoldReadContract({
+  const { data: publicAvailableGames, isLoading: isLoadingPublicAvailableGames } = useScaffoldReadContract({
     contractName: "Critter",
     functionName: "getPublicAvailableGames",
     watch: true,
   });
 
-  const { data: gameCreatedEvents, refetch: refetchMyCreatedGames } = useScaffoldEventHistory({
+  const deploymentBlock = chainConstants[chainId as keyof typeof chainConstants]?.Critter?.deploymentBlock ?? 10n;
+
+  const {
+    data: gameCreatedEvents,
+    refetch: refetchMyCreatedGames,
+    error: errorGameCreatedEvents,
+    isLoading: isLoadingGameCreatedEvents,
+  } = useScaffoldEventHistory({
     contractName: "Critter",
     eventName: "GameCreated",
-    fromBlock: CRITTER_DEPLOYMENT_BLOCK - 10n,
+    fromBlock: deploymentBlock - 10n,
     filters: {
       creator: address,
     },
@@ -43,10 +51,14 @@ const CritterPage: React.FC = () => {
 
   const myCreatedGames = gameCreatedEvents?.map(event => event.args.gameId).filter(gameId => gameId !== undefined);
 
-  const { data: betPlacedEvents } = useScaffoldEventHistory({
+  const {
+    data: betPlacedEvents,
+    error: errorBetPlacedEvents,
+    isLoading: isLoadingBetPlacedEvents,
+  } = useScaffoldEventHistory({
     contractName: "Critter",
     eventName: "BetPlaced",
-    fromBlock: CRITTER_DEPLOYMENT_BLOCK - 10n,
+    fromBlock: deploymentBlock - 10n,
     filters: {
       bettor: address,
     },
@@ -141,7 +153,26 @@ const CritterPage: React.FC = () => {
         </p>
       </DismissibleAlert>
 
-      {publicAvailableGames?.length ? (
+      {(errorGameCreatedEvents || errorBetPlacedEvents) && (
+        <div className="bg-error/50 rounded-lg mb-8 p-8">
+          Error loading games information:{" "}
+          {JSON.parse(((errorGameCreatedEvents ?? errorBetPlacedEvents) as any).details).message}
+        </div>
+      )}
+
+      {isLoadingGameCreatedEvents || isLoadingBetPlacedEvents || isLoadingPublicAvailableGames ? (
+        <div className="self-center mt-8">
+          <ArrowPathIcon className="h-6 w-6 animate-spin" />
+        </div>
+      ) : (
+        !publicAvailableGames?.length && (
+          <div className="flex justify-center items-center h-48">
+            <p className="text-lg text-base-content-200">No public games available</p>
+          </div>
+        )
+      )}
+
+      {!!publicAvailableGames?.length && (
         <>
           <h2 className="text-2xl font-bold mb-4">Publicly Available Games</h2>
 
@@ -151,10 +182,6 @@ const CritterPage: React.FC = () => {
             ))}
           </div>
         </>
-      ) : (
-        <div className="flex justify-center items-center h-48">
-          <p className="text-lg text-base-content-200">No public games available</p>
-        </div>
       )}
 
       {(myCreatedGames?.length ?? 0) > 0 && (
