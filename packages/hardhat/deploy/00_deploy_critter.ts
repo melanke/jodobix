@@ -24,7 +24,10 @@ const deployCritter: DeployFunction = async function (hre: HardhatRuntimeEnviron
 
   await deploy("Critter", {
     from: deployer,
-    // Contract constructor arguments
+    // Contract constructor arguments:
+    // uint256 endingBetPeriodReward,
+    // uint256 bettingPeriodBlocksForPublicGames,
+    // uint256 minBetValueForPublicGames
     args: [ethers.parseEther("0.001"), 1000, ethers.parseEther("0.001")],
     log: true,
     // autoMine: can be passed to the deploy function to make the deployment process faster on local networks by

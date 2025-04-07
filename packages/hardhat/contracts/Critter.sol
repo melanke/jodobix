@@ -176,6 +176,7 @@ contract Critter {
             // Check if all numbers have been bet. This is important to avoid having a winning bet that is not possible to be claimed.
             if (hasAllNumbersBet(game)) {
 
+                // Check the previous block (block.number - 1)
                 bytes32 blockHash = blockhash(block.number - 1);
                 uint8 lastByte = uint8(uint256(blockHash) & 0xff);  // Last byte
                 uint8 lastChar = lastByte & 0xf;                    // Last character (4 bits)
@@ -183,6 +184,20 @@ contract Critter {
 
                 // Check if the last and second last characters are the same. This is important to add some randomness to the drawn number.
                 if (lastChar == secondLastChar) {
+                    // if all the conditions are met, end the betting period
+                    _endBettingPeriod(game, gameId);
+                    // return to avoid placing a bet after the betting period has ended
+                    return;
+                }
+
+                // Check 2 blocks ago (block.number - 2)
+                bytes32 blockHash2 = blockhash(block.number - 2);
+                uint8 lastByte2 = uint8(uint256(blockHash2) & 0xff);  // Last byte
+                uint8 lastChar2 = lastByte2 & 0xf;                    // Last character (4 bits)
+                uint8 secondLastChar2 = (lastByte2 >> 4) & 0xf;       // Second last character (4 bits)
+
+                // Check if the last and second last characters are the same. This is important to add some randomness to the drawn number.
+                if (lastChar2 == secondLastChar2) {
                     // if all the conditions are met, end the betting period
                     _endBettingPeriod(game, gameId);
                     // return to avoid placing a bet after the betting period has ended

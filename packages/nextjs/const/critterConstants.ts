@@ -1,0 +1,1 @@
+export const CRITTER_DEPLOYMENT_BLOCK = 25989953n;

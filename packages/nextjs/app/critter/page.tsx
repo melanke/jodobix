@@ -9,6 +9,7 @@ import { GameDetailsModal } from "./_components/GameDetailsModal";
 import { Abi } from "viem";
 import { parseEventLogs } from "viem";
 import { useAccount } from "wagmi";
+import { CRITTER_DEPLOYMENT_BLOCK } from "~~/const/critterConstants";
 import {
   useDeployedContractInfo,
   useScaffoldEventHistory,
@@ -33,7 +34,7 @@ const CritterPage: React.FC = () => {
   const { data: gameCreatedEvents, refetch: refetchMyCreatedGames } = useScaffoldEventHistory({
     contractName: "Critter",
     eventName: "GameCreated",
-    fromBlock: 0n,
+    fromBlock: CRITTER_DEPLOYMENT_BLOCK - 10n,
     filters: {
       creator: address,
     },
@@ -45,7 +46,7 @@ const CritterPage: React.FC = () => {
   const { data: betPlacedEvents } = useScaffoldEventHistory({
     contractName: "Critter",
     eventName: "BetPlaced",
-    fromBlock: 0n,
+    fromBlock: CRITTER_DEPLOYMENT_BLOCK - 10n,
     filters: {
       bettor: address,
     },

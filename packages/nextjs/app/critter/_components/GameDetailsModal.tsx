@@ -11,6 +11,7 @@ import { useAccount } from "wagmi";
 import { InformationCircleIcon, ShareIcon } from "@heroicons/react/24/outline";
 import { Address } from "~~/components/scaffold-eth";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "~~/components/ui/hover-card";
+import { CRITTER_DEPLOYMENT_BLOCK } from "~~/const/critterConstants";
 import { useScaffoldEventHistory, useScaffoldReadContract, useWatchBalance } from "~~/hooks/scaffold-eth";
 
 interface GameDetailsModalProps {
@@ -43,7 +44,7 @@ export const GameDetailsModal: React.FC<GameDetailsModalProps> = ({ gameId, onCl
   const { data: betPlacedEvents, refetch: refetchMyBets } = useScaffoldEventHistory({
     contractName: "Critter",
     eventName: "BetPlaced",
-    fromBlock: 0n,
+    fromBlock: CRITTER_DEPLOYMENT_BLOCK - 10n,
     filters: {
       gameId: gameId,
       bettor: address,
@@ -201,13 +202,17 @@ export const GameDetailsModal: React.FC<GameDetailsModalProps> = ({ gameId, onCl
                 </button>
               ) : (
                 <>
-                  About to end
-                  <div
-                    className="tooltip tooltip-secondary tooltip-right"
-                    data-tip="Anyone using a burner wallet can close the game and receive a reward. Give it a try!"
-                  >
-                    <InformationCircleIcon className="h-4 w-4 text-base-content/60" />
-                  </div>
+                  <HoverCard>
+                    <HoverCardTrigger className="flex items-center gap-1 cursor-pointer hover:underline">
+                      About to end
+                      <InformationCircleIcon className="h-4 w-4 text-base-content/60" />
+                    </HoverCardTrigger>
+                    <HoverCardContent className="bg-base-100 text-base-content border-base-300">
+                      <div className="w-50">
+                        Anyone using a burner wallet can close the game and receive a reward. Give it a try!
+                      </div>
+                    </HoverCardContent>
+                  </HoverCard>
                 </>
               )}
             </div>

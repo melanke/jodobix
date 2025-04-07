@@ -1,4 +1,5 @@
 import { TransactionHash } from "~~/app/blockexplorer/_components";
+import { CRITTER_DEPLOYMENT_BLOCK } from "~~/const/critterConstants";
 import { useScaffoldEventHistory } from "~~/hooks/scaffold-eth";
 
 interface PrizeClaimInfoProps {
@@ -9,7 +10,7 @@ export const PrizeClaimInfo = ({ betId }: PrizeClaimInfoProps) => {
   const { data: prizeClaimedEvents, isLoading } = useScaffoldEventHistory({
     contractName: "Critter",
     eventName: "PrizeClaimed",
-    fromBlock: 0n,
+    fromBlock: CRITTER_DEPLOYMENT_BLOCK - 10n,
     filters: { betId },
   });
 

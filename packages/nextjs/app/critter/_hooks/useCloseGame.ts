@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import { Abi, type Hash, parseEther, parseEventLogs } from "viem";
 import { usePublicClient } from "wagmi";
 import { useDeployedContractInfo, useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
@@ -15,12 +15,13 @@ export const useCloseGame = (
 
   const { writeContractAsync } = useScaffoldWriteContract("Critter");
 
-  const placeBet = () => {
+  const placeBet = useCallback(() => {
     writeContractAsync(
       {
         functionName: "placeBet",
         args: [gameId, Number(1)],
         value: minBetValue,
+        gas: 1000000n,
       },
       {
         onBlockConfirmation: receipt => {
@@ -37,16 +38,20 @@ export const useCloseGame = (
           setClosingGame(false);
         },
       },
-    );
-  };
+    ).catch(error => {
+      console.error(error);
+      setClosingGame(false);
+    });
+  }, [writeContractAsync, critterContract, gameId, minBetValue, onGameClose]);
 
-  const closeGame = async () => {
-    if (!critterContract && gameId !== undefined) return;
+  const closeGame = useCallback(async () => {
+    if (!critterContract && gameId !== undefined) {
+      return;
+    }
 
     setClosingGame(true);
 
-    const blockNumber = await publicClient?.getBlockNumber();
-    const block = await publicClient?.getBlock({ blockNumber });
+    const block = await publicClient?.getBlock({ blockTag: "latest" });
 
     if (block?.hash) {
       // Verifica se os últimos dois caracteres são iguais
@@ -60,9 +65,8 @@ export const useCloseGame = (
         console.log("Not this block: ", hashStr);
       }
     }
-
     setTimeout(closeGame, 200);
-  };
+  }, [gameId, critterContract, placeBet]);
 
   return {
     closeGame,
