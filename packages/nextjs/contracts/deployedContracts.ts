@@ -1456,7 +1456,7 @@ const deployedContracts = {
   },
   11155420: {
     Critter: {
-      address: "0x15a8D38fD84376d8da495E8b25e1434F5bda6CCe",
+      address: "0xD7082E2295F9A399A0d359eEa191D879A2f7bd30",
       abi: [
         {
           inputs: [
@@ -1482,11 +1482,6 @@ const deployedContracts = {
         {
           inputs: [],
           name: "AddParticipantsToPrivateGame",
-          type: "error",
-        },
-        {
-          inputs: [],
-          name: "BetDoesNotBelongToBettor",
           type: "error",
         },
         {
@@ -1526,7 +1521,7 @@ const deployedContracts = {
         },
         {
           inputs: [],
-          name: "PrizeAlreadyClaimed",
+          name: "PrizeAlreadyPaid",
           type: "error",
         },
         {
@@ -1550,7 +1545,7 @@ const deployedContracts = {
               type: "address",
             },
             {
-              indexed: false,
+              indexed: true,
               internalType: "uint8",
               name: "number",
               type: "uint8",
@@ -1585,6 +1580,12 @@ const deployedContracts = {
               internalType: "uint256",
               name: "gameId",
               type: "uint256",
+            },
+            {
+              indexed: true,
+              internalType: "uint8",
+              name: "drawnNumber",
+              type: "uint8",
             },
             {
               indexed: true,
@@ -1662,6 +1663,12 @@ const deployedContracts = {
             },
             {
               indexed: false,
+              internalType: "address",
+              name: "requestedBy",
+              type: "address",
+            },
+            {
+              indexed: false,
               internalType: "uint8",
               name: "drawnNumber",
               type: "uint8",
@@ -1679,7 +1686,7 @@ const deployedContracts = {
               type: "uint256",
             },
           ],
-          name: "PrizeClaimed",
+          name: "PrizePayment",
           type: "event",
         },
         {
@@ -1766,24 +1773,11 @@ const deployedContracts = {
             },
             {
               internalType: "bool",
-              name: "prizeClaimed",
+              name: "prizeIsPaid",
               type: "bool",
             },
           ],
           stateMutability: "view",
-          type: "function",
-        },
-        {
-          inputs: [
-            {
-              internalType: "uint256",
-              name: "betId",
-              type: "uint256",
-            },
-          ],
-          name: "claimPrize",
-          outputs: [],
-          stateMutability: "nonpayable",
           type: "function",
         },
         {
@@ -1922,7 +1916,7 @@ const deployedContracts = {
                 },
                 {
                   internalType: "bool",
-                  name: "prizeClaimed",
+                  name: "prizeIsPaid",
                   type: "bool",
                 },
               ],
@@ -2146,6 +2140,19 @@ const deployedContracts = {
             },
           ],
           stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "betId",
+              type: "uint256",
+            },
+          ],
+          name: "requestPrizePayment",
+          outputs: [],
+          stateMutability: "nonpayable",
           type: "function",
         },
         {

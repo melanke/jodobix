@@ -1,17 +1,14 @@
 const chainConstants = {
   31337: {
+    // Hardhat
     Critter: {
       deploymentBlock: 10n,
     },
   },
-  421614: {
+  11155420: {
+    // OP Sepolia
     Critter: {
-      deploymentBlock: 140152537n,
-    },
-  },
-  11155111: {
-    Critter: {
-      deploymentBlock: 25989953n,
+      deploymentBlock: 26163748n,
     },
   },
 };
