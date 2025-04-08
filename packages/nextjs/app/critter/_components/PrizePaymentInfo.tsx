@@ -3,17 +3,17 @@ import { TransactionHash } from "~~/app/blockexplorer/_components";
 import chainConstants from "~~/const/chainConstants";
 import { useScaffoldEventHistory } from "~~/hooks/scaffold-eth";
 
-interface PrizeClaimInfoProps {
+interface PrizePaymentInfoProps {
   betId: bigint;
 }
 
-export const PrizeClaimInfo = ({ betId }: PrizeClaimInfoProps) => {
+export const PrizePaymentInfo = ({ betId }: PrizePaymentInfoProps) => {
   const { chainId } = useAccount();
   const deploymentBlock = chainConstants[chainId as keyof typeof chainConstants]?.Critter?.deploymentBlock ?? 10n;
 
-  const { data: prizeClaimedEvents, isLoading } = useScaffoldEventHistory({
+  const { data: prizePaymentedEvents, isLoading } = useScaffoldEventHistory({
     contractName: "Critter",
-    eventName: "PrizeClaimed",
+    eventName: "PrizePayment",
     fromBlock: deploymentBlock - 10n,
     filters: { betId },
     enabled: !!betId,
@@ -23,13 +23,11 @@ export const PrizeClaimInfo = ({ betId }: PrizeClaimInfoProps) => {
     return <div>Loading...</div>;
   }
 
-  if (!prizeClaimedEvents || prizeClaimedEvents.length === 0) {
+  if (!prizePaymentedEvents || prizePaymentedEvents.length === 0) {
     return <div>Prize not claimed yet</div>;
   }
 
-  console.log(prizeClaimedEvents);
-
-  const { transactionHash } = prizeClaimedEvents[0] as any;
+  const { transactionHash } = prizePaymentedEvents[0] as any;
 
   return (
     <div className="text-sm">

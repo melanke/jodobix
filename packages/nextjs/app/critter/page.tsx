@@ -4,6 +4,7 @@ import React, { useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { CreateGameModal } from "./_components/CreateGameModal";
 import { DismissibleAlert } from "./_components/DismissibleAlert";
+import { DistributePrizesModal } from "./_components/DistributePrizesModal";
 import { GameCard } from "./_components/GameCard";
 import { GameDetailsModal } from "./_components/GameDetailsModal";
 import { Abi } from "viem";
@@ -25,6 +26,8 @@ const CritterPage: React.FC = () => {
   const [isCreateGameModalOpen, setIsCreateGameModalOpen] = useState(false);
   const [openGameId, setOpenGameId] = useState<bigint | undefined>(gameIdParam ? BigInt(gameIdParam) : undefined);
   const { address, chainId } = useAccount();
+  const [isDistributePrizesModalOpen, setIsDistributePrizesModalOpen] = useState(false);
+  const [hasUnpaidPrizes, setHasUnpaidPrizes] = useState(false);
 
   const { data: publicAvailableGames, isLoading: isLoadingPublicAvailableGames } = useScaffoldReadContract({
     contractName: "Critter",
@@ -220,12 +223,31 @@ const CritterPage: React.FC = () => {
         </>
       )}
 
+      {hasUnpaidPrizes && (
+        <div
+          onClick={() => setIsDistributePrizesModalOpen(true)}
+          className="self-center mt-16 px-6 bg-base-300 rounded-lg shadow-lg cursor-pointer hover:bg-base-300 transition-colors duration-200"
+        >
+          <p className="text-sm flex items-center gap-2">
+            <span role="img" aria-label="gift" className="text-lg">
+              🎁
+            </span>
+            Feeling generous? Help users claim their prizes!
+          </p>
+        </div>
+      )}
+
       <CreateGameModal
         isOpen={isCreateGameModalOpen}
         onClose={() => setIsCreateGameModalOpen(false)}
         onCreated={handleGameCreated}
       />
       <GameDetailsModal gameId={openGameId} onClose={() => handleOpenGame(undefined)} onBetPlaced={handleGameBet} />
+      <DistributePrizesModal
+        isOpen={isDistributePrizesModalOpen}
+        onClose={() => setIsDistributePrizesModalOpen(false)}
+        onHasUnpaidPrizesChange={setHasUnpaidPrizes}
+      />
     </div>
   );
 };

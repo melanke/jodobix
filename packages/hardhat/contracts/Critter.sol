@@ -34,7 +34,7 @@ contract Critter {
         bool bettingPeriodEnded; // If true, no more bets can be placed
         uint8 drawnNumber; // Drawn number, only set when the betting period ends
         uint256 numberOfBets; // Total number of bets
-        uint256 valueProvidedToWinners; // Total value already provided to winners by their claim
+        uint256 valueProvidedToWinners; // Total value already provided to winners by their request
         uint256 minBetValue; // Minimum bet value in wei
     }
 
@@ -44,7 +44,7 @@ contract Critter {
         address bettor; // Bettor address
         uint256 value; // Bet value in wei
         uint8 number; // What number the bettor bet on, between 1 and 25
-        bool prizeClaimed; // If true, the bettor has claimed the prize
+        bool prizeIsPaid; // If true, the bettor has received the prize
     }
     // #endregion
 
@@ -61,17 +61,18 @@ contract Critter {
     event BetPlaced(
         uint256 indexed gameId,
         address indexed bettor,
-        uint8 number,
+        uint8 indexed number,
         uint256 value,
         uint256 timestamp,
         uint256 betId
     );
 
-    // Event when a bettor claims the prize
-    event PrizeClaimed(
+    // Event when a bettor requests the prize payment
+    event PrizePayment(
         uint256 indexed gameId,
         uint256 indexed betId,
         address indexed bettor,
+        address requestedBy,
         uint8 drawnNumber,
         uint256 prizeValue,
         uint256 timestamp
@@ -80,6 +81,7 @@ contract Critter {
     // Event when the betting period ends
     event EndOfBettingPeriod(
         uint256 indexed gameId,
+        uint8 indexed drawnNumber,
         address indexed closer,
         uint256 reward,
         uint256 timestamp
@@ -100,11 +102,10 @@ contract Critter {
     error GamePrivate(); // for when the bettor tries to place a bet in a private game without being invited
     error InvalidNumber(); // for when the bettor tries to bet an invalid number
     error BettingPeriodHasEnded(); // for when the bettor tries to place a bet after the betting period has ended
-    error BettingPeriodHasNotEnded(); // for when the bettor tries to claim the prize before the betting period has ended
+    error BettingPeriodHasNotEnded(); // for when the bettor tries to request the prize payment before the betting period has ended
     error InvalidValue(); // for when the bettor tries to bet with an invalid value
-    error NoPrize(); // for when the bettor tries to claim a prize of a non winning bet
-    error BetDoesNotBelongToBettor(); // for when the bettor tries to claim a prize of a bet that does not belong to him
-    error PrizeAlreadyClaimed(); // for when the bettor tries to claim a prize that has already been claimed
+    error NoPrize(); // for when the bettor tries to request the prize payment of a non winning bet
+    error PrizeAlreadyPaid(); // for when the bettor tries to request the prize payment of a bet that has already been paid
     error InsufficientBalance(); // for when the contract does not have enough balance to pay the prize (which should never happen)
     error TooManyPublicAvailableGames(); // for when there are too many public games
     error AddParticipantsToPrivateGame(); // for when the creator tries to create a private game without participants
@@ -173,7 +174,7 @@ contract Critter {
         // Check if we are in the minimum ending block or after. This is important to avoid having a game that ends too soon.
         if (block.number >= game.minEndingBlock) {
 
-            // Check if all numbers have been bet. This is important to avoid having a winning bet that is not possible to be claimed.
+            // Check if all numbers have been bet. This is important to avoid having a winning bet that is not possible to be paid.
             if (hasAllNumbersBet(game)) {
 
                 // Check the previous block (block.number - 1)
@@ -233,7 +234,7 @@ contract Critter {
         bet.bettor = msg.sender;
         bet.value = msg.value;
         bet.number = number;
-        bet.prizeClaimed = false;
+        bet.prizeIsPaid = false;
 
         emit BetPlaced(
             gameId,
@@ -246,16 +247,15 @@ contract Critter {
     }
 
     /**
-     * @notice Claim the prize of a bet
+     * @notice Request the prize payment of a bet
      * @param betId The bet id
      */
-    function claimPrize(uint256 betId) external {
+    function requestPrizePayment(uint256 betId) external {
         Bet storage bet = bets[betId];
         Game storage game = games[bet.gameId];
 
         if (!game.bettingPeriodEnded) revert BettingPeriodHasNotEnded();
-        if (bet.prizeClaimed) revert PrizeAlreadyClaimed();
-        if (bet.bettor != msg.sender) revert BetDoesNotBelongToBettor();
+        if (bet.prizeIsPaid) revert PrizeAlreadyPaid();
 
         uint256 prize = _calculatePrize(game, bet);
         if (prize == 0) revert NoPrize();
@@ -267,12 +267,13 @@ contract Critter {
 
         if (prizeToTransfer == 0) revert InsufficientBalance(); // This should never happen, but if nothing is sent, we will not spend the users ETH with the transaction
 
-        bet.prizeClaimed = true;
+        bet.prizeIsPaid = true;
         game.valueProvidedToWinners += prize;
 
-        emit PrizeClaimed(
+        emit PrizePayment(
             bet.gameId,
             betId,
+            bet.bettor,
             msg.sender,
             _calculateDrawnNumber(game),
             prizeToTransfer,
@@ -280,7 +281,7 @@ contract Critter {
         );
 
         // Transfer the prize last to avoid reentrancy
-        (bool sent, ) = payable(msg.sender).call{value: prizeToTransfer}("");
+        (bool sent, ) = payable(bet.bettor).call{value: prizeToTransfer}("");
         require(sent, "Failed to send prize");
     }
 
@@ -353,6 +354,7 @@ contract Critter {
 
         emit EndOfBettingPeriod(
             gameId,
+            game.drawnNumber,
             msg.sender,
             paymentValue,
             block.timestamp

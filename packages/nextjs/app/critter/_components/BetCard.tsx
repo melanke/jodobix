@@ -1,6 +1,6 @@
 import React from "react";
 import Image from "next/image";
-import { PrizeClaimInfo } from "./PrizeClaimInfo";
+import { PrizePaymentInfo } from "./PrizePaymentInfo";
 import { formatEther } from "viem";
 import { InformationCircleIcon } from "@heroicons/react/24/outline";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "~~/components/ui/hover-card";
@@ -31,9 +31,9 @@ export const BetCard: React.FC<BetCardProps> = ({ betId, drawnNumber }) => {
 
   const { writeContractAsync } = useScaffoldWriteContract("Critter");
 
-  const claimPrize = async () => {
+  const requestPrizePayment = async () => {
     await writeContractAsync({
-      functionName: "claimPrize",
+      functionName: "requestPrizePayment",
       args: [betId],
     });
     await refetchBet();
@@ -67,18 +67,18 @@ export const BetCard: React.FC<BetCardProps> = ({ betId, drawnNumber }) => {
         <span className="text-sm">{formatEther(bet?.value || 0n)} ETH</span>
       </div>
 
-      {won && bet?.prizeClaimed === false && (
-        <button onClick={claimPrize} className="btn btn-sm btn-outline btn-primary">
+      {won && bet?.prizeIsPaid === false && (
+        <button onClick={requestPrizePayment} className="btn btn-sm btn-outline btn-primary">
           Claim {formatEther(prize || 0n)} ETH
         </button>
       )}
-      {bet?.prizeClaimed && (
+      {bet?.prizeIsPaid && (
         <HoverCard>
           <HoverCardTrigger className="cursor-pointer text-sm hover:underline">
-            Prize claimed <InformationCircleIcon className="inline h-4 w-4" />
+            Prize paid <InformationCircleIcon className="inline h-4 w-4" />
           </HoverCardTrigger>
           <HoverCardContent side="left" className="w-50">
-            <PrizeClaimInfo betId={betId} />
+            <PrizePaymentInfo betId={betId} />
           </HoverCardContent>
         </HoverCard>
       )}

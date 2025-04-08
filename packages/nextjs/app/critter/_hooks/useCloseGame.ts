@@ -21,7 +21,7 @@ export const useCloseGame = (
         functionName: "placeBet",
         args: [gameId, Number(1)],
         value: minBetValue,
-        gas: 210000n,
+        gas: 300000n, // 210000n,
       },
       {
         onBlockConfirmation: receipt => {

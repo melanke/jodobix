@@ -12,7 +12,7 @@ describe("Critter", function () {
   before(async () => {
     [, bettor] = await ethers.getSigners();
     const critterFactory = await ethers.getContractFactory("Critter");
-    critter = await critterFactory.deploy(ethers.parseEther("0.001"), 1, ethers.parseEther("0.001")); // The important parameter here is "1" for the BETTING_PERIOD_BLOCKS_FOR_PUBLIC_GAMES, to allow us to test closing and claiming  });
+    critter = await critterFactory.deploy(ethers.parseEther("0.001"), 1, ethers.parseEther("0.001")); // The important parameter here is "1" for the BETTING_PERIOD_BLOCKS_FOR_PUBLIC_GAMES, to allow us to test closing and requesting the prize payment  });
   });
 
   it("The workflow should work as expected", async function () {
@@ -66,8 +66,8 @@ describe("Critter", function () {
     const bettorBalanceBeforeClaim = await ethers.provider.getBalance(bettor.address);
 
     // Claim the prize
-    const claimTx = await critter.connect(bettor).claimPrize(winningBetId);
-    await claimTx.wait();
+    const requestTx = await critter.connect(bettor).requestPrizePayment(winningBetId);
+    await requestTx.wait();
 
     // Verify if the value was updated in the game
     const updatedGame = await critter.games(gameId);
