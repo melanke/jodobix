@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useMemo, useState } from "react";
+import React, { Suspense, useMemo, useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { CreateGameModal } from "./_components/CreateGameModal";
 import { DismissibleAlert } from "./_components/DismissibleAlert";
@@ -19,7 +19,7 @@ import {
   useScaffoldWriteContract,
 } from "~~/hooks/scaffold-eth";
 
-const CritterPage: React.FC = () => {
+const CritterClientLogic: React.FC = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const gameIdParam = searchParams.get("gameId");
@@ -249,6 +249,20 @@ const CritterPage: React.FC = () => {
         onHasUnpaidPrizesChange={setHasUnpaidPrizes}
       />
     </div>
+  );
+};
+
+const CritterPage = () => {
+  return (
+    <Suspense
+      fallback={
+        <div className="flex justify-center items-center h-screen">
+          <ArrowPathIcon className="h-10 w-10 animate-spin" />
+        </div>
+      }
+    >
+      <CritterClientLogic />
+    </Suspense>
   );
 };
 
