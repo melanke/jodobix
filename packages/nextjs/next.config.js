@@ -13,7 +13,7 @@ const nextConfig = {
     return [
       {
         source: "/",
-        destination: "/critter",
+        destination: "/jodobix",
         permanent: true,
       },
     ];

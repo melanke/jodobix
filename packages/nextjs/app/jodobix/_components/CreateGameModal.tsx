@@ -20,8 +20,8 @@ export const CreateGameModal: React.FC<CreateGameModalProps> = ({ isOpen, onClos
   const [minBetValue, setMinBetValue] = useState("");
   const [participants, setParticipants] = useState<string[]>([]);
 
-  const { data: critterContractInfo } = useDeployedContractInfo("Critter");
-  const { writeContractAsync } = useScaffoldWriteContract("Critter");
+  const { data: jodobixContractInfo } = useDeployedContractInfo("Jodobix");
+  const { writeContractAsync } = useScaffoldWriteContract("Jodobix");
 
   useEffect(() => {
     // participants only starts [], if the address is erased the participants become [""], so we are not forcing it to be [address]
@@ -43,7 +43,7 @@ export const CreateGameModal: React.FC<CreateGameModalProps> = ({ isOpen, onClos
         {
           onBlockConfirmation: receipt => {
             const [gameCreatedEvent] = parseEventLogs({
-              abi: critterContractInfo?.abi as Abi,
+              abi: jodobixContractInfo?.abi as Abi,
               eventName: "GameCreated",
               logs: receipt.logs,
             });

@@ -29,19 +29,19 @@ export const GameDetailsModal: React.FC<GameDetailsModalProps> = ({ gameId, onCl
   });
 
   const { data: game, refetch: refetchGame } = useScaffoldReadContract({
-    contractName: "Critter",
+    contractName: "Jodobix",
     functionName: "getGame",
     args: [gameId],
   });
 
   const { data: timeLeft } = useScaffoldReadContract({
-    contractName: "Critter",
+    contractName: "Jodobix",
     functionName: "timeLeft",
     args: [gameId],
     watch: true,
   });
 
-  const deploymentBlock = chainConstants[chainId as keyof typeof chainConstants]?.Critter?.deploymentBlock ?? 10n;
+  const deploymentBlock = chainConstants[chainId as keyof typeof chainConstants]?.Jodobix?.deploymentBlock ?? 10n;
 
   const {
     data: betPlacedEvents,
@@ -49,7 +49,7 @@ export const GameDetailsModal: React.FC<GameDetailsModalProps> = ({ gameId, onCl
     isLoading: isLoadingMyBets,
     error: errorMyBets,
   } = useScaffoldEventHistory({
-    contractName: "Critter",
+    contractName: "Jodobix",
     eventName: "BetPlaced",
     fromBlock: deploymentBlock - 10n,
     filters: {
@@ -114,9 +114,9 @@ export const GameDetailsModal: React.FC<GameDetailsModalProps> = ({ gameId, onCl
 
   const handleShare = async () => {
     const shareData = {
-      title: `Critter Game #${gameId}`,
-      text: "Come play Critter with me!",
-      url: `${window.location.origin}/critter?gameId=${gameId}`,
+      title: `Jodobix Game #${gameId}`,
+      text: "Come play Jodobix with me!",
+      url: `${window.location.origin}/jodobix?gameId=${gameId}`,
     };
 
     if (navigator.share) {

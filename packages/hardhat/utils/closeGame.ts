@@ -1,9 +1,9 @@
 import { ethers } from "hardhat";
-import { Critter } from "../typechain-types";
+import { Jodobix } from "../typechain-types";
 import { EventLog } from "ethers";
 
 export async function closeGame(
-  contract: Critter,
+  contract: Jodobix,
   gameId: bigint,
   betNumber = 1,
   verbose = false,

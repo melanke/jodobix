@@ -13,7 +13,7 @@ interface BetCardProps {
 
 export const BetCard: React.FC<BetCardProps> = ({ betId, drawnNumber }) => {
   const { data: bet, refetch: refetchBet } = useScaffoldReadContract({
-    contractName: "Critter",
+    contractName: "Jodobix",
     functionName: "getBet",
     args: [betId],
   });
@@ -21,7 +21,7 @@ export const BetCard: React.FC<BetCardProps> = ({ betId, drawnNumber }) => {
   const won = bet && drawnNumber === bet.number;
 
   const { data: prize } = useScaffoldReadContract({
-    contractName: "Critter",
+    contractName: "Jodobix",
     functionName: "getPrize",
     args: [betId],
     query: {
@@ -29,7 +29,7 @@ export const BetCard: React.FC<BetCardProps> = ({ betId, drawnNumber }) => {
     },
   });
 
-  const { writeContractAsync } = useScaffoldWriteContract("Critter");
+  const { writeContractAsync } = useScaffoldWriteContract("Jodobix");
 
   const requestPrizePayment = async () => {
     await writeContractAsync({

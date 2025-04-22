@@ -5,9 +5,9 @@
 import { GenericContractsDeclaration } from "~~/utils/scaffold-eth/contract";
 
 const deployedContracts = {
-  31337: {
-    Critter: {
-      address: "0x0165878A594ca255338adfa4d48449f69242Eb8F",
+  10: {
+    Jodobix: {
+      address: "0xB23Bd5Eb9986B03E83197BBD22cD12f52607B06C",
       abi: [
         {
           inputs: [
@@ -471,7 +471,7 @@ const deployedContracts = {
                   type: "bool",
                 },
               ],
-              internalType: "struct Critter.Bet",
+              internalType: "struct Jodobix.Bet",
               name: "",
               type: "tuple",
             },
@@ -560,7 +560,735 @@ const deployedContracts = {
                   type: "uint256",
                 },
               ],
-              internalType: "struct Critter.Game",
+              internalType: "struct Jodobix.Game",
+              name: "",
+              type: "tuple",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "participant",
+              type: "address",
+            },
+          ],
+          name: "getPrivateGameInvitations",
+          outputs: [
+            {
+              internalType: "uint256[]",
+              name: "",
+              type: "uint256[]",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "betId",
+              type: "uint256",
+            },
+          ],
+          name: "getPrize",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "getPublicAvailableGames",
+          outputs: [
+            {
+              internalType: "uint256[]",
+              name: "",
+              type: "uint256[]",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "gameId",
+              type: "uint256",
+            },
+            {
+              internalType: "uint8",
+              name: "number",
+              type: "uint8",
+            },
+          ],
+          name: "placeBet",
+          outputs: [],
+          stateMutability: "payable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "address",
+              name: "",
+              type: "address",
+            },
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          name: "privateGamesInvitations",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          name: "publicAvailableGames",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "publicAvailableGamesCount",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "betId",
+              type: "uint256",
+            },
+          ],
+          name: "requestPrizePayment",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "gameId",
+              type: "uint256",
+            },
+          ],
+          name: "timeLeft",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          stateMutability: "payable",
+          type: "receive",
+        },
+      ],
+      inheritedFunctions: {},
+    },
+  },
+  31337: {
+    Jodobix: {
+      address: "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+      abi: [
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "endingBetPeriodReward",
+              type: "uint256",
+            },
+            {
+              internalType: "uint256",
+              name: "bettingPeriodBlocksForPublicGames",
+              type: "uint256",
+            },
+            {
+              internalType: "uint256",
+              name: "minBetValueForPublicGames",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "nonpayable",
+          type: "constructor",
+        },
+        {
+          inputs: [],
+          name: "AddParticipantsToPrivateGame",
+          type: "error",
+        },
+        {
+          inputs: [],
+          name: "BettingPeriodHasEnded",
+          type: "error",
+        },
+        {
+          inputs: [],
+          name: "BettingPeriodHasNotEnded",
+          type: "error",
+        },
+        {
+          inputs: [],
+          name: "GamePrivate",
+          type: "error",
+        },
+        {
+          inputs: [],
+          name: "InsufficientBalance",
+          type: "error",
+        },
+        {
+          inputs: [],
+          name: "InvalidNumber",
+          type: "error",
+        },
+        {
+          inputs: [],
+          name: "InvalidValue",
+          type: "error",
+        },
+        {
+          inputs: [],
+          name: "NoPrize",
+          type: "error",
+        },
+        {
+          inputs: [],
+          name: "PrizeAlreadyPaid",
+          type: "error",
+        },
+        {
+          inputs: [],
+          name: "TooManyPublicAvailableGames",
+          type: "error",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "uint256",
+              name: "gameId",
+              type: "uint256",
+            },
+            {
+              indexed: true,
+              internalType: "address",
+              name: "bettor",
+              type: "address",
+            },
+            {
+              indexed: true,
+              internalType: "uint8",
+              name: "number",
+              type: "uint8",
+            },
+            {
+              indexed: false,
+              internalType: "uint256",
+              name: "value",
+              type: "uint256",
+            },
+            {
+              indexed: false,
+              internalType: "uint256",
+              name: "timestamp",
+              type: "uint256",
+            },
+            {
+              indexed: false,
+              internalType: "uint256",
+              name: "betId",
+              type: "uint256",
+            },
+          ],
+          name: "BetPlaced",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "uint256",
+              name: "gameId",
+              type: "uint256",
+            },
+            {
+              indexed: true,
+              internalType: "uint8",
+              name: "drawnNumber",
+              type: "uint8",
+            },
+            {
+              indexed: true,
+              internalType: "address",
+              name: "closer",
+              type: "address",
+            },
+            {
+              indexed: false,
+              internalType: "uint256",
+              name: "reward",
+              type: "uint256",
+            },
+            {
+              indexed: false,
+              internalType: "uint256",
+              name: "timestamp",
+              type: "uint256",
+            },
+          ],
+          name: "EndOfBettingPeriod",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "uint256",
+              name: "gameId",
+              type: "uint256",
+            },
+            {
+              indexed: true,
+              internalType: "address",
+              name: "creator",
+              type: "address",
+            },
+            {
+              indexed: false,
+              internalType: "bool",
+              name: "isPrivate",
+              type: "bool",
+            },
+            {
+              indexed: false,
+              internalType: "uint256",
+              name: "timestamp",
+              type: "uint256",
+            },
+          ],
+          name: "GameCreated",
+          type: "event",
+        },
+        {
+          anonymous: false,
+          inputs: [
+            {
+              indexed: true,
+              internalType: "uint256",
+              name: "gameId",
+              type: "uint256",
+            },
+            {
+              indexed: true,
+              internalType: "uint256",
+              name: "betId",
+              type: "uint256",
+            },
+            {
+              indexed: true,
+              internalType: "address",
+              name: "bettor",
+              type: "address",
+            },
+            {
+              indexed: false,
+              internalType: "address",
+              name: "requestedBy",
+              type: "address",
+            },
+            {
+              indexed: false,
+              internalType: "uint8",
+              name: "drawnNumber",
+              type: "uint8",
+            },
+            {
+              indexed: false,
+              internalType: "uint256",
+              name: "prizeValue",
+              type: "uint256",
+            },
+            {
+              indexed: false,
+              internalType: "uint256",
+              name: "timestamp",
+              type: "uint256",
+            },
+          ],
+          name: "PrizePayment",
+          type: "event",
+        },
+        {
+          inputs: [],
+          name: "BETTING_PERIOD_BLOCKS_FOR_PUBLIC_GAMES",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "ENDING_BET_PERIOD_REWARD",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "MIN_BET_VALUE_FOR_PUBLIC_GAMES",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "betCount",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          name: "bets",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "gameId",
+              type: "uint256",
+            },
+            {
+              internalType: "address",
+              name: "bettor",
+              type: "address",
+            },
+            {
+              internalType: "uint256",
+              name: "value",
+              type: "uint256",
+            },
+            {
+              internalType: "uint8",
+              name: "number",
+              type: "uint8",
+            },
+            {
+              internalType: "bool",
+              name: "prizeIsPaid",
+              type: "bool",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "bettingPeriodBlocks",
+              type: "uint256",
+            },
+            {
+              internalType: "uint256",
+              name: "minBetValue",
+              type: "uint256",
+            },
+            {
+              internalType: "address[]",
+              name: "participants",
+              type: "address[]",
+            },
+          ],
+          name: "createPrivateGame",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "createPublicGame",
+          outputs: [],
+          stateMutability: "nonpayable",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "gameCount",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          name: "games",
+          outputs: [
+            {
+              internalType: "address",
+              name: "creator",
+              type: "address",
+            },
+            {
+              internalType: "uint256",
+              name: "totalValue",
+              type: "uint256",
+            },
+            {
+              internalType: "uint256",
+              name: "minEndingBlock",
+              type: "uint256",
+            },
+            {
+              internalType: "bytes32",
+              name: "combinedHash",
+              type: "bytes32",
+            },
+            {
+              internalType: "bool",
+              name: "bettingPeriodEnded",
+              type: "bool",
+            },
+            {
+              internalType: "uint8",
+              name: "drawnNumber",
+              type: "uint8",
+            },
+            {
+              internalType: "uint256",
+              name: "numberOfBets",
+              type: "uint256",
+            },
+            {
+              internalType: "uint256",
+              name: "valueProvidedToWinners",
+              type: "uint256",
+            },
+            {
+              internalType: "uint256",
+              name: "minBetValue",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "betId",
+              type: "uint256",
+            },
+          ],
+          name: "getBet",
+          outputs: [
+            {
+              components: [
+                {
+                  internalType: "uint256",
+                  name: "gameId",
+                  type: "uint256",
+                },
+                {
+                  internalType: "address",
+                  name: "bettor",
+                  type: "address",
+                },
+                {
+                  internalType: "uint256",
+                  name: "value",
+                  type: "uint256",
+                },
+                {
+                  internalType: "uint8",
+                  name: "number",
+                  type: "uint8",
+                },
+                {
+                  internalType: "bool",
+                  name: "prizeIsPaid",
+                  type: "bool",
+                },
+              ],
+              internalType: "struct Jodobix.Bet",
+              name: "",
+              type: "tuple",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [],
+          name: "getFirstCloseablePublicGame",
+          outputs: [
+            {
+              internalType: "uint256",
+              name: "",
+              type: "uint256",
+            },
+          ],
+          stateMutability: "view",
+          type: "function",
+        },
+        {
+          inputs: [
+            {
+              internalType: "uint256",
+              name: "gameId",
+              type: "uint256",
+            },
+          ],
+          name: "getGame",
+          outputs: [
+            {
+              components: [
+                {
+                  internalType: "address",
+                  name: "creator",
+                  type: "address",
+                },
+                {
+                  internalType: "address[]",
+                  name: "participants",
+                  type: "address[]",
+                },
+                {
+                  internalType: "uint256",
+                  name: "totalValue",
+                  type: "uint256",
+                },
+                {
+                  internalType: "uint256",
+                  name: "minEndingBlock",
+                  type: "uint256",
+                },
+                {
+                  internalType: "bytes32",
+                  name: "combinedHash",
+                  type: "bytes32",
+                },
+                {
+                  internalType: "uint256[25]",
+                  name: "betsPerNumber",
+                  type: "uint256[25]",
+                },
+                {
+                  internalType: "bool",
+                  name: "bettingPeriodEnded",
+                  type: "bool",
+                },
+                {
+                  internalType: "uint8",
+                  name: "drawnNumber",
+                  type: "uint8",
+                },
+                {
+                  internalType: "uint256",
+                  name: "numberOfBets",
+                  type: "uint256",
+                },
+                {
+                  internalType: "uint256",
+                  name: "valueProvidedToWinners",
+                  type: "uint256",
+                },
+                {
+                  internalType: "uint256",
+                  name: "minBetValue",
+                  type: "uint256",
+                },
+              ],
+              internalType: "struct Jodobix.Game",
               name: "",
               type: "tuple",
             },
@@ -734,7 +1462,7 @@ const deployedContracts = {
     },
   },
   421614: {
-    Critter: {
+    Jodobix: {
       address: "0xB23Bd5Eb9986B03E83197BBD22cD12f52607B06C",
       abi: [
         {
@@ -1205,7 +1933,7 @@ const deployedContracts = {
                   type: "bool",
                 },
               ],
-              internalType: "struct Critter.Bet",
+              internalType: "struct Jodobix.Bet",
               name: "",
               type: "tuple",
             },
@@ -1294,7 +2022,7 @@ const deployedContracts = {
                   type: "uint256",
                 },
               ],
-              internalType: "struct Critter.Game",
+              internalType: "struct Jodobix.Game",
               name: "",
               type: "tuple",
             },
@@ -1425,734 +2153,6 @@ const deployedContracts = {
             },
           ],
           stateMutability: "view",
-          type: "function",
-        },
-        {
-          inputs: [
-            {
-              internalType: "uint256",
-              name: "gameId",
-              type: "uint256",
-            },
-          ],
-          name: "timeLeft",
-          outputs: [
-            {
-              internalType: "uint256",
-              name: "",
-              type: "uint256",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
-          stateMutability: "payable",
-          type: "receive",
-        },
-      ],
-      inheritedFunctions: {},
-    },
-  },
-  11155420: {
-    Critter: {
-      address: "0xD7082E2295F9A399A0d359eEa191D879A2f7bd30",
-      abi: [
-        {
-          inputs: [
-            {
-              internalType: "uint256",
-              name: "endingBetPeriodReward",
-              type: "uint256",
-            },
-            {
-              internalType: "uint256",
-              name: "bettingPeriodBlocksForPublicGames",
-              type: "uint256",
-            },
-            {
-              internalType: "uint256",
-              name: "minBetValueForPublicGames",
-              type: "uint256",
-            },
-          ],
-          stateMutability: "nonpayable",
-          type: "constructor",
-        },
-        {
-          inputs: [],
-          name: "AddParticipantsToPrivateGame",
-          type: "error",
-        },
-        {
-          inputs: [],
-          name: "BettingPeriodHasEnded",
-          type: "error",
-        },
-        {
-          inputs: [],
-          name: "BettingPeriodHasNotEnded",
-          type: "error",
-        },
-        {
-          inputs: [],
-          name: "GamePrivate",
-          type: "error",
-        },
-        {
-          inputs: [],
-          name: "InsufficientBalance",
-          type: "error",
-        },
-        {
-          inputs: [],
-          name: "InvalidNumber",
-          type: "error",
-        },
-        {
-          inputs: [],
-          name: "InvalidValue",
-          type: "error",
-        },
-        {
-          inputs: [],
-          name: "NoPrize",
-          type: "error",
-        },
-        {
-          inputs: [],
-          name: "PrizeAlreadyPaid",
-          type: "error",
-        },
-        {
-          inputs: [],
-          name: "TooManyPublicAvailableGames",
-          type: "error",
-        },
-        {
-          anonymous: false,
-          inputs: [
-            {
-              indexed: true,
-              internalType: "uint256",
-              name: "gameId",
-              type: "uint256",
-            },
-            {
-              indexed: true,
-              internalType: "address",
-              name: "bettor",
-              type: "address",
-            },
-            {
-              indexed: true,
-              internalType: "uint8",
-              name: "number",
-              type: "uint8",
-            },
-            {
-              indexed: false,
-              internalType: "uint256",
-              name: "value",
-              type: "uint256",
-            },
-            {
-              indexed: false,
-              internalType: "uint256",
-              name: "timestamp",
-              type: "uint256",
-            },
-            {
-              indexed: false,
-              internalType: "uint256",
-              name: "betId",
-              type: "uint256",
-            },
-          ],
-          name: "BetPlaced",
-          type: "event",
-        },
-        {
-          anonymous: false,
-          inputs: [
-            {
-              indexed: true,
-              internalType: "uint256",
-              name: "gameId",
-              type: "uint256",
-            },
-            {
-              indexed: true,
-              internalType: "uint8",
-              name: "drawnNumber",
-              type: "uint8",
-            },
-            {
-              indexed: true,
-              internalType: "address",
-              name: "closer",
-              type: "address",
-            },
-            {
-              indexed: false,
-              internalType: "uint256",
-              name: "reward",
-              type: "uint256",
-            },
-            {
-              indexed: false,
-              internalType: "uint256",
-              name: "timestamp",
-              type: "uint256",
-            },
-          ],
-          name: "EndOfBettingPeriod",
-          type: "event",
-        },
-        {
-          anonymous: false,
-          inputs: [
-            {
-              indexed: true,
-              internalType: "uint256",
-              name: "gameId",
-              type: "uint256",
-            },
-            {
-              indexed: true,
-              internalType: "address",
-              name: "creator",
-              type: "address",
-            },
-            {
-              indexed: false,
-              internalType: "bool",
-              name: "isPrivate",
-              type: "bool",
-            },
-            {
-              indexed: false,
-              internalType: "uint256",
-              name: "timestamp",
-              type: "uint256",
-            },
-          ],
-          name: "GameCreated",
-          type: "event",
-        },
-        {
-          anonymous: false,
-          inputs: [
-            {
-              indexed: true,
-              internalType: "uint256",
-              name: "gameId",
-              type: "uint256",
-            },
-            {
-              indexed: true,
-              internalType: "uint256",
-              name: "betId",
-              type: "uint256",
-            },
-            {
-              indexed: true,
-              internalType: "address",
-              name: "bettor",
-              type: "address",
-            },
-            {
-              indexed: false,
-              internalType: "address",
-              name: "requestedBy",
-              type: "address",
-            },
-            {
-              indexed: false,
-              internalType: "uint8",
-              name: "drawnNumber",
-              type: "uint8",
-            },
-            {
-              indexed: false,
-              internalType: "uint256",
-              name: "prizeValue",
-              type: "uint256",
-            },
-            {
-              indexed: false,
-              internalType: "uint256",
-              name: "timestamp",
-              type: "uint256",
-            },
-          ],
-          name: "PrizePayment",
-          type: "event",
-        },
-        {
-          inputs: [],
-          name: "BETTING_PERIOD_BLOCKS_FOR_PUBLIC_GAMES",
-          outputs: [
-            {
-              internalType: "uint256",
-              name: "",
-              type: "uint256",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
-          inputs: [],
-          name: "ENDING_BET_PERIOD_REWARD",
-          outputs: [
-            {
-              internalType: "uint256",
-              name: "",
-              type: "uint256",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
-          inputs: [],
-          name: "MIN_BET_VALUE_FOR_PUBLIC_GAMES",
-          outputs: [
-            {
-              internalType: "uint256",
-              name: "",
-              type: "uint256",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
-          inputs: [],
-          name: "betCount",
-          outputs: [
-            {
-              internalType: "uint256",
-              name: "",
-              type: "uint256",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
-          inputs: [
-            {
-              internalType: "uint256",
-              name: "",
-              type: "uint256",
-            },
-          ],
-          name: "bets",
-          outputs: [
-            {
-              internalType: "uint256",
-              name: "gameId",
-              type: "uint256",
-            },
-            {
-              internalType: "address",
-              name: "bettor",
-              type: "address",
-            },
-            {
-              internalType: "uint256",
-              name: "value",
-              type: "uint256",
-            },
-            {
-              internalType: "uint8",
-              name: "number",
-              type: "uint8",
-            },
-            {
-              internalType: "bool",
-              name: "prizeIsPaid",
-              type: "bool",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
-          inputs: [
-            {
-              internalType: "uint256",
-              name: "bettingPeriodBlocks",
-              type: "uint256",
-            },
-            {
-              internalType: "uint256",
-              name: "minBetValue",
-              type: "uint256",
-            },
-            {
-              internalType: "address[]",
-              name: "participants",
-              type: "address[]",
-            },
-          ],
-          name: "createPrivateGame",
-          outputs: [],
-          stateMutability: "nonpayable",
-          type: "function",
-        },
-        {
-          inputs: [],
-          name: "createPublicGame",
-          outputs: [],
-          stateMutability: "nonpayable",
-          type: "function",
-        },
-        {
-          inputs: [],
-          name: "gameCount",
-          outputs: [
-            {
-              internalType: "uint256",
-              name: "",
-              type: "uint256",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
-          inputs: [
-            {
-              internalType: "uint256",
-              name: "",
-              type: "uint256",
-            },
-          ],
-          name: "games",
-          outputs: [
-            {
-              internalType: "address",
-              name: "creator",
-              type: "address",
-            },
-            {
-              internalType: "uint256",
-              name: "totalValue",
-              type: "uint256",
-            },
-            {
-              internalType: "uint256",
-              name: "minEndingBlock",
-              type: "uint256",
-            },
-            {
-              internalType: "bytes32",
-              name: "combinedHash",
-              type: "bytes32",
-            },
-            {
-              internalType: "bool",
-              name: "bettingPeriodEnded",
-              type: "bool",
-            },
-            {
-              internalType: "uint8",
-              name: "drawnNumber",
-              type: "uint8",
-            },
-            {
-              internalType: "uint256",
-              name: "numberOfBets",
-              type: "uint256",
-            },
-            {
-              internalType: "uint256",
-              name: "valueProvidedToWinners",
-              type: "uint256",
-            },
-            {
-              internalType: "uint256",
-              name: "minBetValue",
-              type: "uint256",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
-          inputs: [
-            {
-              internalType: "uint256",
-              name: "betId",
-              type: "uint256",
-            },
-          ],
-          name: "getBet",
-          outputs: [
-            {
-              components: [
-                {
-                  internalType: "uint256",
-                  name: "gameId",
-                  type: "uint256",
-                },
-                {
-                  internalType: "address",
-                  name: "bettor",
-                  type: "address",
-                },
-                {
-                  internalType: "uint256",
-                  name: "value",
-                  type: "uint256",
-                },
-                {
-                  internalType: "uint8",
-                  name: "number",
-                  type: "uint8",
-                },
-                {
-                  internalType: "bool",
-                  name: "prizeIsPaid",
-                  type: "bool",
-                },
-              ],
-              internalType: "struct Critter.Bet",
-              name: "",
-              type: "tuple",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
-          inputs: [],
-          name: "getFirstCloseablePublicGame",
-          outputs: [
-            {
-              internalType: "uint256",
-              name: "",
-              type: "uint256",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
-          inputs: [
-            {
-              internalType: "uint256",
-              name: "gameId",
-              type: "uint256",
-            },
-          ],
-          name: "getGame",
-          outputs: [
-            {
-              components: [
-                {
-                  internalType: "address",
-                  name: "creator",
-                  type: "address",
-                },
-                {
-                  internalType: "address[]",
-                  name: "participants",
-                  type: "address[]",
-                },
-                {
-                  internalType: "uint256",
-                  name: "totalValue",
-                  type: "uint256",
-                },
-                {
-                  internalType: "uint256",
-                  name: "minEndingBlock",
-                  type: "uint256",
-                },
-                {
-                  internalType: "bytes32",
-                  name: "combinedHash",
-                  type: "bytes32",
-                },
-                {
-                  internalType: "uint256[25]",
-                  name: "betsPerNumber",
-                  type: "uint256[25]",
-                },
-                {
-                  internalType: "bool",
-                  name: "bettingPeriodEnded",
-                  type: "bool",
-                },
-                {
-                  internalType: "uint8",
-                  name: "drawnNumber",
-                  type: "uint8",
-                },
-                {
-                  internalType: "uint256",
-                  name: "numberOfBets",
-                  type: "uint256",
-                },
-                {
-                  internalType: "uint256",
-                  name: "valueProvidedToWinners",
-                  type: "uint256",
-                },
-                {
-                  internalType: "uint256",
-                  name: "minBetValue",
-                  type: "uint256",
-                },
-              ],
-              internalType: "struct Critter.Game",
-              name: "",
-              type: "tuple",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
-          inputs: [
-            {
-              internalType: "address",
-              name: "participant",
-              type: "address",
-            },
-          ],
-          name: "getPrivateGameInvitations",
-          outputs: [
-            {
-              internalType: "uint256[]",
-              name: "",
-              type: "uint256[]",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
-          inputs: [
-            {
-              internalType: "uint256",
-              name: "betId",
-              type: "uint256",
-            },
-          ],
-          name: "getPrize",
-          outputs: [
-            {
-              internalType: "uint256",
-              name: "",
-              type: "uint256",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
-          inputs: [],
-          name: "getPublicAvailableGames",
-          outputs: [
-            {
-              internalType: "uint256[]",
-              name: "",
-              type: "uint256[]",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
-          inputs: [
-            {
-              internalType: "uint256",
-              name: "gameId",
-              type: "uint256",
-            },
-            {
-              internalType: "uint8",
-              name: "number",
-              type: "uint8",
-            },
-          ],
-          name: "placeBet",
-          outputs: [],
-          stateMutability: "payable",
-          type: "function",
-        },
-        {
-          inputs: [
-            {
-              internalType: "address",
-              name: "",
-              type: "address",
-            },
-            {
-              internalType: "uint256",
-              name: "",
-              type: "uint256",
-            },
-          ],
-          name: "privateGamesInvitations",
-          outputs: [
-            {
-              internalType: "uint256",
-              name: "",
-              type: "uint256",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
-          inputs: [
-            {
-              internalType: "uint256",
-              name: "",
-              type: "uint256",
-            },
-          ],
-          name: "publicAvailableGames",
-          outputs: [
-            {
-              internalType: "uint256",
-              name: "",
-              type: "uint256",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
-          inputs: [],
-          name: "publicAvailableGamesCount",
-          outputs: [
-            {
-              internalType: "uint256",
-              name: "",
-              type: "uint256",
-            },
-          ],
-          stateMutability: "view",
-          type: "function",
-        },
-        {
-          inputs: [
-            {
-              internalType: "uint256",
-              name: "betId",
-              type: "uint256",
-            },
-          ],
-          name: "requestPrizePayment",
-          outputs: [],
-          stateMutability: "nonpayable",
           type: "function",
         },
         {

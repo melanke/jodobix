@@ -2,7 +2,7 @@ import * as dotenv from "dotenv";
 dotenv.config();
 import { Wallet } from "ethers";
 import { ethers } from "hardhat";
-import { Critter } from "../typechain-types";
+import { Jodobix } from "../typechain-types";
 import { closeGame } from "../utils/closeGame";
 
 /**
@@ -56,7 +56,7 @@ async function main() {
     await requestFunds(wallet);
   }
 
-  const contract = await ethers.getContract<Critter>("Critter", wallet);
+  const contract = await ethers.getContract<Jodobix>("Jodobix", wallet);
 
   while (true) {
     // Search for games that can be closed

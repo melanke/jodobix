@@ -3,12 +3,12 @@ import { DeployFunction } from "hardhat-deploy/types";
 import { ethers } from "ethers";
 
 /**
- * Deploys a contract named "Critter" using the deployer account and
+ * Deploys a contract named "Jodobix" using the deployer account and
  * constructor arguments set to the deployer address
  *
  * @param hre HardhatRuntimeEnvironment object.
  */
-const deployCritter: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
+const deployJodobix: DeployFunction = async function (hre: HardhatRuntimeEnvironment) {
   /*
     On localhost, the deployer account is the one that comes with Hardhat, which is already funded.
 
@@ -22,7 +22,7 @@ const deployCritter: DeployFunction = async function (hre: HardhatRuntimeEnviron
   const { deployer } = await hre.getNamedAccounts();
   const { deploy } = hre.deployments;
 
-  await deploy("Critter", {
+  await deploy("Jodobix", {
     from: deployer,
     // Contract constructor arguments:
     // uint256 endingBetPeriodReward,
@@ -36,8 +36,8 @@ const deployCritter: DeployFunction = async function (hre: HardhatRuntimeEnviron
   });
 };
 
-export default deployCritter;
+export default deployJodobix;
 
 // Tags are useful if you have multiple deploy files and only want to run one of them.
-// e.g. yarn deploy --tags Critter
-deployCritter.tags = ["Critter"];
+// e.g. yarn deploy --tags Jodobix
+deployJodobix.tags = ["Jodobix"];

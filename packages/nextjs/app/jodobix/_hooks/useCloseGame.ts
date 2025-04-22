@@ -11,9 +11,9 @@ export const useCloseGame = (
   const [closingGame, setClosingGame] = useState(false);
   const [lastTwoChars, setLastTwoChars] = useState<string | undefined>(undefined);
   const publicClient = usePublicClient();
-  const { data: critterContract } = useDeployedContractInfo("Critter");
+  const { data: jodobixContract } = useDeployedContractInfo("Jodobix");
 
-  const { writeContractAsync } = useScaffoldWriteContract("Critter");
+  const { writeContractAsync } = useScaffoldWriteContract("Jodobix");
 
   const placeBet = useCallback(() => {
     writeContractAsync(
@@ -26,7 +26,7 @@ export const useCloseGame = (
       {
         onBlockConfirmation: receipt => {
           const [endingEvent] = parseEventLogs({
-            abi: critterContract?.abi as Abi,
+            abi: jodobixContract?.abi as Abi,
             eventName: "EndOfBettingPeriod",
             logs: receipt.logs,
           });
@@ -42,10 +42,10 @@ export const useCloseGame = (
       console.error(error);
       setClosingGame(false);
     });
-  }, [writeContractAsync, critterContract, gameId, minBetValue, onGameClose]);
+  }, [writeContractAsync, jodobixContract, gameId, minBetValue, onGameClose]);
 
   const closeGame = useCallback(async () => {
-    if (!critterContract && gameId !== undefined) {
+    if (!jodobixContract && gameId !== undefined) {
       return;
     }
 
@@ -66,7 +66,7 @@ export const useCloseGame = (
       }
     }
     setTimeout(closeGame, 200);
-  }, [gameId, critterContract, placeBet]);
+  }, [gameId, jodobixContract, placeBet]);
 
   return {
     closeGame,

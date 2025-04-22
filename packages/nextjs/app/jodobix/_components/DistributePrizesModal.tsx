@@ -20,13 +20,13 @@ const WinningBetItem: React.FC<{
   onBetStatusChange: (betId: bigint, shouldShow: boolean) => void;
 }> = ({ betId, onBetStatusChange }) => {
   const { data: bet, refetch: refetchBet } = useScaffoldReadContract({
-    contractName: "Critter",
+    contractName: "Jodobix",
     functionName: "getBet",
     args: [betId],
   });
 
   const { data: prize } = useScaffoldReadContract({
-    contractName: "Critter",
+    contractName: "Jodobix",
     functionName: "getPrize",
     args: [betId],
     query: {
@@ -39,7 +39,7 @@ const WinningBetItem: React.FC<{
     onBetStatusChange(betId, !(!bet || bet.prizeIsPaid));
   }, [bet, betId, onBetStatusChange]);
 
-  const { writeContractAsync } = useScaffoldWriteContract("Critter");
+  const { writeContractAsync } = useScaffoldWriteContract("Jodobix");
 
   const requestPrizePayment = async () => {
     try {
@@ -86,7 +86,7 @@ const EndedGameItem: React.FC<{
     isLoading,
     error,
   } = useScaffoldEventHistory({
-    contractName: "Critter",
+    contractName: "Jodobix",
     eventName: "BetPlaced",
     fromBlock: deploymentBlock - 10n,
     filters: {
@@ -147,14 +147,14 @@ export const DistributePrizesModal: React.FC<DistributePrizesModalProps> = ({
   const { chainId } = useAccount();
   const [gamesWithUnpaidBets, setGamesWithUnpaidBets] = React.useState<Set<bigint>>(new Set());
 
-  const deploymentBlock = chainConstants[chainId as keyof typeof chainConstants]?.Critter?.deploymentBlock ?? 10n;
+  const deploymentBlock = chainConstants[chainId as keyof typeof chainConstants]?.Jodobix?.deploymentBlock ?? 10n;
 
   const {
     data: endedGames,
     error: errorEndOfBettingPeriodEvents,
     isLoading: isLoadingEndOfBettingPeriodEvents,
   } = useScaffoldEventHistory({
-    contractName: "Critter",
+    contractName: "Jodobix",
     eventName: "EndOfBettingPeriod",
     fromBlock: deploymentBlock - 10n,
   });

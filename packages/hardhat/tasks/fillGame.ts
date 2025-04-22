@@ -48,7 +48,7 @@ task("fillgame", "Fill all empty numbers in a game with bets")
       await requestFunds(wallet);
     }
 
-    const contract = await ethers.getContract("Critter", wallet);
+    const contract = await ethers.getContract("Jodobix", wallet);
     const game = await contract.getGame(taskArgs.gameId);
 
     for (let number = 0; number < 25; number++) {

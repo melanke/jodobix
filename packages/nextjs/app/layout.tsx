@@ -5,9 +5,9 @@ import "~~/styles/globals.css";
 import { getMetadata } from "~~/utils/scaffold-eth/getMetadata";
 
 export const metadata = getMetadata({
-  title: "Critter",
+  title: "Jodobix",
   description:
-    "Critter is a betting game where you choose one of the 25 available animals. The prize is split among the winners who chose the winning animal. The house keeps nothing.",
+    "Jodobix is a betting game where you choose one of the 25 available animals. The prize is split among the winners who chose the winning animal. The house keeps nothing.",
 });
 
 const ScaffoldEthApp = ({ children }: { children: React.ReactNode }) => {

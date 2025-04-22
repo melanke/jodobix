@@ -19,7 +19,7 @@ import {
   useScaffoldWriteContract,
 } from "~~/hooks/scaffold-eth";
 
-const CritterClientLogic: React.FC = () => {
+const JodobixClientLogic: React.FC = () => {
   const router = useRouter();
   const searchParams = useSearchParams();
   const gameIdParam = searchParams.get("gameId");
@@ -30,12 +30,12 @@ const CritterClientLogic: React.FC = () => {
   const [hasUnpaidPrizes, setHasUnpaidPrizes] = useState(false);
 
   const { data: publicAvailableGames, isLoading: isLoadingPublicAvailableGames } = useScaffoldReadContract({
-    contractName: "Critter",
+    contractName: "Jodobix",
     functionName: "getPublicAvailableGames",
     watch: true,
   });
 
-  const deploymentBlock = chainConstants[chainId as keyof typeof chainConstants]?.Critter?.deploymentBlock ?? 10n;
+  const deploymentBlock = chainConstants[chainId as keyof typeof chainConstants]?.Jodobix?.deploymentBlock ?? 10n;
 
   const {
     data: gameCreatedEvents,
@@ -43,7 +43,7 @@ const CritterClientLogic: React.FC = () => {
     error: errorGameCreatedEvents,
     isLoading: isLoadingGameCreatedEvents,
   } = useScaffoldEventHistory({
-    contractName: "Critter",
+    contractName: "Jodobix",
     eventName: "GameCreated",
     fromBlock: deploymentBlock - 10n,
     filters: {
@@ -59,7 +59,7 @@ const CritterClientLogic: React.FC = () => {
     error: errorBetPlacedEvents,
     isLoading: isLoadingBetPlacedEvents,
   } = useScaffoldEventHistory({
-    contractName: "Critter",
+    contractName: "Jodobix",
     eventName: "BetPlaced",
     fromBlock: deploymentBlock - 10n,
     filters: {
@@ -74,19 +74,19 @@ const CritterClientLogic: React.FC = () => {
   );
 
   const { data: privateGameInvitations } = useScaffoldReadContract({
-    contractName: "Critter",
+    contractName: "Jodobix",
     functionName: "getPrivateGameInvitations",
     args: [address],
     watch: true,
   });
 
   const { data: publicAvailableGamesCount } = useScaffoldReadContract({
-    contractName: "Critter",
+    contractName: "Jodobix",
     functionName: "publicAvailableGamesCount",
   });
 
-  const { data: critterContractInfo } = useDeployedContractInfo("Critter");
-  const { writeContractAsync } = useScaffoldWriteContract("Critter");
+  const { data: jodobixContractInfo } = useDeployedContractInfo("Jodobix");
+  const { writeContractAsync } = useScaffoldWriteContract("Jodobix");
 
   const handleCreatePublicGame = async () => {
     await writeContractAsync(
@@ -94,7 +94,7 @@ const CritterClientLogic: React.FC = () => {
       {
         onBlockConfirmation: receipt => {
           const [gameCreatedEvent] = parseEventLogs({
-            abi: critterContractInfo?.abi as Abi,
+            abi: jodobixContractInfo?.abi as Abi,
             eventName: "GameCreated",
             logs: receipt.logs,
           });
@@ -119,9 +119,9 @@ const CritterClientLogic: React.FC = () => {
 
   const handleOpenGame = (gameId: bigint | undefined) => {
     if (gameId) {
-      router.push(`/critter?gameId=${gameId.toString()}`);
+      router.push(`/jodobix?gameId=${gameId.toString()}`);
     } else {
-      router.push("/critter");
+      router.push("/jodobix");
     }
     setOpenGameId(gameId);
   };
@@ -129,7 +129,7 @@ const CritterClientLogic: React.FC = () => {
   return (
     <div className="w-full max-w-7xl mx-auto flex flex-col px-6 lg:px-10 py-8 lg:py-12">
       <div className="flex flex-wrap justify-between items-center mb-8">
-        <h1 className="text-4xl font-bold">Critter</h1>
+        <h1 className="text-4xl font-bold">Jodobix</h1>
         <div className="flex gap-2">
           <button
             onClick={handleCreatePublicGame}
@@ -147,7 +147,7 @@ const CritterClientLogic: React.FC = () => {
       <DismissibleAlert id="how-it-works" className="bg-base-300/50 rounded-lg mb-8 border border-primary/50">
         <h2 className="text-xl font-bold mb-2">How it works?</h2>
         <p className="mb-2">
-          Critter is a betting game where you choose one of the 25 available animals. When all animals have received at
+          Jodobix is a betting game where you choose one of the 25 available animals. When all animals have received at
           least one bet and the betting period ends, a number will be drawn and the winners who chose the winning animal
           will split the prize proportionally to their bets.
         </p>
@@ -252,7 +252,7 @@ const CritterClientLogic: React.FC = () => {
   );
 };
 
-const CritterPage = () => {
+const JodobixPage = () => {
   return (
     <Suspense
       fallback={
@@ -261,9 +261,9 @@ const CritterPage = () => {
         </div>
       }
     >
-      <CritterClientLogic />
+      <JodobixClientLogic />
     </Suspense>
   );
 };
 
-export default CritterPage;
+export default JodobixPage;

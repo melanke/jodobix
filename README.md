@@ -1,4 +1,4 @@
-# Critter
+# Jodobix
 
 _(codename, will change)_
 

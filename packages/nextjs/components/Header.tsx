@@ -16,8 +16,8 @@ type HeaderMenuLink = {
 
 export const menuLinks: HeaderMenuLink[] = [
   {
-    label: "Critter",
-    href: "/critter",
+    label: "Jodobix",
+    href: "/jodobix",
   },
   {
     label: "Debug Contracts",
@@ -92,7 +92,7 @@ export const Header = () => {
             <Image alt="SE2 logo" className="cursor-pointer" fill src="/logo.svg" />
           </div>
           <div className="flex flex-col">
-            <span className="font-bold leading-tight">Critter</span>
+            <span className="font-bold leading-tight">Jodobix</span>
             <span className="text-xs">Betting game</span>
           </div>
         </Link>

@@ -13,13 +13,13 @@ interface GameCardProps {
 
 export const GameCard: React.FC<GameCardProps> = ({ gameId, onNavigate }) => {
   const { data: game } = useScaffoldReadContract({
-    contractName: "Critter",
+    contractName: "Jodobix",
     functionName: "getGame",
     args: [gameId],
   });
 
   const { data: timeLeft } = useScaffoldReadContract({
-    contractName: "Critter",
+    contractName: "Jodobix",
     functionName: "timeLeft",
     args: [gameId],
     watch: true,

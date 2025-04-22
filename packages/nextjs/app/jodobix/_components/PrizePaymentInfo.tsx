@@ -9,10 +9,10 @@ interface PrizePaymentInfoProps {
 
 export const PrizePaymentInfo = ({ betId }: PrizePaymentInfoProps) => {
   const { chainId } = useAccount();
-  const deploymentBlock = chainConstants[chainId as keyof typeof chainConstants]?.Critter?.deploymentBlock ?? 10n;
+  const deploymentBlock = chainConstants[chainId as keyof typeof chainConstants]?.Jodobix?.deploymentBlock ?? 10n;
 
   const { data: prizePaymentedEvents, isLoading } = useScaffoldEventHistory({
-    contractName: "Critter",
+    contractName: "Jodobix",
     eventName: "PrizePayment",
     fromBlock: deploymentBlock - 10n,
     filters: { betId },

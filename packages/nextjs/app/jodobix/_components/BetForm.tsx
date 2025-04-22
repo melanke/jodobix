@@ -12,8 +12,8 @@ interface BetFormProps {
 }
 
 export const BetForm: React.FC<BetFormProps> = ({ gameId, selectedNumber, onBetPlaced, betAmount, setBetAmount }) => {
-  const { data: critterContractInfo } = useDeployedContractInfo("Critter");
-  const { writeContractAsync } = useScaffoldWriteContract("Critter");
+  const { data: jodobixContractInfo } = useDeployedContractInfo("Jodobix");
+  const { writeContractAsync } = useScaffoldWriteContract("Jodobix");
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -28,7 +28,7 @@ export const BetForm: React.FC<BetFormProps> = ({ gameId, selectedNumber, onBetP
         {
           onBlockConfirmation: receipt => {
             const [betPlacedEvent] = parseEventLogs({
-              abi: critterContractInfo?.abi as Abi,
+              abi: jodobixContractInfo?.abi as Abi,
               eventName: "BetPlaced",
               logs: receipt.logs,
             });

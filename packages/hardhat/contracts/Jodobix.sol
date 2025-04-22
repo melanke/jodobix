@@ -1,7 +1,7 @@
 //SPDX-License-Identifier: MIT
 pragma solidity >=0.8.0 <0.9.0;
 
-contract Critter {
+contract Jodobix {
 
     // #region Constants
     uint256 constant MAX_PUBLIC_AVAILABLE_GAMES = 10; // Max number of public available games, this limitation is to improve the performance
