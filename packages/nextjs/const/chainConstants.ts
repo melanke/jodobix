@@ -1,4 +1,10 @@
 const chainConstants = {
+  10: {
+    // Optimism Mainnet
+    Jodobix: {
+      deploymentBlock: 134864452n,
+    },
+  },
   31337: {
     // Hardhat
     Jodobix: {
