@@ -30,7 +30,7 @@ export const GameCard: React.FC<GameCardProps> = ({ gameId, onNavigate }) => {
   return (
     <div
       onClick={() => onNavigate(gameId)}
-      className="rounded-xl p-4 bg-base-100 shadow-xl cursor-pointer hover:scale-105 transition-all duration-300"
+      className="rounded-xl p-4 bg-base-100 border border-primary cursor-pointer hover:scale-105 transition-all duration-300"
     >
       <div className="flex justify-between">
         <h2 className="card-title">Game #{gameId.toString()}</h2>

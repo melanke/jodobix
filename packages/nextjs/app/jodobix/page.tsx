@@ -144,7 +144,7 @@ const JodobixClientLogic: React.FC = () => {
         </div>
       </div>
 
-      <DismissibleAlert id="how-it-works" className="bg-base-300/50 rounded-lg mb-8 border border-primary/50">
+      <DismissibleAlert id="how-it-works" className="bg-base-300/50 rounded-lg mb-8 border border-primary">
         <h2 className="text-xl font-bold mb-2">How it works?</h2>
         <p className="mb-2">
           Jodobix is a betting game where you choose one of the 25 available animals. When all animals have received at
