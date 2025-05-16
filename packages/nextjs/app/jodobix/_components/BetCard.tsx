@@ -40,14 +40,9 @@ export const BetCard: React.FC<BetCardProps> = ({ betId, drawnNumber }) => {
   };
 
   return (
-    <div className="flex items-center gap-4 p-3 bg-base-200 dark:bg-[#574c3b] rounded-lg">
+    <div className="flex items-center gap-4">
       <div className="relative w-16 h-16">
-        <Image
-          src={`/animals/${bet?.number}.webp`}
-          alt={`Animal ${bet?.number}`}
-          fill
-          className="object-contain mix-blend-multiply"
-        />
+        <Image src={`/animals/${bet?.number}.webp`} alt={`Animal ${bet?.number}`} width={228} height={325} />
 
         {won && (
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 86 66" className="h-14 -ml-1 mt-1">

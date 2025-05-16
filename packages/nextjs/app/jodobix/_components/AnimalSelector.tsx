@@ -26,22 +26,11 @@ export const AnimalSelector: React.FC<AnimalSelectorProps> = ({
           <button
             onClick={() => onSelectNumber(number)}
             key={number}
-            className={`group flex flex-col items-center rounded-lg p-1 transition
-              outline  
-              hover:scale-125 hover:bg-secondary dark:hover:bg-[#675c47] 
-              ${
-                selectedNumber === number
-                  ? "scale-125 bg-secondary dark:bg-[#675c47] outline-2 outline-primary"
-                  : "bg-white dark:bg-[#574c3b] outline-1 outline-secondary dark:outline-none"
-              }`}
+            className={`flex flex-col items-center transition  
+              hover:scale-125 
+              ${selectedNumber === number ? "scale-125 z-10" : selectedNumber !== null ? "brightness-50" : ""}`}
           >
-            <Image
-              src={`/animals/${number}.webp`}
-              alt={`Animal ${number}`}
-              width={96}
-              height={96}
-              className="mix-blend-multiply group-hover:mix-blend-color-burn"
-            />
+            <Image src={`/animals/${number}.webp`} alt={`Animal ${number}`} width={110} height={110} />
             {drawnNumber === number && (
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 86 66" className="-mt-20 h-20">
                 <path
@@ -52,9 +41,9 @@ export const AnimalSelector: React.FC<AnimalSelectorProps> = ({
                 />
               </svg>
             )}
-            <div className="flex justify-between w-[96px] mt-0.5 flex-col md:flex-row">
+            <div className="flex items-center justify-between w-[86px] -mt-12 h-12 flex-col md:flex-row">
               <span className="text-sm text-accent">#{number}</span>
-              <span className="text-xs">{formatEther(betAmount)} ETH</span>
+              <span className="text-xs text-black">{formatEther(betAmount)} ETH</span>
             </div>
           </button>
         );
