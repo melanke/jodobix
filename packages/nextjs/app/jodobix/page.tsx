@@ -10,8 +10,8 @@ import { GameDetailsModal } from "./_components/GameDetailsModal";
 import { Abi } from "viem";
 import { parseEventLogs } from "viem";
 import { useAccount } from "wagmi";
+import { useBlockNumber } from "wagmi";
 import { ArrowPathIcon } from "@heroicons/react/24/outline";
-import chainConstants from "~~/const/chainConstants";
 import {
   useDeployedContractInfo,
   useScaffoldEventHistory,
@@ -28,6 +28,7 @@ const JodobixClientLogic: React.FC = () => {
   const { address, chainId } = useAccount();
   const [isDistributePrizesModalOpen, setIsDistributePrizesModalOpen] = useState(false);
   const [hasUnpaidPrizes, setHasUnpaidPrizes] = useState(false);
+  const { data: blockNumber } = useBlockNumber();
 
   const { data: publicAvailableGames, isLoading: isLoadingPublicAvailableGames } = useScaffoldReadContract({
     contractName: "Jodobix",
@@ -35,7 +36,7 @@ const JodobixClientLogic: React.FC = () => {
     watch: true,
   });
 
-  const deploymentBlock = chainConstants[chainId as keyof typeof chainConstants]?.Jodobix?.deploymentBlock ?? 10n;
+  const fromBlock = blockNumber ? blockNumber - 499n : 10n;
 
   const {
     data: gameCreatedEvents,
@@ -45,11 +46,11 @@ const JodobixClientLogic: React.FC = () => {
   } = useScaffoldEventHistory({
     contractName: "Jodobix",
     eventName: "GameCreated",
-    fromBlock: deploymentBlock - 10n,
+    fromBlock,
     filters: {
       creator: address,
     },
-    enabled: !!address,
+    enabled: !!address && !!blockNumber,
   });
 
   const myCreatedGames = gameCreatedEvents?.map(event => event.args.gameId).filter(gameId => gameId !== undefined);
@@ -61,11 +62,11 @@ const JodobixClientLogic: React.FC = () => {
   } = useScaffoldEventHistory({
     contractName: "Jodobix",
     eventName: "BetPlaced",
-    fromBlock: deploymentBlock - 10n,
+    fromBlock,
     filters: {
       bettor: address,
     },
-    enabled: !!address,
+    enabled: !!address && !!blockNumber,
   });
 
   const gamesIHaveBet = useMemo(
