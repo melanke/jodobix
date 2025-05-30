@@ -1,0 +1,35 @@
+specVersion: 1.3.0
+indexerHints:
+  prune: auto
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: Jodobix
+    network: optimism
+    source:
+      address: "0xB23Bd5Eb9986B03E83197BBD22cD12f52607B06C"
+      abi: Jodobix
+      startBlock: 134864452
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.9
+      language: wasm/assemblyscript
+      entities:
+        - BetPlaced
+        - EndOfBettingPeriod
+        - GameCreated
+        - PrizePayment
+      abis:
+        - name: Jodobix
+          file: ./abis/Jodobix.json
+      eventHandlers:
+        - event: BetPlaced(indexed uint256,indexed address,indexed uint8,uint256,uint256,uint256)
+          handler: handleBetPlaced
+        - event: EndOfBettingPeriod(indexed uint256,indexed uint8,indexed address,uint256,uint256)
+          handler: handleEndOfBettingPeriod
+        - event: GameCreated(indexed uint256,indexed address,bool,uint256)
+          handler: handleGameCreated
+        - event: PrizePayment(indexed uint256,indexed uint256,indexed address,address,uint8,uint256,uint256)
+          handler: handlePrizePayment
+      file: ./src/jodobix.ts
