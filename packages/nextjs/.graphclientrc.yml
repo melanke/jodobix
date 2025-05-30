@@ -1,0 +1,7 @@
+sources:
+  - name: jodobix-op-mainnet
+    handler:
+      graphql:
+        endpoint: https://gateway.thegraph.com/api/adca8d5ca99b5c886296cdbf714ddf6b/subgraphs/id/CNojXnaokkytgd54qTvamsYWtKfCjnXm6afHXzKNAT4G
+documents:
+  - ./graphqueries/*.graphql

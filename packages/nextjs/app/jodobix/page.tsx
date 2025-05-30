@@ -18,6 +18,8 @@ import {
   useScaffoldReadContract,
   useScaffoldWriteContract,
 } from "~~/hooks/scaffold-eth";
+import { useBetsPlaced } from "~~/hooks/useBetPlaceds";
+import { useGamesCreated } from "~~/hooks/useGamesCreated";
 
 const JodobixClientLogic: React.FC = () => {
   const router = useRouter();
@@ -37,39 +39,24 @@ const JodobixClientLogic: React.FC = () => {
   });
 
   const {
-    data: gameCreatedEvents,
+    data: myCreatedGames,
     refetch: refetchMyCreatedGames,
     error: errorGameCreatedEvents,
     isLoading: isLoadingGameCreatedEvents,
-  } = useScaffoldEventHistory({
-    contractName: "Jodobix",
-    eventName: "GameCreated",
-    fromBlock: 0n,
-    filters: {
-      creator: address,
-    },
-    enabled: !!address,
-  });
-
-  const myCreatedGames = gameCreatedEvents?.map(event => event.args.gameId).filter(gameId => gameId !== undefined);
+  } = useGamesCreated({ creator: address, enabled: !!address });
 
   const {
-    data: betPlacedEvents,
+    data: myPlacedBets,
     error: errorBetPlacedEvents,
     isLoading: isLoadingBetPlacedEvents,
-  } = useScaffoldEventHistory({
-    contractName: "Jodobix",
-    eventName: "BetPlaced",
-    fromBlock: 0n,
-    filters: {
-      bettor: address,
-    },
+  } = useBetsPlaced({
+    bettor: address,
     enabled: !!address && !!blockNumber,
   });
 
-  const gamesIHaveBet = useMemo(
-    () => [...new Set((betPlacedEvents ?? []).map(event => event.args.gameId).filter(gameId => gameId !== undefined))],
-    [betPlacedEvents],
+  const gameIdsIHaveBets: bigint[] = useMemo(
+    () => [...new Set((myPlacedBets ?? []).map(event => event.gameId).filter(gameId => gameId !== undefined))],
+    [myPlacedBets],
   );
 
   const { data: privateGameInvitations } = useScaffoldReadContract({
@@ -191,19 +178,19 @@ const JodobixClientLogic: React.FC = () => {
           <h2 className="text-2xl font-bold mb-4">My Created Games</h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
-            {myCreatedGames?.map((gameId, index) => (
-              <GameCard key={index} gameId={gameId} onNavigate={handleOpenGame} />
+            {myCreatedGames?.map((game, index) => (
+              <GameCard key={index} gameId={game.gameId} onNavigate={handleOpenGame} />
             ))}
           </div>
         </>
       )}
 
-      {(gamesIHaveBet?.length ?? 0) > 0 && (
+      {(gameIdsIHaveBets?.length ?? 0) > 0 && (
         <>
           <h2 className="text-2xl font-bold mb-4">Games I Have Bet</h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
-            {gamesIHaveBet?.map((gameId, index) => (
+            {gameIdsIHaveBets?.map((gameId, index) => (
               <GameCard key={index} gameId={gameId} onNavigate={handleOpenGame} />
             ))}
           </div>

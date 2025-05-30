@@ -6,6 +6,8 @@ import { formatEther } from "viem";
 import { useAccount } from "wagmi";
 import { Address } from "~~/components/scaffold-eth";
 import { useScaffoldEventHistory, useScaffoldReadContract, useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
+import { useBetsPlaced } from "~~/hooks/useBetPlaceds";
+import { useEndsOfBettingPeriod } from "~~/hooks/useEndsOfBettingPeriod";
 import { cn } from "~~/lib/utils";
 
 interface DistributePrizesModalProps {
@@ -83,18 +85,13 @@ const EndedGameItem: React.FC<{
     data: winningBets,
     isLoading,
     error,
-  } = useScaffoldEventHistory({
-    contractName: "Jodobix",
-    eventName: "BetPlaced",
-    fromBlock: 0n,
-    filters: {
-      gameId: gameId,
-      number: drawnNumber,
-    },
+  } = useBetsPlaced({
+    gameId: gameId,
+    number: drawnNumber,
     enabled: !!gameId && !!drawnNumber,
   });
 
-  const validBets = winningBets?.filter(bet => !!bet.args.betId) ?? [];
+  const validBets = winningBets?.filter(bet => !!bet.betId) ?? [];
 
   const handleBetStatusChange = useCallback((betId: bigint, shouldShow: boolean) => {
     setVisibleBets(prev => {
@@ -126,11 +123,7 @@ const EndedGameItem: React.FC<{
         </h4>
         <div className="space-y-2">
           {validBets.map(bet => (
-            <WinningBetItem
-              key={bet.args.betId!.toString()}
-              betId={bet.args.betId!}
-              onBetStatusChange={handleBetStatusChange}
-            />
+            <WinningBetItem key={bet.betId!.toString()} betId={bet.betId!} onBetStatusChange={handleBetStatusChange} />
           ))}
         </div>
       </div>
@@ -150,11 +143,7 @@ export const DistributePrizesModal: React.FC<DistributePrizesModalProps> = ({
     data: endedGames,
     error: errorEndOfBettingPeriodEvents,
     isLoading: isLoadingEndOfBettingPeriodEvents,
-  } = useScaffoldEventHistory({
-    contractName: "Jodobix",
-    eventName: "EndOfBettingPeriod",
-    fromBlock: 0n,
-  });
+  } = useEndsOfBettingPeriod({});
 
   const handleGameStatusChange = useCallback((gameId: bigint, hasUnpaidBets: boolean) => {
     setGamesWithUnpaidBets(prev => {
@@ -179,12 +168,12 @@ export const DistributePrizesModal: React.FC<DistributePrizesModalProps> = ({
     content = <div>Error loading games</div>;
   } else if (endedGames && endedGames.length > 0) {
     content = endedGames
-      .filter(game => !!game.args.gameId && !!game.args.drawnNumber)
+      .filter(game => !!game.gameId && !!game.drawnNumber)
       .map(game => (
         <EndedGameItem
-          key={game.args.gameId!.toString()}
-          gameId={game.args.gameId!}
-          drawnNumber={game.args.drawnNumber!}
+          key={game.gameId!.toString()}
+          gameId={game.gameId!}
+          drawnNumber={game.drawnNumber!}
           onGameStatusChange={handleGameStatusChange}
         />
       ));

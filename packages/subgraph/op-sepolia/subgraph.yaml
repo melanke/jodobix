@@ -1,0 +1,35 @@
+specVersion: 1.3.0
+indexerHints:
+  prune: auto
+schema:
+  file: ./schema.graphql
+dataSources:
+  - kind: ethereum
+    name: Critter
+    network: optimism-sepolia
+    source:
+      address: "0xD7082E2295F9A399A0d359eEa191D879A2f7bd30"
+      abi: Critter
+      startBlock: 26163748
+    mapping:
+      kind: ethereum/events
+      apiVersion: 0.0.9
+      language: wasm/assemblyscript
+      entities:
+        - BetPlaced
+        - EndOfBettingPeriod
+        - GameCreated
+        - PrizePayment
+      abis:
+        - name: Critter
+          file: ./abis/Critter.json
+      eventHandlers:
+        - event: BetPlaced(indexed uint256,indexed address,indexed uint8,uint256,uint256,uint256)
+          handler: handleBetPlaced
+        - event: EndOfBettingPeriod(indexed uint256,indexed uint8,indexed address,uint256,uint256)
+          handler: handleEndOfBettingPeriod
+        - event: GameCreated(indexed uint256,indexed address,bool,uint256)
+          handler: handleGameCreated
+        - event: PrizePayment(indexed uint256,indexed uint256,indexed address,address,uint8,uint256,uint256)
+          handler: handlePrizePayment
+      file: ./src/critter.ts

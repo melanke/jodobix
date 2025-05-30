@@ -1,0 +1,8 @@
+{
+  "optimism-sepolia": {
+    "Critter": {
+      "address": "0xD7082E2295F9A399A0d359eEa191D879A2f7bd30",
+      "startBlock": 26163748
+    }
+  }
+}

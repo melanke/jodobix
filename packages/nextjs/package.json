@@ -40,6 +40,7 @@
     "zustand": "~5.0.0"
   },
   "devDependencies": {
+    "@graphprotocol/client-cli": "^3.0.7",
     "@shadcn/ui": "^0.0.4",
     "@trivago/prettier-plugin-sort-imports": "~4.3.0",
     "@types/node": "~18.19.50",

@@ -1,0 +1,49 @@
+type BetPlaced @entity(immutable: true) {
+  id: Bytes!
+  gameId: BigInt! # uint256
+  bettor: Bytes! # address
+  number: Int! # uint8
+  value: BigInt! # uint256
+  timestamp: BigInt! # uint256
+  betId: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type EndOfBettingPeriod @entity(immutable: true) {
+  id: Bytes!
+  gameId: BigInt! # uint256
+  drawnNumber: Int! # uint8
+  closer: Bytes! # address
+  reward: BigInt! # uint256
+  timestamp: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type GameCreated @entity(immutable: true) {
+  id: Bytes!
+  gameId: BigInt! # uint256
+  creator: Bytes! # address
+  isPrivate: Boolean! # bool
+  timestamp: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+type PrizePayment @entity(immutable: true) {
+  id: Bytes!
+  gameId: BigInt! # uint256
+  betId: BigInt! # uint256
+  bettor: Bytes! # address
+  requestedBy: Bytes! # address
+  drawnNumber: Int! # uint8
+  prizeValue: BigInt! # uint256
+  timestamp: BigInt! # uint256
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}

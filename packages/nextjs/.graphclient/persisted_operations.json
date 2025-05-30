@@ -1,0 +1,6 @@
+{
+  "267ad73e638a85666fd849ba69c892326055d6a7a8a17ddebb441dc9003a51f0": "query BetsPlaced($where: BetPlaced_filter) {\n  betPlaceds(where: $where) {\n    gameId\n    bettor\n    number\n    value\n    timestamp\n    betId\n    blockNumber\n    blockTimestamp\n    transactionHash\n  }\n}",
+  "f8b7c3a0937bfd2e1ca126d8687a2df454e8b78d9b5f5cc51cb61f16d8a11219": "query EndsOfBettingPeriod($where: EndOfBettingPeriod_filter) {\n  endOfBettingPeriods(where: $where) {\n    gameId\n    drawnNumber\n    closer\n    reward\n    timestamp\n    blockNumber\n    blockTimestamp\n    transactionHash\n  }\n}",
+  "1660e83a8060a699d2aaa2433529f5a4705ac1385f2efac829ac77ca92a66539": "query GamesCreated($where: GameCreated_filter) {\n  gameCreateds(where: $where) {\n    gameId\n    creator\n    isPrivate\n    timestamp\n    blockNumber\n    blockTimestamp\n    transactionHash\n  }\n}",
+  "1a10ff92996b6959c5bc1e9836a06bafaccf4e045bf61e28325b0cd341c111a7": "query PrizePayments($where: PrizePayment_filter) {\n  prizePayments(where: $where) {\n    gameId\n    betId\n    bettor\n    requestedBy\n    drawnNumber\n    prizeValue\n    timestamp\n    blockNumber\n    blockTimestamp\n    transactionHash\n  }\n}"
+}

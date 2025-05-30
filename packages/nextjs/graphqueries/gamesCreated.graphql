@@ -1,0 +1,11 @@
+query GamesCreated($where: GameCreated_filter) {
+  gameCreateds(where: $where) {
+    gameId
+    creator
+    isPrivate
+    timestamp
+    blockNumber
+    blockTimestamp
+    transactionHash
+  }
+}

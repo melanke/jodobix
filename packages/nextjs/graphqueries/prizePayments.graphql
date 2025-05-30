@@ -1,0 +1,14 @@
+query PrizePayments($where: PrizePayment_filter) {
+  prizePayments(where: $where) {
+    gameId
+    betId
+    bettor
+    requestedBy
+    drawnNumber
+    prizeValue
+    timestamp
+    blockNumber
+    blockTimestamp
+    transactionHash
+  }
+}

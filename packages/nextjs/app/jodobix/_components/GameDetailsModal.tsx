@@ -12,6 +12,7 @@ import { ArrowPathIcon, InformationCircleIcon, ShareIcon } from "@heroicons/reac
 import { Address } from "~~/components/scaffold-eth";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "~~/components/ui/hover-card";
 import { useScaffoldEventHistory, useScaffoldReadContract, useWatchBalance } from "~~/hooks/scaffold-eth";
+import { useBetsPlaced } from "~~/hooks/useBetPlaceds";
 
 interface GameDetailsModalProps {
   gameId?: bigint; // undefined if not open
@@ -40,18 +41,13 @@ export const GameDetailsModal: React.FC<GameDetailsModalProps> = ({ gameId, onCl
     watch: true,
   });
   const {
-    data: betPlacedEvents,
+    data: myBets,
     refetch: refetchMyBets,
     isLoading: isLoadingMyBets,
     error: errorMyBets,
-  } = useScaffoldEventHistory({
-    contractName: "Jodobix",
-    eventName: "BetPlaced",
-    fromBlock: 0n,
-    filters: {
-      gameId: gameId,
-      bettor: address,
-    },
+  } = useBetsPlaced({
+    gameId: gameId,
+    bettor: address,
     enabled: !!gameId && !!address,
   });
 
@@ -65,11 +61,6 @@ export const GameDetailsModal: React.FC<GameDetailsModalProps> = ({ gameId, onCl
     }
     return null;
   }, [errorMyBets]);
-
-  const myBets = useMemo(
-    () => (betPlacedEvents ?? []).map(event => event.args.betId).filter(betId => betId !== undefined),
-    [betPlacedEvents],
-  );
 
   const { closeGame, closingGame, lastTwoChars } = useCloseGame(gameId ?? 0n, game?.minBetValue, reward => {
     toast.success(`Game closed! Reward: ${formatEther(reward)} ETH`);
@@ -255,10 +246,10 @@ export const GameDetailsModal: React.FC<GameDetailsModalProps> = ({ gameId, onCl
                 {(myBets?.length ?? 0) > 0 && (
                   <>
                     <h3 className="font-bold text-lg mt-6 mb-1">My Bets</h3>
-                    {myBets?.map((betId, index) => (
+                    {myBets?.map((bet, index) => (
                       <BetCard
                         key={index}
-                        betId={betId}
+                        betId={bet.betId}
                         drawnNumber={game?.bettingPeriodEnded ? game?.drawnNumber : undefined}
                       />
                     ))}

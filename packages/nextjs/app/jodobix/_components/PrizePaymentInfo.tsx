@@ -1,16 +1,13 @@
 import { TransactionHash } from "~~/app/blockexplorer/_components";
-import { useScaffoldEventHistory } from "~~/hooks/scaffold-eth";
+import { usePrizePayments } from "~~/hooks/usePrizePayments";
 
 interface PrizePaymentInfoProps {
   betId: bigint;
 }
 
 export const PrizePaymentInfo = ({ betId }: PrizePaymentInfoProps) => {
-  const { data: prizePaymentedEvents, isLoading } = useScaffoldEventHistory({
-    contractName: "Jodobix",
-    eventName: "PrizePayment",
-    fromBlock: 0n,
-    filters: { betId },
+  const { data: prizePaymentedEvents, isLoading } = usePrizePayments({
+    betId,
     enabled: !!betId,
   });
 

@@ -1,0 +1,12 @@
+query EndsOfBettingPeriod($where: EndOfBettingPeriod_filter) {
+  endOfBettingPeriods(where: $where) {
+    gameId
+    drawnNumber
+    closer
+    reward
+    timestamp
+    blockNumber
+    blockTimestamp
+    transactionHash
+  }
+}

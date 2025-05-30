@@ -1,0 +1,13 @@
+query BetsPlaced($where: BetPlaced_filter) {
+  betPlaceds(where: $where) {
+    gameId
+    bettor
+    number
+    value
+    timestamp
+    betId
+    blockNumber
+    blockTimestamp
+    transactionHash
+  }
+}

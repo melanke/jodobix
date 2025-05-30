@@ -1,0 +1,654 @@
+schema {
+  query: Query
+}
+
+"""
+Marks the GraphQL type as indexable entity.  Each type that should be an entity is required to be annotated with this directive.
+"""
+directive @entity on OBJECT
+
+"""Defined a Subgraph ID for an object type"""
+directive @subgraphId(id: String!) on OBJECT
+
+"""
+creates a virtual field on the entity that may be queried but cannot be set manually through the mappings API.
+"""
+directive @derivedFrom(field: String!) on FIELD_DEFINITION
+
+enum Aggregation_interval {
+  hour
+  day
+}
+
+type BetPlaced {
+  id: Bytes!
+  gameId: BigInt!
+  bettor: Bytes!
+  number: Int!
+  value: BigInt!
+  timestamp: BigInt!
+  betId: BigInt!
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+input BetPlaced_filter {
+  id: Bytes
+  id_not: Bytes
+  id_gt: Bytes
+  id_lt: Bytes
+  id_gte: Bytes
+  id_lte: Bytes
+  id_in: [Bytes!]
+  id_not_in: [Bytes!]
+  id_contains: Bytes
+  id_not_contains: Bytes
+  gameId: BigInt
+  gameId_not: BigInt
+  gameId_gt: BigInt
+  gameId_lt: BigInt
+  gameId_gte: BigInt
+  gameId_lte: BigInt
+  gameId_in: [BigInt!]
+  gameId_not_in: [BigInt!]
+  bettor: Bytes
+  bettor_not: Bytes
+  bettor_gt: Bytes
+  bettor_lt: Bytes
+  bettor_gte: Bytes
+  bettor_lte: Bytes
+  bettor_in: [Bytes!]
+  bettor_not_in: [Bytes!]
+  bettor_contains: Bytes
+  bettor_not_contains: Bytes
+  number: Int
+  number_not: Int
+  number_gt: Int
+  number_lt: Int
+  number_gte: Int
+  number_lte: Int
+  number_in: [Int!]
+  number_not_in: [Int!]
+  value: BigInt
+  value_not: BigInt
+  value_gt: BigInt
+  value_lt: BigInt
+  value_gte: BigInt
+  value_lte: BigInt
+  value_in: [BigInt!]
+  value_not_in: [BigInt!]
+  timestamp: BigInt
+  timestamp_not: BigInt
+  timestamp_gt: BigInt
+  timestamp_lt: BigInt
+  timestamp_gte: BigInt
+  timestamp_lte: BigInt
+  timestamp_in: [BigInt!]
+  timestamp_not_in: [BigInt!]
+  betId: BigInt
+  betId_not: BigInt
+  betId_gt: BigInt
+  betId_lt: BigInt
+  betId_gte: BigInt
+  betId_lte: BigInt
+  betId_in: [BigInt!]
+  betId_not_in: [BigInt!]
+  blockNumber: BigInt
+  blockNumber_not: BigInt
+  blockNumber_gt: BigInt
+  blockNumber_lt: BigInt
+  blockNumber_gte: BigInt
+  blockNumber_lte: BigInt
+  blockNumber_in: [BigInt!]
+  blockNumber_not_in: [BigInt!]
+  blockTimestamp: BigInt
+  blockTimestamp_not: BigInt
+  blockTimestamp_gt: BigInt
+  blockTimestamp_lt: BigInt
+  blockTimestamp_gte: BigInt
+  blockTimestamp_lte: BigInt
+  blockTimestamp_in: [BigInt!]
+  blockTimestamp_not_in: [BigInt!]
+  transactionHash: Bytes
+  transactionHash_not: Bytes
+  transactionHash_gt: Bytes
+  transactionHash_lt: Bytes
+  transactionHash_gte: Bytes
+  transactionHash_lte: Bytes
+  transactionHash_in: [Bytes!]
+  transactionHash_not_in: [Bytes!]
+  transactionHash_contains: Bytes
+  transactionHash_not_contains: Bytes
+  """Filter for the block changed event."""
+  _change_block: BlockChangedFilter
+  and: [BetPlaced_filter]
+  or: [BetPlaced_filter]
+}
+
+enum BetPlaced_orderBy {
+  id
+  gameId
+  bettor
+  number
+  value
+  timestamp
+  betId
+  blockNumber
+  blockTimestamp
+  transactionHash
+}
+
+scalar BigDecimal
+
+scalar BigInt
+
+input BlockChangedFilter {
+  number_gte: Int!
+}
+
+input Block_height {
+  hash: Bytes
+  number: Int
+  number_gte: Int
+}
+
+scalar Bytes
+
+type EndOfBettingPeriod {
+  id: Bytes!
+  gameId: BigInt!
+  drawnNumber: Int!
+  closer: Bytes!
+  reward: BigInt!
+  timestamp: BigInt!
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+input EndOfBettingPeriod_filter {
+  id: Bytes
+  id_not: Bytes
+  id_gt: Bytes
+  id_lt: Bytes
+  id_gte: Bytes
+  id_lte: Bytes
+  id_in: [Bytes!]
+  id_not_in: [Bytes!]
+  id_contains: Bytes
+  id_not_contains: Bytes
+  gameId: BigInt
+  gameId_not: BigInt
+  gameId_gt: BigInt
+  gameId_lt: BigInt
+  gameId_gte: BigInt
+  gameId_lte: BigInt
+  gameId_in: [BigInt!]
+  gameId_not_in: [BigInt!]
+  drawnNumber: Int
+  drawnNumber_not: Int
+  drawnNumber_gt: Int
+  drawnNumber_lt: Int
+  drawnNumber_gte: Int
+  drawnNumber_lte: Int
+  drawnNumber_in: [Int!]
+  drawnNumber_not_in: [Int!]
+  closer: Bytes
+  closer_not: Bytes
+  closer_gt: Bytes
+  closer_lt: Bytes
+  closer_gte: Bytes
+  closer_lte: Bytes
+  closer_in: [Bytes!]
+  closer_not_in: [Bytes!]
+  closer_contains: Bytes
+  closer_not_contains: Bytes
+  reward: BigInt
+  reward_not: BigInt
+  reward_gt: BigInt
+  reward_lt: BigInt
+  reward_gte: BigInt
+  reward_lte: BigInt
+  reward_in: [BigInt!]
+  reward_not_in: [BigInt!]
+  timestamp: BigInt
+  timestamp_not: BigInt
+  timestamp_gt: BigInt
+  timestamp_lt: BigInt
+  timestamp_gte: BigInt
+  timestamp_lte: BigInt
+  timestamp_in: [BigInt!]
+  timestamp_not_in: [BigInt!]
+  blockNumber: BigInt
+  blockNumber_not: BigInt
+  blockNumber_gt: BigInt
+  blockNumber_lt: BigInt
+  blockNumber_gte: BigInt
+  blockNumber_lte: BigInt
+  blockNumber_in: [BigInt!]
+  blockNumber_not_in: [BigInt!]
+  blockTimestamp: BigInt
+  blockTimestamp_not: BigInt
+  blockTimestamp_gt: BigInt
+  blockTimestamp_lt: BigInt
+  blockTimestamp_gte: BigInt
+  blockTimestamp_lte: BigInt
+  blockTimestamp_in: [BigInt!]
+  blockTimestamp_not_in: [BigInt!]
+  transactionHash: Bytes
+  transactionHash_not: Bytes
+  transactionHash_gt: Bytes
+  transactionHash_lt: Bytes
+  transactionHash_gte: Bytes
+  transactionHash_lte: Bytes
+  transactionHash_in: [Bytes!]
+  transactionHash_not_in: [Bytes!]
+  transactionHash_contains: Bytes
+  transactionHash_not_contains: Bytes
+  """Filter for the block changed event."""
+  _change_block: BlockChangedFilter
+  and: [EndOfBettingPeriod_filter]
+  or: [EndOfBettingPeriod_filter]
+}
+
+enum EndOfBettingPeriod_orderBy {
+  id
+  gameId
+  drawnNumber
+  closer
+  reward
+  timestamp
+  blockNumber
+  blockTimestamp
+  transactionHash
+}
+
+type GameCreated {
+  id: Bytes!
+  gameId: BigInt!
+  creator: Bytes!
+  isPrivate: Boolean!
+  timestamp: BigInt!
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+input GameCreated_filter {
+  id: Bytes
+  id_not: Bytes
+  id_gt: Bytes
+  id_lt: Bytes
+  id_gte: Bytes
+  id_lte: Bytes
+  id_in: [Bytes!]
+  id_not_in: [Bytes!]
+  id_contains: Bytes
+  id_not_contains: Bytes
+  gameId: BigInt
+  gameId_not: BigInt
+  gameId_gt: BigInt
+  gameId_lt: BigInt
+  gameId_gte: BigInt
+  gameId_lte: BigInt
+  gameId_in: [BigInt!]
+  gameId_not_in: [BigInt!]
+  creator: Bytes
+  creator_not: Bytes
+  creator_gt: Bytes
+  creator_lt: Bytes
+  creator_gte: Bytes
+  creator_lte: Bytes
+  creator_in: [Bytes!]
+  creator_not_in: [Bytes!]
+  creator_contains: Bytes
+  creator_not_contains: Bytes
+  isPrivate: Boolean
+  isPrivate_not: Boolean
+  isPrivate_in: [Boolean!]
+  isPrivate_not_in: [Boolean!]
+  timestamp: BigInt
+  timestamp_not: BigInt
+  timestamp_gt: BigInt
+  timestamp_lt: BigInt
+  timestamp_gte: BigInt
+  timestamp_lte: BigInt
+  timestamp_in: [BigInt!]
+  timestamp_not_in: [BigInt!]
+  blockNumber: BigInt
+  blockNumber_not: BigInt
+  blockNumber_gt: BigInt
+  blockNumber_lt: BigInt
+  blockNumber_gte: BigInt
+  blockNumber_lte: BigInt
+  blockNumber_in: [BigInt!]
+  blockNumber_not_in: [BigInt!]
+  blockTimestamp: BigInt
+  blockTimestamp_not: BigInt
+  blockTimestamp_gt: BigInt
+  blockTimestamp_lt: BigInt
+  blockTimestamp_gte: BigInt
+  blockTimestamp_lte: BigInt
+  blockTimestamp_in: [BigInt!]
+  blockTimestamp_not_in: [BigInt!]
+  transactionHash: Bytes
+  transactionHash_not: Bytes
+  transactionHash_gt: Bytes
+  transactionHash_lt: Bytes
+  transactionHash_gte: Bytes
+  transactionHash_lte: Bytes
+  transactionHash_in: [Bytes!]
+  transactionHash_not_in: [Bytes!]
+  transactionHash_contains: Bytes
+  transactionHash_not_contains: Bytes
+  """Filter for the block changed event."""
+  _change_block: BlockChangedFilter
+  and: [GameCreated_filter]
+  or: [GameCreated_filter]
+}
+
+enum GameCreated_orderBy {
+  id
+  gameId
+  creator
+  isPrivate
+  timestamp
+  blockNumber
+  blockTimestamp
+  transactionHash
+}
+
+"""
+8 bytes signed integer
+
+"""
+scalar Int8
+
+"""Defines the order direction, either ascending or descending"""
+enum OrderDirection {
+  asc
+  desc
+}
+
+type PrizePayment {
+  id: Bytes!
+  gameId: BigInt!
+  betId: BigInt!
+  bettor: Bytes!
+  requestedBy: Bytes!
+  drawnNumber: Int!
+  prizeValue: BigInt!
+  timestamp: BigInt!
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: Bytes!
+}
+
+input PrizePayment_filter {
+  id: Bytes
+  id_not: Bytes
+  id_gt: Bytes
+  id_lt: Bytes
+  id_gte: Bytes
+  id_lte: Bytes
+  id_in: [Bytes!]
+  id_not_in: [Bytes!]
+  id_contains: Bytes
+  id_not_contains: Bytes
+  gameId: BigInt
+  gameId_not: BigInt
+  gameId_gt: BigInt
+  gameId_lt: BigInt
+  gameId_gte: BigInt
+  gameId_lte: BigInt
+  gameId_in: [BigInt!]
+  gameId_not_in: [BigInt!]
+  betId: BigInt
+  betId_not: BigInt
+  betId_gt: BigInt
+  betId_lt: BigInt
+  betId_gte: BigInt
+  betId_lte: BigInt
+  betId_in: [BigInt!]
+  betId_not_in: [BigInt!]
+  bettor: Bytes
+  bettor_not: Bytes
+  bettor_gt: Bytes
+  bettor_lt: Bytes
+  bettor_gte: Bytes
+  bettor_lte: Bytes
+  bettor_in: [Bytes!]
+  bettor_not_in: [Bytes!]
+  bettor_contains: Bytes
+  bettor_not_contains: Bytes
+  requestedBy: Bytes
+  requestedBy_not: Bytes
+  requestedBy_gt: Bytes
+  requestedBy_lt: Bytes
+  requestedBy_gte: Bytes
+  requestedBy_lte: Bytes
+  requestedBy_in: [Bytes!]
+  requestedBy_not_in: [Bytes!]
+  requestedBy_contains: Bytes
+  requestedBy_not_contains: Bytes
+  drawnNumber: Int
+  drawnNumber_not: Int
+  drawnNumber_gt: Int
+  drawnNumber_lt: Int
+  drawnNumber_gte: Int
+  drawnNumber_lte: Int
+  drawnNumber_in: [Int!]
+  drawnNumber_not_in: [Int!]
+  prizeValue: BigInt
+  prizeValue_not: BigInt
+  prizeValue_gt: BigInt
+  prizeValue_lt: BigInt
+  prizeValue_gte: BigInt
+  prizeValue_lte: BigInt
+  prizeValue_in: [BigInt!]
+  prizeValue_not_in: [BigInt!]
+  timestamp: BigInt
+  timestamp_not: BigInt
+  timestamp_gt: BigInt
+  timestamp_lt: BigInt
+  timestamp_gte: BigInt
+  timestamp_lte: BigInt
+  timestamp_in: [BigInt!]
+  timestamp_not_in: [BigInt!]
+  blockNumber: BigInt
+  blockNumber_not: BigInt
+  blockNumber_gt: BigInt
+  blockNumber_lt: BigInt
+  blockNumber_gte: BigInt
+  blockNumber_lte: BigInt
+  blockNumber_in: [BigInt!]
+  blockNumber_not_in: [BigInt!]
+  blockTimestamp: BigInt
+  blockTimestamp_not: BigInt
+  blockTimestamp_gt: BigInt
+  blockTimestamp_lt: BigInt
+  blockTimestamp_gte: BigInt
+  blockTimestamp_lte: BigInt
+  blockTimestamp_in: [BigInt!]
+  blockTimestamp_not_in: [BigInt!]
+  transactionHash: Bytes
+  transactionHash_not: Bytes
+  transactionHash_gt: Bytes
+  transactionHash_lt: Bytes
+  transactionHash_gte: Bytes
+  transactionHash_lte: Bytes
+  transactionHash_in: [Bytes!]
+  transactionHash_not_in: [Bytes!]
+  transactionHash_contains: Bytes
+  transactionHash_not_contains: Bytes
+  """Filter for the block changed event."""
+  _change_block: BlockChangedFilter
+  and: [PrizePayment_filter]
+  or: [PrizePayment_filter]
+}
+
+enum PrizePayment_orderBy {
+  id
+  gameId
+  betId
+  bettor
+  requestedBy
+  drawnNumber
+  prizeValue
+  timestamp
+  blockNumber
+  blockTimestamp
+  transactionHash
+}
+
+type Query {
+  betPlaced(
+    id: ID!
+    """
+    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+    """
+    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
+    """
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): BetPlaced
+  betPlaceds(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: BetPlaced_orderBy
+    orderDirection: OrderDirection
+    where: BetPlaced_filter
+    """
+    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+    """
+    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
+    """
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): [BetPlaced!]!
+  endOfBettingPeriod(
+    id: ID!
+    """
+    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+    """
+    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
+    """
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): EndOfBettingPeriod
+  endOfBettingPeriods(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: EndOfBettingPeriod_orderBy
+    orderDirection: OrderDirection
+    where: EndOfBettingPeriod_filter
+    """
+    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+    """
+    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
+    """
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): [EndOfBettingPeriod!]!
+  gameCreated(
+    id: ID!
+    """
+    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+    """
+    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
+    """
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): GameCreated
+  gameCreateds(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: GameCreated_orderBy
+    orderDirection: OrderDirection
+    where: GameCreated_filter
+    """
+    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+    """
+    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
+    """
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): [GameCreated!]!
+  prizePayment(
+    id: ID!
+    """
+    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+    """
+    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
+    """
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): PrizePayment
+  prizePayments(
+    skip: Int = 0
+    first: Int = 100
+    orderBy: PrizePayment_orderBy
+    orderDirection: OrderDirection
+    where: PrizePayment_filter
+    """
+    The block at which the query should be executed. Can either be a `{ hash: Bytes }` value containing a block hash, a `{ number: Int }` containing the block number, or a `{ number_gte: Int }` containing the minimum block number. In the case of `number_gte`, the query will be executed on the latest block only if the subgraph has progressed to or past the minimum block number. Defaults to the latest block when omitted.
+    """
+    block: Block_height
+    """
+    Set to `allow` to receive data even if the subgraph has skipped over errors while syncing.
+    """
+    subgraphError: _SubgraphErrorPolicy_! = deny
+  ): [PrizePayment!]!
+  """Access to subgraph metadata"""
+  _meta(block: Block_height): _Meta_
+}
+
+"""
+A string representation of microseconds UNIX timestamp (16 digits)
+
+"""
+scalar Timestamp
+
+type _Block_ {
+  """The hash of the block"""
+  hash: Bytes
+  """The block number"""
+  number: Int!
+  """Integer representation of the timestamp stored in blocks for the chain"""
+  timestamp: Int
+  """The hash of the parent block"""
+  parentHash: Bytes
+}
+
+"""The type for the top-level _meta field"""
+type _Meta_ {
+  """
+  Information about a specific subgraph block. The hash of the block
+  will be null if the _meta field has a block constraint that asks for
+  a block number. It will be filled if the _meta field has no block constraint
+  and therefore asks for the latest  block
+  
+  """
+  block: _Block_!
+  """The deployment ID"""
+  deployment: String!
+  """If `true`, the subgraph encountered indexing errors at some past block"""
+  hasIndexingErrors: Boolean!
+}
+
+enum _SubgraphErrorPolicy_ {
+  """Data will be returned even if the subgraph has indexing errors"""
+  allow
+  """
+  If the subgraph has indexing errors, data will be omitted. The default.
+  """
+  deny
+}
