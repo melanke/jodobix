@@ -5,11 +5,11 @@ schema:
   file: ./schema.graphql
 dataSources:
   - kind: ethereum
-    name: Critter
+    name: Jodobix
     network: optimism-sepolia
     source:
       address: "0xD7082E2295F9A399A0d359eEa191D879A2f7bd30"
-      abi: Critter
+      abi: Jodobix
       startBlock: 26163748
     mapping:
       kind: ethereum/events
@@ -21,8 +21,8 @@ dataSources:
         - GameCreated
         - PrizePayment
       abis:
-        - name: Critter
-          file: ./abis/Critter.json
+        - name: Jodobix
+          file: ./abis/Jodobix.json
       eventHandlers:
         - event: BetPlaced(indexed uint256,indexed address,indexed uint8,uint256,uint256,uint256)
           handler: handleBetPlaced
@@ -32,4 +32,4 @@ dataSources:
           handler: handleGameCreated
         - event: PrizePayment(indexed uint256,indexed uint256,indexed address,address,uint8,uint256,uint256)
           handler: handlePrizePayment
-      file: ./src/critter.ts
+      file: ./src/jodobix.ts

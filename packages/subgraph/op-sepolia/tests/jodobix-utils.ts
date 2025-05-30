@@ -5,7 +5,7 @@ import {
   EndOfBettingPeriod,
   GameCreated,
   PrizePayment
-} from "../generated/Critter/Critter"
+} from "../generated/Jodobix/Jodobix"
 
 export function createBetPlacedEvent(
   gameId: BigInt,

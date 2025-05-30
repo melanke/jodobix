@@ -8,9 +8,9 @@ import {
 } from "matchstick-as/assembly/index"
 import { BigInt, Address } from "@graphprotocol/graph-ts"
 import { BetPlaced } from "../generated/schema"
-import { BetPlaced as BetPlacedEvent } from "../generated/Critter/Critter"
-import { handleBetPlaced } from "../src/critter"
-import { createBetPlacedEvent } from "./critter-utils"
+import { BetPlaced as BetPlacedEvent } from "../generated/Jodobix/Jodobix"
+import { handleBetPlaced } from "../src/jodobix"
+import { createBetPlacedEvent } from "./jodobix-utils"
 
 // Tests structure (matchstick-as >=0.5.0)
 // https://thegraph.com/docs/en/subgraphs/developing/creating/unit-testing-framework/#tests-structure

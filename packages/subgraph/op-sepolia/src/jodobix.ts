@@ -3,7 +3,7 @@ import {
   EndOfBettingPeriod as EndOfBettingPeriodEvent,
   GameCreated as GameCreatedEvent,
   PrizePayment as PrizePaymentEvent
-} from "../generated/Critter/Critter"
+} from "../generated/Jodobix/Jodobix"
 import {
   BetPlaced,
   EndOfBettingPeriod,
