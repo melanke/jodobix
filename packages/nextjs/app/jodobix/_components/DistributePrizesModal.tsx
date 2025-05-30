@@ -5,7 +5,6 @@ import { DismissibleAlert } from "./DismissibleAlert";
 import { formatEther } from "viem";
 import { useAccount } from "wagmi";
 import { Address } from "~~/components/scaffold-eth";
-import chainConstants from "~~/const/chainConstants";
 import { useScaffoldEventHistory, useScaffoldReadContract, useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
 import { cn } from "~~/lib/utils";
 
@@ -76,9 +75,8 @@ const WinningBetItem: React.FC<{
 const EndedGameItem: React.FC<{
   gameId: bigint;
   drawnNumber: number;
-  deploymentBlock: bigint;
   onGameStatusChange: (gameId: bigint, hasUnpaidBets: boolean) => void;
-}> = ({ gameId, drawnNumber, deploymentBlock, onGameStatusChange }) => {
+}> = ({ gameId, drawnNumber, onGameStatusChange }) => {
   const [visibleBets, setVisibleBets] = React.useState<Set<bigint>>(new Set());
 
   const {
@@ -88,11 +86,12 @@ const EndedGameItem: React.FC<{
   } = useScaffoldEventHistory({
     contractName: "Jodobix",
     eventName: "BetPlaced",
-    fromBlock: deploymentBlock - 10n,
+    fromBlock: 0n,
     filters: {
       gameId: gameId,
       number: drawnNumber,
     },
+    enabled: !!gameId && !!drawnNumber,
   });
 
   const validBets = winningBets?.filter(bet => !!bet.args.betId) ?? [];
@@ -147,8 +146,6 @@ export const DistributePrizesModal: React.FC<DistributePrizesModalProps> = ({
   const { chainId } = useAccount();
   const [gamesWithUnpaidBets, setGamesWithUnpaidBets] = React.useState<Set<bigint>>(new Set());
 
-  const deploymentBlock = chainConstants[chainId as keyof typeof chainConstants]?.Jodobix?.deploymentBlock ?? 10n;
-
   const {
     data: endedGames,
     error: errorEndOfBettingPeriodEvents,
@@ -156,7 +153,7 @@ export const DistributePrizesModal: React.FC<DistributePrizesModalProps> = ({
   } = useScaffoldEventHistory({
     contractName: "Jodobix",
     eventName: "EndOfBettingPeriod",
-    fromBlock: deploymentBlock - 10n,
+    fromBlock: 0n,
   });
 
   const handleGameStatusChange = useCallback((gameId: bigint, hasUnpaidBets: boolean) => {
@@ -188,7 +185,6 @@ export const DistributePrizesModal: React.FC<DistributePrizesModalProps> = ({
           key={game.args.gameId!.toString()}
           gameId={game.args.gameId!}
           drawnNumber={game.args.drawnNumber!}
-          deploymentBlock={deploymentBlock}
           onGameStatusChange={handleGameStatusChange}
         />
       ));

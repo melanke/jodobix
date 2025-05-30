@@ -25,7 +25,7 @@ const JodobixClientLogic: React.FC = () => {
   const gameIdParam = searchParams.get("gameId");
   const [isCreateGameModalOpen, setIsCreateGameModalOpen] = useState(false);
   const [openGameId, setOpenGameId] = useState<bigint | undefined>(gameIdParam ? BigInt(gameIdParam) : undefined);
-  const { address, chainId } = useAccount();
+  const { address } = useAccount();
   const [isDistributePrizesModalOpen, setIsDistributePrizesModalOpen] = useState(false);
   const [hasUnpaidPrizes, setHasUnpaidPrizes] = useState(false);
   const { data: blockNumber } = useBlockNumber();
@@ -36,8 +36,6 @@ const JodobixClientLogic: React.FC = () => {
     watch: true,
   });
 
-  const fromBlock = blockNumber ? blockNumber - 499n : 10n;
-
   const {
     data: gameCreatedEvents,
     refetch: refetchMyCreatedGames,
@@ -46,11 +44,11 @@ const JodobixClientLogic: React.FC = () => {
   } = useScaffoldEventHistory({
     contractName: "Jodobix",
     eventName: "GameCreated",
-    fromBlock,
+    fromBlock: 0n,
     filters: {
       creator: address,
     },
-    enabled: !!address && !!blockNumber,
+    enabled: !!address,
   });
 
   const myCreatedGames = gameCreatedEvents?.map(event => event.args.gameId).filter(gameId => gameId !== undefined);
@@ -62,7 +60,7 @@ const JodobixClientLogic: React.FC = () => {
   } = useScaffoldEventHistory({
     contractName: "Jodobix",
     eventName: "BetPlaced",
-    fromBlock,
+    fromBlock: 0n,
     filters: {
       bettor: address,
     },

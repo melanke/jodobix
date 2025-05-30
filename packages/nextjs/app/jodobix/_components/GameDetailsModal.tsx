@@ -11,7 +11,6 @@ import { useAccount } from "wagmi";
 import { ArrowPathIcon, InformationCircleIcon, ShareIcon } from "@heroicons/react/24/outline";
 import { Address } from "~~/components/scaffold-eth";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "~~/components/ui/hover-card";
-import chainConstants from "~~/const/chainConstants";
 import { useScaffoldEventHistory, useScaffoldReadContract, useWatchBalance } from "~~/hooks/scaffold-eth";
 
 interface GameDetailsModalProps {
@@ -40,9 +39,6 @@ export const GameDetailsModal: React.FC<GameDetailsModalProps> = ({ gameId, onCl
     args: [gameId],
     watch: true,
   });
-
-  const deploymentBlock = chainConstants[chainId as keyof typeof chainConstants]?.Jodobix?.deploymentBlock ?? 10n;
-
   const {
     data: betPlacedEvents,
     refetch: refetchMyBets,
@@ -51,13 +47,24 @@ export const GameDetailsModal: React.FC<GameDetailsModalProps> = ({ gameId, onCl
   } = useScaffoldEventHistory({
     contractName: "Jodobix",
     eventName: "BetPlaced",
-    fromBlock: deploymentBlock - 10n,
+    fromBlock: 0n,
     filters: {
       gameId: gameId,
       bettor: address,
     },
     enabled: !!gameId && !!address,
   });
+
+  const errorMsg = useMemo(() => {
+    if (errorMyBets) {
+      try {
+        return JSON.parse((errorMyBets as any).details).message;
+      } catch (err) {
+        return errorMyBets.toString();
+      }
+    }
+    return null;
+  }, [errorMyBets]);
 
   const myBets = useMemo(
     () => (betPlacedEvents ?? []).map(event => event.args.betId).filter(betId => betId !== undefined),
@@ -231,9 +238,9 @@ export const GameDetailsModal: React.FC<GameDetailsModalProps> = ({ gameId, onCl
               <div className="self-center mt-8">
                 <ArrowPathIcon className="h-6 w-6 animate-spin" />
               </div>
-            ) : !!errorMyBets ? (
+            ) : !!errorMsg ? (
               <div className="w-56 bg-error/50 rounded-lg mb-8 p-2 mt-8">
-                Error loading bets information: {JSON.parse((errorMyBets as any).details).message}
+                Error loading bets information: {errorMsg}
               </div>
             ) : (
               <>

@@ -1,6 +1,4 @@
-import { useAccount } from "wagmi";
 import { TransactionHash } from "~~/app/blockexplorer/_components";
-import chainConstants from "~~/const/chainConstants";
 import { useScaffoldEventHistory } from "~~/hooks/scaffold-eth";
 
 interface PrizePaymentInfoProps {
@@ -8,13 +6,10 @@ interface PrizePaymentInfoProps {
 }
 
 export const PrizePaymentInfo = ({ betId }: PrizePaymentInfoProps) => {
-  const { chainId } = useAccount();
-  const deploymentBlock = chainConstants[chainId as keyof typeof chainConstants]?.Jodobix?.deploymentBlock ?? 10n;
-
   const { data: prizePaymentedEvents, isLoading } = useScaffoldEventHistory({
     contractName: "Jodobix",
     eventName: "PrizePayment",
-    fromBlock: deploymentBlock - 10n,
+    fromBlock: 0n,
     filters: { betId },
     enabled: !!betId,
   });
