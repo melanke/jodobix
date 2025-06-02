@@ -15351,9 +15351,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jodobix-op-mainnet@workspace:packages/subgraph/op-mainnet":
+"jodobix-op-mainnet@workspace:packages/subgraph-op-mainnet":
   version: 0.0.0-use.local
-  resolution: "jodobix-op-mainnet@workspace:packages/subgraph/op-mainnet"
+  resolution: "jodobix-op-mainnet@workspace:packages/subgraph-op-mainnet"
   dependencies:
     "@graphprotocol/graph-cli": 0.97.1
     "@graphprotocol/graph-ts": 0.37.0
@@ -15361,9 +15361,9 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"jodobix-op-sepolia@workspace:packages/subgraph/op-sepolia":
+"jodobix-op-sepolia@workspace:packages/subgraph-op-sepolia":
   version: 0.0.0-use.local
-  resolution: "jodobix-op-sepolia@workspace:packages/subgraph/op-sepolia"
+  resolution: "jodobix-op-sepolia@workspace:packages/subgraph-op-sepolia"
   dependencies:
     "@graphprotocol/graph-cli": 0.97.1
     "@graphprotocol/graph-ts": 0.37.0

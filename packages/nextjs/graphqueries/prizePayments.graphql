@@ -1,5 +1,6 @@
 query PrizePayments($where: PrizePayment_filter) {
   prizePayments(where: $where) {
+    chainName
     gameId
     betId
     bettor

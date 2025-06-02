@@ -1,5 +1,6 @@
 query BetsPlaced($where: BetPlaced_filter) {
   betPlaceds(where: $where) {
+    chainName
     gameId
     bettor
     number

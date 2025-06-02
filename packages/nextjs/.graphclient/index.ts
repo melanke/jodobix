@@ -13,7 +13,8 @@ import { fetch as fetchFn } from '@whatwg-node/fetch';
 import { MeshResolvedSource } from '@graphql-mesh/runtime';
 import { MeshTransform, MeshPlugin } from '@graphql-mesh/types';
 import GraphqlHandler from "@graphql-mesh/graphql"
-import BareMerger from "@graphql-mesh/merger-bare";
+import { parse } from 'graphql';
+import StitchingMerger from "@graphql-mesh/merger-stitching";
 import { printWithCache } from '@graphql-mesh/utils';
 import { usePersistedOperations } from '@graphql-yoga/plugin-persisted-operations';
 import { createMeshHTTPHandler, MeshHTTPHandler } from '@graphql-mesh/http';
@@ -21,8 +22,10 @@ import { getMesh, ExecuteMeshFn, SubscribeMeshFn, MeshContext as BaseMeshContext
 import { MeshStore, FsStoreStorageAdapter } from '@graphql-mesh/store';
 import { path as pathModule } from '@graphql-mesh/cross-helpers';
 import { ImportFn } from '@graphql-mesh/types';
+import type { JodobixOpSepoliaTypes } from './sources/jodobix-op-sepolia/types';
 import type { JodobixOpMainnetTypes } from './sources/jodobix-op-mainnet/types';
 import * as importedModule$0 from "./sources/jodobix-op-mainnet/introspectionSchema";
+import * as importedModule$1 from "./sources/jodobix-op-sepolia/introspectionSchema";
 export type Maybe<T> = T | null;
 export type InputMaybe<T> = Maybe<T>;
 export type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
@@ -48,6 +51,96 @@ export type Scalars = {
   Timestamp: { input: any; output: any; }
 };
 
+export type Query = {
+  betPlaced?: Maybe<BetPlaced>;
+  betPlaceds: Array<BetPlaced>;
+  endOfBettingPeriod?: Maybe<EndOfBettingPeriod>;
+  endOfBettingPeriods: Array<EndOfBettingPeriod>;
+  gameCreated?: Maybe<GameCreated>;
+  gameCreateds: Array<GameCreated>;
+  prizePayment?: Maybe<PrizePayment>;
+  prizePayments: Array<PrizePayment>;
+  /** Access to subgraph metadata */
+  _meta?: Maybe<_Meta_>;
+};
+
+
+export type QuerybetPlacedArgs = {
+  id: Scalars['ID']['input'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QuerybetPlacedsArgs = {
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<BetPlaced_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<BetPlaced_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QueryendOfBettingPeriodArgs = {
+  id: Scalars['ID']['input'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QueryendOfBettingPeriodsArgs = {
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<EndOfBettingPeriod_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<EndOfBettingPeriod_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QuerygameCreatedArgs = {
+  id: Scalars['ID']['input'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QuerygameCreatedsArgs = {
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<GameCreated_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<GameCreated_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QueryprizePaymentArgs = {
+  id: Scalars['ID']['input'];
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type QueryprizePaymentsArgs = {
+  skip?: InputMaybe<Scalars['Int']['input']>;
+  first?: InputMaybe<Scalars['Int']['input']>;
+  orderBy?: InputMaybe<PrizePayment_orderBy>;
+  orderDirection?: InputMaybe<OrderDirection>;
+  where?: InputMaybe<PrizePayment_filter>;
+  block?: InputMaybe<Block_height>;
+  subgraphError?: _SubgraphErrorPolicy_;
+};
+
+
+export type Query_metaArgs = {
+  block?: InputMaybe<Block_height>;
+};
+
 export type Aggregation_interval =
   | 'hour'
   | 'day';
@@ -63,6 +156,7 @@ export type BetPlaced = {
   blockNumber: Scalars['BigInt']['output'];
   blockTimestamp: Scalars['BigInt']['output'];
   transactionHash: Scalars['Bytes']['output'];
+  chainName: Scalars['String']['output'];
 };
 
 export type BetPlaced_filter = {
@@ -190,6 +284,7 @@ export type EndOfBettingPeriod = {
   blockNumber: Scalars['BigInt']['output'];
   blockTimestamp: Scalars['BigInt']['output'];
   transactionHash: Scalars['Bytes']['output'];
+  chainName: Scalars['String']['output'];
 };
 
 export type EndOfBettingPeriod_filter = {
@@ -297,6 +392,7 @@ export type GameCreated = {
   blockNumber: Scalars['BigInt']['output'];
   blockTimestamp: Scalars['BigInt']['output'];
   transactionHash: Scalars['Bytes']['output'];
+  chainName: Scalars['String']['output'];
 };
 
 export type GameCreated_filter = {
@@ -399,6 +495,7 @@ export type PrizePayment = {
   blockNumber: Scalars['BigInt']['output'];
   blockTimestamp: Scalars['BigInt']['output'];
   transactionHash: Scalars['Bytes']['output'];
+  chainName: Scalars['String']['output'];
 };
 
 export type PrizePayment_filter = {
@@ -516,96 +613,6 @@ export type PrizePayment_orderBy =
   | 'blockNumber'
   | 'blockTimestamp'
   | 'transactionHash';
-
-export type Query = {
-  betPlaced?: Maybe<BetPlaced>;
-  betPlaceds: Array<BetPlaced>;
-  endOfBettingPeriod?: Maybe<EndOfBettingPeriod>;
-  endOfBettingPeriods: Array<EndOfBettingPeriod>;
-  gameCreated?: Maybe<GameCreated>;
-  gameCreateds: Array<GameCreated>;
-  prizePayment?: Maybe<PrizePayment>;
-  prizePayments: Array<PrizePayment>;
-  /** Access to subgraph metadata */
-  _meta?: Maybe<_Meta_>;
-};
-
-
-export type QuerybetPlacedArgs = {
-  id: Scalars['ID']['input'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type QuerybetPlacedsArgs = {
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<BetPlaced_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<BetPlaced_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type QueryendOfBettingPeriodArgs = {
-  id: Scalars['ID']['input'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type QueryendOfBettingPeriodsArgs = {
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<EndOfBettingPeriod_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<EndOfBettingPeriod_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type QuerygameCreatedArgs = {
-  id: Scalars['ID']['input'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type QuerygameCreatedsArgs = {
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<GameCreated_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<GameCreated_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type QueryprizePaymentArgs = {
-  id: Scalars['ID']['input'];
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type QueryprizePaymentsArgs = {
-  skip?: InputMaybe<Scalars['Int']['input']>;
-  first?: InputMaybe<Scalars['Int']['input']>;
-  orderBy?: InputMaybe<PrizePayment_orderBy>;
-  orderDirection?: InputMaybe<OrderDirection>;
-  where?: InputMaybe<PrizePayment_filter>;
-  block?: InputMaybe<Block_height>;
-  subgraphError?: _SubgraphErrorPolicy_;
-};
-
-
-export type Query_metaArgs = {
-  block?: InputMaybe<Block_height>;
-};
 
 export type _Block_ = {
   /** The hash of the block */
@@ -726,6 +733,7 @@ export type DirectiveResolverFn<TResult = {}, TParent = {}, TContext = {}, TArgs
 
 /** Mapping between all available schema types and the resolvers types */
 export type ResolversTypes = ResolversObject<{
+  Query: ResolverTypeWrapper<{}>;
   Aggregation_interval: Aggregation_interval;
   BetPlaced: ResolverTypeWrapper<BetPlaced>;
   BetPlaced_filter: BetPlaced_filter;
@@ -750,7 +758,6 @@ export type ResolversTypes = ResolversObject<{
   PrizePayment: ResolverTypeWrapper<PrizePayment>;
   PrizePayment_filter: PrizePayment_filter;
   PrizePayment_orderBy: PrizePayment_orderBy;
-  Query: ResolverTypeWrapper<{}>;
   String: ResolverTypeWrapper<Scalars['String']['output']>;
   Timestamp: ResolverTypeWrapper<Scalars['Timestamp']['output']>;
   _Block_: ResolverTypeWrapper<_Block_>;
@@ -760,6 +767,7 @@ export type ResolversTypes = ResolversObject<{
 
 /** Mapping between all available schema types and the resolvers parents */
 export type ResolversParentTypes = ResolversObject<{
+  Query: {};
   BetPlaced: BetPlaced;
   BetPlaced_filter: BetPlaced_filter;
   BigDecimal: Scalars['BigDecimal']['output'];
@@ -778,7 +786,6 @@ export type ResolversParentTypes = ResolversObject<{
   Int8: Scalars['Int8']['output'];
   PrizePayment: PrizePayment;
   PrizePayment_filter: PrizePayment_filter;
-  Query: {};
   String: Scalars['String']['output'];
   Timestamp: Scalars['Timestamp']['output'];
   _Block_: _Block_;
@@ -787,21 +794,33 @@ export type ResolversParentTypes = ResolversObject<{
 
 export type entityDirectiveArgs = { };
 
-export type entityDirectiveResolver<Result, Parent, ContextType = MeshContext, Args = entityDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
+export type entityDirectiveResolver<Result, Parent, ContextType = MeshContext & { chainName: string }, Args = entityDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
 
 export type subgraphIdDirectiveArgs = {
   id: Scalars['String']['input'];
 };
 
-export type subgraphIdDirectiveResolver<Result, Parent, ContextType = MeshContext, Args = subgraphIdDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
+export type subgraphIdDirectiveResolver<Result, Parent, ContextType = MeshContext & { chainName: string }, Args = subgraphIdDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
 
 export type derivedFromDirectiveArgs = {
   field: Scalars['String']['input'];
 };
 
-export type derivedFromDirectiveResolver<Result, Parent, ContextType = MeshContext, Args = derivedFromDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
+export type derivedFromDirectiveResolver<Result, Parent, ContextType = MeshContext & { chainName: string }, Args = derivedFromDirectiveArgs> = DirectiveResolverFn<Result, Parent, ContextType, Args>;
 
-export type BetPlacedResolvers<ContextType = MeshContext, ParentType extends ResolversParentTypes['BetPlaced'] = ResolversParentTypes['BetPlaced']> = ResolversObject<{
+export type QueryResolvers<ContextType = MeshContext & { chainName: string }, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
+  betPlaced?: Resolver<Maybe<ResolversTypes['BetPlaced']>, ParentType, ContextType, RequireFields<QuerybetPlacedArgs, 'id' | 'subgraphError'>>;
+  betPlaceds?: Resolver<Array<ResolversTypes['BetPlaced']>, ParentType, ContextType, RequireFields<QuerybetPlacedsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  endOfBettingPeriod?: Resolver<Maybe<ResolversTypes['EndOfBettingPeriod']>, ParentType, ContextType, RequireFields<QueryendOfBettingPeriodArgs, 'id' | 'subgraphError'>>;
+  endOfBettingPeriods?: Resolver<Array<ResolversTypes['EndOfBettingPeriod']>, ParentType, ContextType, RequireFields<QueryendOfBettingPeriodsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  gameCreated?: Resolver<Maybe<ResolversTypes['GameCreated']>, ParentType, ContextType, RequireFields<QuerygameCreatedArgs, 'id' | 'subgraphError'>>;
+  gameCreateds?: Resolver<Array<ResolversTypes['GameCreated']>, ParentType, ContextType, RequireFields<QuerygameCreatedsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  prizePayment?: Resolver<Maybe<ResolversTypes['PrizePayment']>, ParentType, ContextType, RequireFields<QueryprizePaymentArgs, 'id' | 'subgraphError'>>;
+  prizePayments?: Resolver<Array<ResolversTypes['PrizePayment']>, ParentType, ContextType, RequireFields<QueryprizePaymentsArgs, 'skip' | 'first' | 'subgraphError'>>;
+  _meta?: Resolver<Maybe<ResolversTypes['_Meta_']>, ParentType, ContextType, Partial<Query_metaArgs>>;
+}>;
+
+export type BetPlacedResolvers<ContextType = MeshContext & { chainName: string }, ParentType extends ResolversParentTypes['BetPlaced'] = ResolversParentTypes['BetPlaced']> = ResolversObject<{
   id?: Resolver<ResolversTypes['Bytes'], ParentType, ContextType>;
   gameId?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   bettor?: Resolver<ResolversTypes['Bytes'], ParentType, ContextType>;
@@ -812,6 +831,7 @@ export type BetPlacedResolvers<ContextType = MeshContext, ParentType extends Res
   blockNumber?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   blockTimestamp?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   transactionHash?: Resolver<ResolversTypes['Bytes'], ParentType, ContextType>;
+  chainName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -827,7 +847,7 @@ export interface BytesScalarConfig extends GraphQLScalarTypeConfig<ResolversType
   name: 'Bytes';
 }
 
-export type EndOfBettingPeriodResolvers<ContextType = MeshContext, ParentType extends ResolversParentTypes['EndOfBettingPeriod'] = ResolversParentTypes['EndOfBettingPeriod']> = ResolversObject<{
+export type EndOfBettingPeriodResolvers<ContextType = MeshContext & { chainName: string }, ParentType extends ResolversParentTypes['EndOfBettingPeriod'] = ResolversParentTypes['EndOfBettingPeriod']> = ResolversObject<{
   id?: Resolver<ResolversTypes['Bytes'], ParentType, ContextType>;
   gameId?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   drawnNumber?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
@@ -837,10 +857,11 @@ export type EndOfBettingPeriodResolvers<ContextType = MeshContext, ParentType ex
   blockNumber?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   blockTimestamp?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   transactionHash?: Resolver<ResolversTypes['Bytes'], ParentType, ContextType>;
+  chainName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type GameCreatedResolvers<ContextType = MeshContext, ParentType extends ResolversParentTypes['GameCreated'] = ResolversParentTypes['GameCreated']> = ResolversObject<{
+export type GameCreatedResolvers<ContextType = MeshContext & { chainName: string }, ParentType extends ResolversParentTypes['GameCreated'] = ResolversParentTypes['GameCreated']> = ResolversObject<{
   id?: Resolver<ResolversTypes['Bytes'], ParentType, ContextType>;
   gameId?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   creator?: Resolver<ResolversTypes['Bytes'], ParentType, ContextType>;
@@ -849,6 +870,7 @@ export type GameCreatedResolvers<ContextType = MeshContext, ParentType extends R
   blockNumber?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   blockTimestamp?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   transactionHash?: Resolver<ResolversTypes['Bytes'], ParentType, ContextType>;
+  chainName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
@@ -856,7 +878,7 @@ export interface Int8ScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes
   name: 'Int8';
 }
 
-export type PrizePaymentResolvers<ContextType = MeshContext, ParentType extends ResolversParentTypes['PrizePayment'] = ResolversParentTypes['PrizePayment']> = ResolversObject<{
+export type PrizePaymentResolvers<ContextType = MeshContext & { chainName: string }, ParentType extends ResolversParentTypes['PrizePayment'] = ResolversParentTypes['PrizePayment']> = ResolversObject<{
   id?: Resolver<ResolversTypes['Bytes'], ParentType, ContextType>;
   gameId?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   betId?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
@@ -868,26 +890,15 @@ export type PrizePaymentResolvers<ContextType = MeshContext, ParentType extends 
   blockNumber?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   blockTimestamp?: Resolver<ResolversTypes['BigInt'], ParentType, ContextType>;
   transactionHash?: Resolver<ResolversTypes['Bytes'], ParentType, ContextType>;
+  chainName?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
-}>;
-
-export type QueryResolvers<ContextType = MeshContext, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = ResolversObject<{
-  betPlaced?: Resolver<Maybe<ResolversTypes['BetPlaced']>, ParentType, ContextType, RequireFields<QuerybetPlacedArgs, 'id' | 'subgraphError'>>;
-  betPlaceds?: Resolver<Array<ResolversTypes['BetPlaced']>, ParentType, ContextType, RequireFields<QuerybetPlacedsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  endOfBettingPeriod?: Resolver<Maybe<ResolversTypes['EndOfBettingPeriod']>, ParentType, ContextType, RequireFields<QueryendOfBettingPeriodArgs, 'id' | 'subgraphError'>>;
-  endOfBettingPeriods?: Resolver<Array<ResolversTypes['EndOfBettingPeriod']>, ParentType, ContextType, RequireFields<QueryendOfBettingPeriodsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  gameCreated?: Resolver<Maybe<ResolversTypes['GameCreated']>, ParentType, ContextType, RequireFields<QuerygameCreatedArgs, 'id' | 'subgraphError'>>;
-  gameCreateds?: Resolver<Array<ResolversTypes['GameCreated']>, ParentType, ContextType, RequireFields<QuerygameCreatedsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  prizePayment?: Resolver<Maybe<ResolversTypes['PrizePayment']>, ParentType, ContextType, RequireFields<QueryprizePaymentArgs, 'id' | 'subgraphError'>>;
-  prizePayments?: Resolver<Array<ResolversTypes['PrizePayment']>, ParentType, ContextType, RequireFields<QueryprizePaymentsArgs, 'skip' | 'first' | 'subgraphError'>>;
-  _meta?: Resolver<Maybe<ResolversTypes['_Meta_']>, ParentType, ContextType, Partial<Query_metaArgs>>;
 }>;
 
 export interface TimestampScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Timestamp'], any> {
   name: 'Timestamp';
 }
 
-export type _Block_Resolvers<ContextType = MeshContext, ParentType extends ResolversParentTypes['_Block_'] = ResolversParentTypes['_Block_']> = ResolversObject<{
+export type _Block_Resolvers<ContextType = MeshContext & { chainName: string }, ParentType extends ResolversParentTypes['_Block_'] = ResolversParentTypes['_Block_']> = ResolversObject<{
   hash?: Resolver<Maybe<ResolversTypes['Bytes']>, ParentType, ContextType>;
   number?: Resolver<ResolversTypes['Int'], ParentType, ContextType>;
   timestamp?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>;
@@ -895,14 +906,15 @@ export type _Block_Resolvers<ContextType = MeshContext, ParentType extends Resol
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type _Meta_Resolvers<ContextType = MeshContext, ParentType extends ResolversParentTypes['_Meta_'] = ResolversParentTypes['_Meta_']> = ResolversObject<{
+export type _Meta_Resolvers<ContextType = MeshContext & { chainName: string }, ParentType extends ResolversParentTypes['_Meta_'] = ResolversParentTypes['_Meta_']> = ResolversObject<{
   block?: Resolver<ResolversTypes['_Block_'], ParentType, ContextType>;
   deployment?: Resolver<ResolversTypes['String'], ParentType, ContextType>;
   hasIndexingErrors?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>;
   __isTypeOf?: IsTypeOfResolverFn<ParentType, ContextType>;
 }>;
 
-export type Resolvers<ContextType = MeshContext> = ResolversObject<{
+export type Resolvers<ContextType = MeshContext & { chainName: string }> = ResolversObject<{
+  Query?: QueryResolvers<ContextType>;
   BetPlaced?: BetPlacedResolvers<ContextType>;
   BigDecimal?: GraphQLScalarType;
   BigInt?: GraphQLScalarType;
@@ -911,19 +923,18 @@ export type Resolvers<ContextType = MeshContext> = ResolversObject<{
   GameCreated?: GameCreatedResolvers<ContextType>;
   Int8?: GraphQLScalarType;
   PrizePayment?: PrizePaymentResolvers<ContextType>;
-  Query?: QueryResolvers<ContextType>;
   Timestamp?: GraphQLScalarType;
   _Block_?: _Block_Resolvers<ContextType>;
   _Meta_?: _Meta_Resolvers<ContextType>;
 }>;
 
-export type DirectiveResolvers<ContextType = MeshContext> = ResolversObject<{
+export type DirectiveResolvers<ContextType = MeshContext & { chainName: string }> = ResolversObject<{
   entity?: entityDirectiveResolver<any, any, ContextType>;
   subgraphId?: subgraphIdDirectiveResolver<any, any, ContextType>;
   derivedFrom?: derivedFromDirectiveResolver<any, any, ContextType>;
 }>;
 
-export type MeshContext = JodobixOpMainnetTypes.Context & BaseMeshContext;
+export type MeshContext = JodobixOpMainnetTypes.Context & JodobixOpSepoliaTypes.Context & BaseMeshContext;
 
 
 import { fileURLToPath } from '@graphql-mesh/utils';
@@ -934,6 +945,9 @@ const importFn: ImportFn = <T>(moduleId: string) => {
   switch(relativeModuleId) {
     case ".graphclient/sources/jodobix-op-mainnet/introspectionSchema":
       return Promise.resolve(importedModule$0) as T;
+    
+    case ".graphclient/sources/jodobix-op-sepolia/introspectionSchema":
+      return Promise.resolve(importedModule$1) as T;
     
     default:
       return Promise.reject(new Error(`Cannot find module '${relativeModuleId}'.`));
@@ -966,7 +980,7 @@ const sources: MeshResolvedSource[] = [];
 const transforms: MeshTransform[] = [];
 const additionalEnvelopPlugins: MeshPlugin<any>[] = [];
 const jodobixOpMainnetTransforms = [];
-const additionalTypeDefs = [] as any[];
+const jodobixOpSepoliaTransforms = [];
 const jodobixOpMainnetHandler = new GraphqlHandler({
               name: "jodobix-op-mainnet",
               config: {"endpoint":"https://gateway.thegraph.com/api/adca8d5ca99b5c886296cdbf714ddf6b/subgraphs/id/CNojXnaokkytgd54qTvamsYWtKfCjnXm6afHXzKNAT4G"},
@@ -977,23 +991,42 @@ const jodobixOpMainnetHandler = new GraphqlHandler({
               logger: logger.child("jodobix-op-mainnet"),
               importFn,
             });
+const jodobixOpSepoliaHandler = new GraphqlHandler({
+              name: "jodobix-op-sepolia",
+              config: {"endpoint":"https://gateway.thegraph.com/api/adca8d5ca99b5c886296cdbf714ddf6b/subgraphs/id/62tPEBeCiSXAxZUtSiCRcM2UMzTpXtmbs6ABcetyEgfW"},
+              baseDir,
+              cache,
+              pubsub,
+              store: sourcesStore.child("jodobix-op-sepolia"),
+              logger: logger.child("jodobix-op-sepolia"),
+              importFn,
+            });
 sources[0] = {
           name: 'jodobix-op-mainnet',
           handler: jodobixOpMainnetHandler,
           transforms: jodobixOpMainnetTransforms
         }
-const additionalResolvers = [] as any[]
-const merger = new(BareMerger as any)({
+sources[1] = {
+          name: 'jodobix-op-sepolia',
+          handler: jodobixOpSepoliaHandler,
+          transforms: jodobixOpSepoliaTransforms
+        }
+const additionalTypeDefs = [parse("extend type BetPlaced {\n  chainName: String!\n}\n\nextend type EndOfBettingPeriod {\n  chainName: String!\n}\n\nextend type GameCreated {\n  chainName: String!\n}\n\nextend type PrizePayment {\n  chainName: String!\n}"),] as any[];
+const additionalResolvers = await Promise.all([
+        import("../utils/graph/resolver.ts")
+            .then(m => m.resolvers || m.default || m)
+      ]);
+const merger = new(StitchingMerger as any)({
         cache,
         pubsub,
-        logger: logger.child('bareMerger'),
-        store: rootStore.child('bareMerger')
+        logger: logger.child('stitchingMerger'),
+        store: rootStore.child('stitchingMerger')
       })
 const documentHashMap = {
-        "267ad73e638a85666fd849ba69c892326055d6a7a8a17ddebb441dc9003a51f0": BetsPlacedDocument,
-"1a10ff92996b6959c5bc1e9836a06bafaccf4e045bf61e28325b0cd341c111a7": PrizePaymentsDocument,
-"f8b7c3a0937bfd2e1ca126d8687a2df454e8b78d9b5f5cc51cb61f16d8a11219": EndsOfBettingPeriodDocument,
-"1660e83a8060a699d2aaa2433529f5a4705ac1385f2efac829ac77ca92a66539": GamesCreatedDocument
+        "d0107e7258e4380240aab850b66fc12c11b9f70fffe43d46c4515dd35a5dfb98": EndsOfBettingPeriodDocument,
+"468d0cb557e6f88694b628593fe0591baa666f5c7be6d36fb92bbb494f044a82": BetsPlacedDocument,
+"abe7a7e243ef23107b78066213c9324e8bf1ede415e18fb7834a3cbff6b32450": GamesCreatedDocument,
+"4ea33ed8ed756e9a58174f17f3d63f723f3fef04ea02baa0cbbe2e2a1ec5b72e": PrizePaymentsDocument
       }
 additionalEnvelopPlugins.push(usePersistedOperations({
         getPersistedOperation(key) {
@@ -1015,33 +1048,33 @@ additionalEnvelopPlugins.push(usePersistedOperations({
     get documents() {
       return [
       {
-        document: BetsPlacedDocument,
-        get rawSDL() {
-          return printWithCache(BetsPlacedDocument);
-        },
-        location: 'BetsPlacedDocument.graphql',
-        sha256Hash: '267ad73e638a85666fd849ba69c892326055d6a7a8a17ddebb441dc9003a51f0'
-      },{
-        document: PrizePaymentsDocument,
-        get rawSDL() {
-          return printWithCache(PrizePaymentsDocument);
-        },
-        location: 'PrizePaymentsDocument.graphql',
-        sha256Hash: '1a10ff92996b6959c5bc1e9836a06bafaccf4e045bf61e28325b0cd341c111a7'
-      },{
         document: EndsOfBettingPeriodDocument,
         get rawSDL() {
           return printWithCache(EndsOfBettingPeriodDocument);
         },
         location: 'EndsOfBettingPeriodDocument.graphql',
-        sha256Hash: 'f8b7c3a0937bfd2e1ca126d8687a2df454e8b78d9b5f5cc51cb61f16d8a11219'
+        sha256Hash: 'd0107e7258e4380240aab850b66fc12c11b9f70fffe43d46c4515dd35a5dfb98'
+      },{
+        document: BetsPlacedDocument,
+        get rawSDL() {
+          return printWithCache(BetsPlacedDocument);
+        },
+        location: 'BetsPlacedDocument.graphql',
+        sha256Hash: '468d0cb557e6f88694b628593fe0591baa666f5c7be6d36fb92bbb494f044a82'
       },{
         document: GamesCreatedDocument,
         get rawSDL() {
           return printWithCache(GamesCreatedDocument);
         },
         location: 'GamesCreatedDocument.graphql',
-        sha256Hash: '1660e83a8060a699d2aaa2433529f5a4705ac1385f2efac829ac77ca92a66539'
+        sha256Hash: 'abe7a7e243ef23107b78066213c9324e8bf1ede415e18fb7834a3cbff6b32450'
+      },{
+        document: PrizePaymentsDocument,
+        get rawSDL() {
+          return printWithCache(PrizePaymentsDocument);
+        },
+        location: 'PrizePaymentsDocument.graphql',
+        sha256Hash: '4ea33ed8ed756e9a58174f17f3d63f723f3fef04ea02baa0cbbe2e2a1ec5b72e'
       }
     ];
     },
@@ -1101,33 +1134,34 @@ export type BetsPlacedQueryVariables = Exact<{
 }>;
 
 
-export type BetsPlacedQuery = { betPlaceds: Array<Pick<BetPlaced, 'gameId' | 'bettor' | 'number' | 'value' | 'timestamp' | 'betId' | 'blockNumber' | 'blockTimestamp' | 'transactionHash'>> };
+export type BetsPlacedQuery = { betPlaceds: Array<Pick<BetPlaced, 'chainName' | 'gameId' | 'bettor' | 'number' | 'value' | 'timestamp' | 'betId' | 'blockNumber' | 'blockTimestamp' | 'transactionHash'>> };
 
 export type EndsOfBettingPeriodQueryVariables = Exact<{
   where?: InputMaybe<EndOfBettingPeriod_filter>;
 }>;
 
 
-export type EndsOfBettingPeriodQuery = { endOfBettingPeriods: Array<Pick<EndOfBettingPeriod, 'gameId' | 'drawnNumber' | 'closer' | 'reward' | 'timestamp' | 'blockNumber' | 'blockTimestamp' | 'transactionHash'>> };
+export type EndsOfBettingPeriodQuery = { endOfBettingPeriods: Array<Pick<EndOfBettingPeriod, 'chainName' | 'gameId' | 'drawnNumber' | 'closer' | 'reward' | 'timestamp' | 'blockNumber' | 'blockTimestamp' | 'transactionHash'>> };
 
 export type GamesCreatedQueryVariables = Exact<{
   where?: InputMaybe<GameCreated_filter>;
 }>;
 
 
-export type GamesCreatedQuery = { gameCreateds: Array<Pick<GameCreated, 'gameId' | 'creator' | 'isPrivate' | 'timestamp' | 'blockNumber' | 'blockTimestamp' | 'transactionHash'>> };
+export type GamesCreatedQuery = { gameCreateds: Array<Pick<GameCreated, 'chainName' | 'gameId' | 'creator' | 'isPrivate' | 'timestamp' | 'blockNumber' | 'blockTimestamp' | 'transactionHash'>> };
 
 export type PrizePaymentsQueryVariables = Exact<{
   where?: InputMaybe<PrizePayment_filter>;
 }>;
 
 
-export type PrizePaymentsQuery = { prizePayments: Array<Pick<PrizePayment, 'gameId' | 'betId' | 'bettor' | 'requestedBy' | 'drawnNumber' | 'prizeValue' | 'timestamp' | 'blockNumber' | 'blockTimestamp' | 'transactionHash'>> };
+export type PrizePaymentsQuery = { prizePayments: Array<Pick<PrizePayment, 'chainName' | 'gameId' | 'betId' | 'bettor' | 'requestedBy' | 'drawnNumber' | 'prizeValue' | 'timestamp' | 'blockNumber' | 'blockTimestamp' | 'transactionHash'>> };
 
 
 export const BetsPlacedDocument = gql`
     query BetsPlaced($where: BetPlaced_filter) {
   betPlaceds(where: $where) {
+    chainName
     gameId
     bettor
     number
@@ -1143,6 +1177,7 @@ export const BetsPlacedDocument = gql`
 export const EndsOfBettingPeriodDocument = gql`
     query EndsOfBettingPeriod($where: EndOfBettingPeriod_filter) {
   endOfBettingPeriods(where: $where) {
+    chainName
     gameId
     drawnNumber
     closer
@@ -1157,6 +1192,7 @@ export const EndsOfBettingPeriodDocument = gql`
 export const GamesCreatedDocument = gql`
     query GamesCreated($where: GameCreated_filter) {
   gameCreateds(where: $where) {
+    chainName
     gameId
     creator
     isPrivate
@@ -1170,6 +1206,7 @@ export const GamesCreatedDocument = gql`
 export const PrizePaymentsDocument = gql`
     query PrizePayments($where: PrizePayment_filter) {
   prizePayments(where: $where) {
+    chainName
     gameId
     betId
     bettor
