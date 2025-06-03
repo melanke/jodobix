@@ -5,3 +5,4 @@ export * from "./Faucet";
 export * from "./FaucetButton";
 export * from "./Input";
 export * from "./PrivyCustomConnectButton";
+export * from "./RainbowKitCustomConnectButton";

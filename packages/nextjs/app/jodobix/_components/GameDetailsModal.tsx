@@ -11,7 +11,7 @@ import { useAccount } from "wagmi";
 import { ArrowPathIcon, InformationCircleIcon, ShareIcon } from "@heroicons/react/24/outline";
 import { Address } from "~~/components/scaffold-eth";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "~~/components/ui/hover-card";
-import { useScaffoldEventHistory, useScaffoldReadContract, useWatchBalance } from "~~/hooks/scaffold-eth";
+import { useScaffoldReadContract, useWatchBalance } from "~~/hooks/scaffold-eth";
 import { useBetsPlaced } from "~~/hooks/useBetPlaceds";
 
 interface GameDetailsModalProps {
@@ -40,6 +40,7 @@ export const GameDetailsModal: React.FC<GameDetailsModalProps> = ({ gameId, onCl
     args: [gameId],
     watch: true,
   });
+
   const {
     data: myBets,
     refetch: refetchMyBets,

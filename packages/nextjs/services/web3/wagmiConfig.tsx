@@ -1,6 +1,8 @@
-import { createConfig } from "@privy-io/wagmi";
+// import { createConfig } from "@privy-io/wagmi";
+import { wagmiConnectors } from "./wagmiConnectors";
 import { Chain, createClient, fallback, http } from "viem";
-import { hardhat, mainnet, optimism, optimismSepolia } from "viem/chains";
+import { hardhat, mainnet } from "viem/chains";
+import { createConfig } from "wagmi";
 import scaffoldConfig from "~~/scaffold.config";
 import { getAlchemyHttpUrl } from "~~/utils/scaffold-eth";
 
@@ -13,14 +15,8 @@ export const enabledChains = targetNetworks.find((network: Chain) => network.id 
 
 export const wagmiConfig = createConfig({
   chains: enabledChains,
+  connectors: wagmiConnectors, // comment this line to use Privy
   ssr: true,
-  // transports: {
-  //   [optimism.id]: http(),
-  //   [optimismSepolia.id]: http(),
-  //   [mainnet.id]: http(),
-  //   // For each of your required chains, add an entry to `transports` with
-  //   // a key of the chain's `id` and a value of `http()`
-  // },
   client({ chain }) {
     const alchemyHttpUrl = getAlchemyHttpUrl(chain.id);
     const rpcFallbacks = alchemyHttpUrl ? [http(alchemyHttpUrl), http()] : [http()];

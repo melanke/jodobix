@@ -5,7 +5,7 @@ import { DismissibleAlert } from "./DismissibleAlert";
 import { formatEther } from "viem";
 import { useAccount } from "wagmi";
 import { Address } from "~~/components/scaffold-eth";
-import { useScaffoldEventHistory, useScaffoldReadContract, useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
+import { useScaffoldReadContract, useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
 import { useBetsPlaced } from "~~/hooks/useBetPlaceds";
 import { useEndsOfBettingPeriod } from "~~/hooks/useEndsOfBettingPeriod";
 import { cn } from "~~/lib/utils";
