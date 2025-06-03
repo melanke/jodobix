@@ -25,7 +25,7 @@ export const PrivyCustomConnectButton = () => {
   const chainId = useChainId();
   const chain = extractChain({
     chains: wagmiConfig.chains,
-    id: chainId,
+    id: chainId as 1 | 10 | 11155420,
   });
   const { data: ensName } = useEnsName({
     address: account.address,

@@ -42,11 +42,5 @@
   "packageManager": "yarn@3.2.3",
   "engines": {
     "node": ">=18.18.0"
-  },
-  "dependencies": {
-    "@heroicons/react": "^2.1.5",
-    "@uidotdev/usehooks": "^2.4.1",
-    "graphql": "^16.11.0",
-    "urql": "^4.2.2"
   }
 }

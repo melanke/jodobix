@@ -1,6 +1,5 @@
 import React from "react";
 import Image from "next/image";
-import { toast } from "react-hot-toast";
 import { formatEther } from "viem";
 
 interface AnimalSelectorProps {
