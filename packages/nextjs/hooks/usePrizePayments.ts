@@ -1,19 +1,26 @@
 import { UseQueryResult, useQuery } from "@tanstack/react-query";
-import { PrizePaymentsDocument, PrizePaymentsQuery, execute } from "~~/.graphclient";
+import { useChainId } from "wagmi";
+import { PrizePaymentsDocument, PrizePaymentsQuery } from "~~/.graphclient";
+import urqlClient, { UrqlClientNetwork } from "~~/services/graph/urqlClient";
 
 export const usePrizePayments = ({
+  network,
   betId,
   enabled = true,
 }: {
+  network?: UrqlClientNetwork;
   betId?: bigint;
   enabled?: boolean;
-}): UseQueryResult<PrizePaymentsQuery["prizePayments"]> => {
+}): UseQueryResult<PrizePaymentsQuery["prizePayments"] | undefined> => {
+  const defaultChainId = useChainId();
+  const networkWithFallback = network ?? defaultChainId;
+
   return useQuery({
-    queryKey: ["prizePayments", betId],
+    queryKey: ["prizePayments", networkWithFallback, betId],
     queryFn: async () => {
-      const result = await execute(PrizePaymentsDocument, { where: { betId } });
+      const result = await urqlClient[networkWithFallback].query(PrizePaymentsDocument, { where: { betId } });
       return result.data?.prizePayments;
     },
-    enabled,
+    enabled: enabled && !!networkWithFallback,
   });
 };

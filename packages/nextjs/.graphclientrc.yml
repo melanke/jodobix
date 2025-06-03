@@ -9,26 +9,3 @@ sources:
         endpoint: https://gateway.thegraph.com/api/adca8d5ca99b5c886296cdbf714ddf6b/subgraphs/id/62tPEBeCiSXAxZUtSiCRcM2UMzTpXtmbs6ABcetyEgfW
 documents:
   - ./graphqueries/*.graphql
-
-additionalTypeDefs: |
-  extend type BetPlaced {
-    chainName: String!
-  }
-
-  extend type EndOfBettingPeriod {
-    chainName: String!
-  }
-
-  extend type GameCreated {
-    chainName: String!
-  }
-
-  extend type PrizePayment {
-    chainName: String!
-  }
-
-additionalResolvers:
-  - ./utils/graph/resolver.ts
-
-codegen:
-  contextType: "MeshContext & { chainName: string }"

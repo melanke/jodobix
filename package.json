@@ -45,6 +45,8 @@
   },
   "dependencies": {
     "@heroicons/react": "^2.1.5",
-    "@uidotdev/usehooks": "^2.4.1"
+    "@uidotdev/usehooks": "^2.4.1",
+    "graphql": "^16.11.0",
+    "urql": "^4.2.2"
   }
 }

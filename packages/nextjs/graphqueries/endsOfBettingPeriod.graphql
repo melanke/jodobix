@@ -1,6 +1,5 @@
 query EndsOfBettingPeriod($where: EndOfBettingPeriod_filter) {
   endOfBettingPeriods(where: $where) {
-    chainName
     gameId
     drawnNumber
     closer

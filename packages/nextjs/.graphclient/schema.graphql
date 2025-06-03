@@ -140,7 +140,6 @@ type BetPlaced {
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
-  chainName: String!
 }
 
 input BetPlaced_filter {
@@ -275,7 +274,6 @@ type EndOfBettingPeriod {
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
-  chainName: String!
 }
 
 input EndOfBettingPeriod_filter {
@@ -384,7 +382,6 @@ type GameCreated {
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
-  chainName: String!
 }
 
 input GameCreated_filter {
@@ -495,7 +492,6 @@ type PrizePayment {
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: Bytes!
-  chainName: String!
 }
 
 input PrizePayment_filter {

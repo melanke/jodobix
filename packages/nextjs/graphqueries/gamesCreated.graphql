@@ -1,6 +1,5 @@
 query GamesCreated($where: GameCreated_filter) {
   gameCreateds(where: $where) {
-    chainName
     gameId
     creator
     isPrivate

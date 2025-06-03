@@ -12,12 +12,7 @@ import { parseEventLogs } from "viem";
 import { useAccount } from "wagmi";
 import { useBlockNumber } from "wagmi";
 import { ArrowPathIcon } from "@heroicons/react/24/outline";
-import {
-  useDeployedContractInfo,
-  useScaffoldEventHistory,
-  useScaffoldReadContract,
-  useScaffoldWriteContract,
-} from "~~/hooks/scaffold-eth";
+import { useDeployedContractInfo, useScaffoldReadContract, useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
 import { useBetsPlaced } from "~~/hooks/useBetPlaceds";
 import { useGamesCreated } from "~~/hooks/useGamesCreated";
 
