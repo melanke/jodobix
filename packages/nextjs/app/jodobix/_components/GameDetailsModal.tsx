@@ -47,7 +47,7 @@ export const GameDetailsModal: React.FC<GameDetailsModalProps> = ({ gameId, onCl
     isLoading: isLoadingMyBets,
     error: errorMyBets,
   } = useBetsPlaced({
-    gameId: gameId,
+    gameId: gameId?.toString(),
     bettor: address,
     enabled: !!gameId && !!address,
   });

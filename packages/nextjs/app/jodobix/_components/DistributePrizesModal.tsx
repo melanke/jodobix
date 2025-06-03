@@ -86,7 +86,7 @@ const EndedGameItem: React.FC<{
     isLoading,
     error,
   } = useBetsPlaced({
-    gameId: gameId,
+    gameId: gameId.toString(),
     number: drawnNumber,
     enabled: !!gameId && !!drawnNumber,
   });

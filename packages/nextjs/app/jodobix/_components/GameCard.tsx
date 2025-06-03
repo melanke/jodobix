@@ -39,7 +39,7 @@ export const GameCard: React.FC<GameCardProps> = ({ gameId, onNavigate }) => {
       <div className="flex justify-between items-center">
         <div className="flex flex-col">
           <div className="flex gap-1">
-            Created by <Address address={game?.creator} />
+            Created by <Address address={game?.creator} disableAddressLink={true} />
           </div>
           <div>
             {!hasAllNumbersBet

@@ -11,7 +11,7 @@ export const useBetsPlaced = ({
   enabled = true,
 }: {
   network?: UrqlClientNetwork;
-  gameId?: bigint;
+  gameId?: string;
   number?: number;
   bettor?: string;
   enabled?: boolean;

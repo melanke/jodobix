@@ -7,7 +7,7 @@ interface PrizePaymentInfoProps {
 
 export const PrizePaymentInfo = ({ betId }: PrizePaymentInfoProps) => {
   const { data: prizePaymentedEvents, isLoading } = usePrizePayments({
-    betId,
+    betId: betId.toString(),
     enabled: !!betId,
   });
 

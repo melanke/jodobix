@@ -9,7 +9,7 @@ export const usePrizePayments = ({
   enabled = true,
 }: {
   network?: UrqlClientNetwork;
-  betId?: bigint;
+  betId?: string;
   enabled?: boolean;
 }): UseQueryResult<PrizePaymentsQuery["prizePayments"] | undefined> => {
   const defaultChainId = useChainId();
