@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 import { createWalletClient, http, parseEther } from "viem";
-import { hardhat } from "viem/chains";
+import { hardhat, optimismSepolia } from "viem/chains";
 import { useAccount } from "wagmi";
 import { BanknotesIcon } from "@heroicons/react/24/outline";
 import { useTransactor } from "~~/hooks/scaffold-eth";
@@ -23,11 +23,25 @@ const localWalletClient = createWalletClient({
 export const FaucetButton = () => {
   const { address, chain: ConnectedChain } = useAccount();
 
+  const isHardhat = ConnectedChain?.id === hardhat.id;
+  const isOpSepolia = ConnectedChain?.id === optimismSepolia.id;
+
   const { data: balance } = useWatchBalance({ address });
 
   const [loading, setLoading] = useState(false);
 
   const faucetTxn = useTransactor(localWalletClient);
+
+  const clickHandler = () => {
+    if (!address) return;
+    if (isHardhat) {
+      sendETH();
+    } else if (isOpSepolia) {
+      window.open("https://console.optimism.io/faucet", "_blank");
+    } else {
+      window.open("https://global-stg.transak.com/", "_blank");
+    }
+  };
 
   const sendETH = async () => {
     if (!address) return;
@@ -45,12 +59,11 @@ export const FaucetButton = () => {
     }
   };
 
-  // Render only on local chain
-  if (ConnectedChain?.id !== hardhat.id) {
-    return null;
-  }
-
   const isBalanceZero = balance && balance.value === 0n;
+
+  const tooltipText = isHardhat || isOpSepolia ? "Grab funds from faucet" : "Buy ETH (optimism) on Transak";
+
+  if (!address) return null;
 
   return (
     <div
@@ -59,9 +72,9 @@ export const FaucetButton = () => {
           ? "ml-1"
           : "ml-1 tooltip tooltip-bottom tooltip-secondary tooltip-open font-bold before:left-auto before:transform-none before:content-[attr(data-tip)] before:right-0"
       }
-      data-tip="Grab funds from faucet"
+      data-tip={tooltipText}
     >
-      <button className="btn btn-secondary btn-sm px-2 rounded-full" onClick={sendETH} disabled={loading}>
+      <button className="btn btn-secondary btn-sm px-2 rounded-full" onClick={clickHandler} disabled={loading}>
         {!loading ? (
           <BanknotesIcon className="h-4 w-4" />
         ) : (
