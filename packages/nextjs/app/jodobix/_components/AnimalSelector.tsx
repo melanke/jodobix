@@ -16,7 +16,7 @@ export const AnimalSelector: React.FC<AnimalSelectorProps> = ({
   drawnNumber,
 }) => {
   return (
-    <div className="grid grid-cols-5 gap-1 md:gap-2 flex-1">
+    <div className="flex flex-wrap gap-1 md:gap-2 flex-1">
       {[...Array(25)].map((_, index) => {
         const number = index + 1;
         const betAmount = betsPerNumber[index] || 0n;
@@ -40,9 +40,8 @@ export const AnimalSelector: React.FC<AnimalSelectorProps> = ({
                 />
               </svg>
             )}
-            <div className="flex items-center justify-between w-[86px] -mt-12 h-12 flex-col md:flex-row">
-              <span className="text-sm text-accent">#{number}</span>
-              <span className="text-xs text-black">{formatEther(betAmount)} ETH</span>
+            <div className="w-[86px] -mt-10 h-10 text-sm leading-8 text-end font-bold text-black">
+              {formatEther(betAmount)} ETH
             </div>
           </button>
         );

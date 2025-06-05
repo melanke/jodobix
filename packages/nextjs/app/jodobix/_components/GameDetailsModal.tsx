@@ -5,9 +5,10 @@ import { useCloseGame } from "../_hooks/useCloseGame";
 import { AnimalSelector } from "./AnimalSelector";
 import { BetCard } from "./BetCard";
 import { BetForm } from "./BetForm";
+import { useQueryClient } from "@tanstack/react-query";
 import { toast } from "react-hot-toast";
 import { formatEther, parseEther } from "viem";
-import { useAccount } from "wagmi";
+import { useAccount, useChainId } from "wagmi";
 import { ArrowPathIcon, InformationCircleIcon, ShareIcon } from "@heroicons/react/24/outline";
 import { Address } from "~~/components/scaffold-eth";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "~~/components/ui/hover-card";
@@ -24,9 +25,11 @@ export const GameDetailsModal: React.FC<GameDetailsModalProps> = ({ gameId, onCl
   const [selectedNumber, setSelectedNumber] = useState<number | null>(null);
   const [betAmount, setBetAmount] = useState("");
   const { address, connector, chainId } = useAccount();
+  const queryClient = useQueryClient();
   const { data: balance } = useWatchBalance({
     address,
   });
+  const defaultChainId = useChainId();
 
   const { data: game, refetch: refetchGame } = useScaffoldReadContract({
     contractName: "Jodobix",
@@ -43,7 +46,6 @@ export const GameDetailsModal: React.FC<GameDetailsModalProps> = ({ gameId, onCl
 
   const {
     data: myBets,
-    refetch: refetchMyBets,
     isLoading: isLoadingMyBets,
     error: errorMyBets,
   } = useBetsPlaced({
@@ -100,9 +102,27 @@ export const GameDetailsModal: React.FC<GameDetailsModalProps> = ({ gameId, onCl
     setSelectedNumber(number);
   };
 
-  const handleBetPlaced = (betId: bigint) => {
+  const handleBetPlaced = (betId: bigint, gameId: bigint, number: number) => {
+    // Optimistic UI update
+    queryClient.setQueryData(
+      ["betPlaceds", defaultChainId, gameId?.toString(), undefined, address],
+      [
+        ...(myBets ?? []),
+        {
+          betId: betId.toString(),
+          gameId: gameId.toString(),
+          number,
+          bettor: address,
+          value: parseEther(betAmount).toString(),
+          timestamp: Date.now().toString(),
+          blockNumber: "0",
+          blockTimestamp: "0",
+          transactionHash: "0x",
+        },
+      ],
+    );
+
     resetBetForm();
-    refetchMyBets();
     onBetPlaced?.(betId);
   };
 
@@ -151,7 +171,7 @@ export const GameDetailsModal: React.FC<GameDetailsModalProps> = ({ gameId, onCl
 
   return (
     <div className="modal modal-open">
-      <div className="modal-box w-11/12 max-w-5xl h-full flex flex-col dark:bg-">
+      <div className="modal-box w-11/12 max-w-5xl h-full flex flex-col">
         <div className="flex justify-between items-center mb-4">
           <h3 className="font-bold text-lg">
             Game #{gameId.toString()}
@@ -179,7 +199,7 @@ export const GameDetailsModal: React.FC<GameDetailsModalProps> = ({ gameId, onCl
           </button>
         </div>
 
-        <div className="flex gap-8 md:h-[calc(100%-3.3rem)] items-start flex-col md:flex-row">
+        <div className="flex gap-8 items-start flex-col md:flex-row pb-8">
           <AnimalSelector
             selectedNumber={selectedNumber}
             onSelectNumber={handleSelectNumber}
@@ -187,7 +207,7 @@ export const GameDetailsModal: React.FC<GameDetailsModalProps> = ({ gameId, onCl
             drawnNumber={game?.bettingPeriodEnded ? game?.drawnNumber : undefined}
           />
 
-          <div className="flex flex-col gap-2 h-full overflow-y-auto overflow-x-hidden self-center">
+          <div className="flex flex-col gap-2 h-full self-center">
             <div>
               Total Value: {formatEther(game?.totalValue || 0n)} ETH ({game?.numberOfBets.toString()} bets)
             </div>

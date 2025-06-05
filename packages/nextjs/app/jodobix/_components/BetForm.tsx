@@ -6,7 +6,7 @@ import { useDeployedContractInfo, useScaffoldWriteContract } from "~~/hooks/scaf
 interface BetFormProps {
   gameId?: bigint;
   selectedNumber: number | null;
-  onBetPlaced?: (betId: bigint) => void;
+  onBetPlaced?: (betId: bigint, gameId: bigint, number: number) => void;
   betAmount: string;
   setBetAmount: (value: string) => void;
 }
@@ -35,7 +35,7 @@ export const BetForm: React.FC<BetFormProps> = ({ gameId, selectedNumber, onBetP
 
             if (betPlacedEvent && "betId" in betPlacedEvent.args) {
               const betId = betPlacedEvent.args.betId as bigint;
-              onBetPlaced?.(betId);
+              onBetPlaced?.(betId, gameId!, Number(selectedNumber));
             }
           },
         },

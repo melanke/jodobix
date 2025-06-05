@@ -41,8 +41,15 @@ export const BetCard: React.FC<BetCardProps> = ({ betId, drawnNumber }) => {
 
   return (
     <div className="flex items-center gap-4">
-      <div className="relative w-16 h-16">
-        <Image src={`/animals/${bet?.number}.webp`} alt={`Animal ${bet?.number}`} width={228} height={325} />
+      <div className="relative w-16 h-[68px] overflow-hidden">
+        <Image
+          src={`/animals/${bet?.number}.webp`}
+          alt={`Animal ${bet?.number}`}
+          width={228}
+          height={325}
+          className="object-contain object-top"
+          style={{ width: "100%", height: "auto" }}
+        />
 
         {won && (
           <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 86 66" className="h-14 -ml-1 mt-1">
@@ -58,7 +65,6 @@ export const BetCard: React.FC<BetCardProps> = ({ betId, drawnNumber }) => {
 
       <div className="flex flex-col">
         <span className="text-sm font-semibold">Bet #{betId.toString()}</span>
-        <span className="text-sm">Number: #{bet?.number}</span>
         <span className="text-sm">{formatEther(bet?.value || 0n)} ETH</span>
       </div>
 
