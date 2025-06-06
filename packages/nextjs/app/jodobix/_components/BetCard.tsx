@@ -40,7 +40,7 @@ export const BetCard: React.FC<BetCardProps> = ({ betId, drawnNumber }) => {
   };
 
   return (
-    <div className="flex items-center gap-4">
+    <div className="flex items-center gap-4 bg-base-300">
       <div className="relative w-16 h-[68px] overflow-hidden">
         <Image
           src={`/animals/${bet?.number}.webp`}
