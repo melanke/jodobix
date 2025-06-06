@@ -118,7 +118,7 @@ const EndedGameItem: React.FC<{
   return (
     <div className={shouldShow ? "block" : "hidden"}>
       <div className="mb-6 p-4 border rounded-xl bg-base-100">
-        <h4 className="text-lg font-semibold mb-4">
+        <h4 className="text-lg font-semibold mb-4 font-encode-sans">
           Game {gameId.toString()} - Drawn Number: {drawnNumber}
         </h4>
         <div className="space-y-2">
@@ -187,7 +187,7 @@ export const DistributePrizesModal: React.FC<DistributePrizesModalProps> = ({
         <button onClick={onClose} className="btn btn-sm btn-circle btn-ghost absolute right-2 top-2">
           ✕
         </button>
-        <h3 className="font-bold text-lg mb-4">Distribute Prizes</h3>
+        <h3 className="font-bold text-lg mb-4 font-encode-sans">Distribute Prizes</h3>
         <DismissibleAlert id="distribute-prizes" className="bg-base-300/50 rounded-lg mb-8 border border-primary/50">
           <p>This page allows you to distribute prizes to the winners of the games.</p>
           <p>

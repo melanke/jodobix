@@ -1,8 +1,15 @@
+import { Encode_Sans } from "next/font/google";
 import "@rainbow-me/rainbowkit/styles.css";
 import { ScaffoldEthAppWithProviders } from "~~/components/ScaffoldEthAppWithProviders";
 import { ThemeProvider } from "~~/components/ThemeProvider";
 import "~~/styles/globals.css";
 import { getMetadata } from "~~/utils/scaffold-eth/getMetadata";
+
+const encodeSans = Encode_Sans({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-encode-sans",
+});
 
 export const metadata = getMetadata({
   title: "Jodobix",
@@ -12,7 +19,7 @@ export const metadata = getMetadata({
 
 const ScaffoldEthApp = ({ children }: { children: React.ReactNode }) => {
   return (
-    <html suppressHydrationWarning>
+    <html lang="en" className={encodeSans.variable} suppressHydrationWarning>
       <body>
         <ThemeProvider enableSystem>
           <ScaffoldEthAppWithProviders>{children}</ScaffoldEthAppWithProviders>

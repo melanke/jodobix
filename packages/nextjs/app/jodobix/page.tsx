@@ -110,7 +110,7 @@ const JodobixClientLogic: React.FC = () => {
   return (
     <div className="w-full max-w-7xl mx-auto flex flex-col px-6 lg:px-10 py-8 lg:py-12">
       <div className="flex flex-wrap justify-between items-center mb-8">
-        <h1 className="text-4xl font-bold">Jodobix</h1>
+        <h1 className="text-4xl font-bold font-encode-sans">Jodobix</h1>
         <div className="flex gap-2">
           <button
             onClick={handleCreatePublicGame}
@@ -125,14 +125,14 @@ const JodobixClientLogic: React.FC = () => {
         </div>
       </div>
 
-      <DismissibleAlert id="how-it-works" className="bg-base-300/50 rounded-lg mb-8 border border-primary">
-        <h2 className="text-xl font-bold mb-2">How it works?</h2>
+      <DismissibleAlert id="how-it-works" className="bg-base-300/50 mb-8">
+        <h2 className="text-xl font-bold mb-2 font-encode-sans">How it works?</h2>
         <p className="mb-2">
           Jodobix is a betting game where you choose one of the 25 available animals. When all animals have received at
           least one bet and the betting period ends, a number will be drawn and the winners who chose the winning animal
           will split the prize proportionally to their bets.
         </p>
-        <p className="text-primary">
+        <p className="font-bold">
           Click on any game below to see the details and make your bet. The minimum bet is 0.001 ETH.
         </p>
       </DismissibleAlert>
@@ -158,7 +158,7 @@ const JodobixClientLogic: React.FC = () => {
 
       {!!publicAvailableGames?.length && (
         <>
-          <h2 className="text-2xl font-bold mb-4">Publicly Available Games</h2>
+          <h2 className="text-2xl font-bold mb-4 font-encode-sans">Publicly Available Games</h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
             {publicAvailableGames?.map((gameId, index) => (
@@ -170,7 +170,7 @@ const JodobixClientLogic: React.FC = () => {
 
       {(myCreatedGames?.length ?? 0) > 0 && (
         <>
-          <h2 className="text-2xl font-bold mb-4">My Created Games</h2>
+          <h2 className="text-2xl font-bold mb-4 font-encode-sans">My Created Games</h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-16">
             {myCreatedGames?.map((game, index) => (
@@ -182,7 +182,7 @@ const JodobixClientLogic: React.FC = () => {
 
       {(gameIdsIHaveBets?.length ?? 0) > 0 && (
         <>
-          <h2 className="text-2xl font-bold mb-4">Games I Have Bet</h2>
+          <h2 className="text-2xl font-bold mb-4 font-encode-sans">Games I Have Bet</h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
             {gameIdsIHaveBets?.map((gameId, index) => (
@@ -194,7 +194,7 @@ const JodobixClientLogic: React.FC = () => {
 
       {(privateGameInvitations?.length ?? 0) > 0 && (
         <>
-          <h2 className="text-2xl font-bold mb-4">Private Game Invitations</h2>
+          <h2 className="text-2xl font-bold mb-4 font-encode-sans">Private Game Invitations</h2>
 
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
             {privateGameInvitations?.map((gameId, index) => (

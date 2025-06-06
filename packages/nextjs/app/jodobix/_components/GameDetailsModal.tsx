@@ -173,7 +173,7 @@ export const GameDetailsModal: React.FC<GameDetailsModalProps> = ({ gameId, onCl
     <div className="modal modal-open">
       <div className="modal-box w-11/12 max-w-5xl h-full flex flex-col">
         <div className="flex justify-between items-center mb-4">
-          <h3 className="font-bold text-lg">
+          <h3 className="font-bold text-lg font-encode-sans">
             Game #{gameId.toString()}
             {!!game?.participants.length && (
               <HoverCard>

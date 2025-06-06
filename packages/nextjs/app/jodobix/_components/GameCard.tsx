@@ -30,7 +30,7 @@ export const GameCard: React.FC<GameCardProps> = ({ gameId, onNavigate }) => {
   return (
     <div
       onClick={() => onNavigate(gameId)}
-      className="rounded-xl p-4 bg-base-100 border border-primary cursor-pointer hover:scale-105 transition-all duration-300"
+      className="text-white rounded-xl p-4 bg-primary cursor-pointer hover:scale-105 transition-all duration-300 [clip-path:polygon(12px_0,calc(100%-12px)_0,100%_12px,100%_calc(100%-12px),calc(100%-12px)_100%,12px_100%,0_calc(100%-12px),0_12px)]"
     >
       <div className="flex justify-between">
         <h2 className="card-title">Game #{gameId.toString()}</h2>
@@ -51,7 +51,7 @@ export const GameCard: React.FC<GameCardProps> = ({ gameId, onNavigate }) => {
                 : `Estimated end: ${timeLeft?.toString()} blocks`}
           </div>
         </div>
-        <div className="btn btn-square btn-secondary btn-sm">
+        <div className="btn btn-square btn-white btn-sm">
           <ChevronDoubleRightIcon className="size-4" />
         </div>
       </div>

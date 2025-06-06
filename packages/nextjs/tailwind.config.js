@@ -73,6 +73,7 @@ module.exports = {
     extend: {
       fontFamily: {
         "space-grotesk": ["Space Grotesk", "sans-serif"],
+        "encode-sans": ["var(--font-encode-sans)", "sans-serif"],
       },
       boxShadow: {
         center: "0 0 12px -2px rgb(0 0 0 / 0.05)",

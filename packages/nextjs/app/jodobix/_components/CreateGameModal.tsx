@@ -74,7 +74,7 @@ export const CreateGameModal: React.FC<CreateGameModalProps> = ({ isOpen, onClos
   return (
     <div className="modal modal-open">
       <div className="modal-box">
-        <h3 className="font-bold text-lg mb-4">Create New Game</h3>
+        <h3 className="font-bold text-lg mb-4 font-encode-sans">Create New Game</h3>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label className="label">

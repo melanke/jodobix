@@ -19,7 +19,7 @@ import { getBlockExplorerAddressLink } from "~~/utils/scaffold-eth";
 export const PrivyCustomConnectButton = () => {
   const networkColor = useNetworkColor();
   const { targetNetwork } = useTargetNetwork();
-  const { login, authenticated, ready } = usePrivy();
+  const { login, authenticated, ready, logout } = usePrivy();
   const account = useAccount();
   const chainId = useChainId();
   const chain = extractChain({
@@ -45,9 +45,22 @@ export const PrivyCustomConnectButton = () => {
     return <span className="loading loading-spinner loading-sm"></span>;
   }
 
+  const handleConnect = async () => {
+    // If user is authenticated but has no wallet connected, logout first
+    if (authenticated && !account.address) {
+      await logout();
+    }
+    await login();
+  };
+
+  // Show loading while we don't have a valid wallet address
+  if (!account.address) {
+    return <span className="loading loading-spinner loading-sm"></span>;
+  }
+
   if (!authenticated) {
     return (
-      <button className="btn btn-primary btn-sm" onClick={login} type="button">
+      <button className="btn btn-primary btn-sm" onClick={handleConnect} type="button">
         Connect Wallet
       </button>
     );
@@ -63,10 +76,6 @@ export const PrivyCustomConnectButton = () => {
 
   if (chainId !== targetNetwork.id) {
     return <WrongNetworkDropdown />;
-  }
-
-  if (!account.address) {
-    return <span className="loading loading-spinner loading-sm"></span>;
   }
 
   return (
