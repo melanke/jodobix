@@ -223,7 +223,7 @@ const GameDetailsPage = () => {
             {timeLeft !== BigInt(0) ? (
               `Estimated end: ${timeLeft?.toString()} blocks`
             ) : !hasAllNumbersBet ? (
-              "Waiting for bets on all numbers"
+              "Waiting for bets on all animals"
             ) : game?.bettingPeriodEnded ? (
               <span className="font-bold bg-secondary text-secondary-content p-1 rounded-md">
                 Drawn number: {game?.drawnNumber}
@@ -241,7 +241,15 @@ const GameDetailsPage = () => {
                   </HoverCardTrigger>
                   <HoverCardContent className="bg-base-100 text-base-content border-base-300">
                     <div className="w-50">
-                      Anyone using a burner wallet can close the game and receive a reward. Give it a try!
+                      The game will be closed very soon. Anyone can close the game and receive a reward, but it's an
+                      advanced feature.{" "}
+                      <a
+                        href="https://github.com/melanke/jodobix?tab=readme-ov-file#6-end-the-betting-period"
+                        target="_blank"
+                      >
+                        Click here
+                      </a>{" "}
+                      to know more.
                     </div>
                   </HoverCardContent>
                 </HoverCard>

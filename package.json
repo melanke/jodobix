@@ -9,6 +9,8 @@
   },
   "scripts": {
     "gamerecycler": "yarn workspace @se-2/hardhat gamerecycler",
+    "gamerecycler:opSepolia": "yarn workspace @se-2/hardhat gamerecycler:opSepolia",
+    "gamerecycler:optimism": "yarn workspace @se-2/hardhat gamerecycler:optimism",
     "fillgame": "yarn workspace @se-2/hardhat fillgame",
     "account": "yarn workspace @se-2/hardhat account",
     "chain": "yarn workspace @se-2/hardhat chain",

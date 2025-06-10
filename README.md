@@ -70,18 +70,22 @@ This script places a bet on each empty option.
 
 ### 6. End the betting period
 
-There are two ways to end the betting period:
-
-#### a) Manually
-
-While logged in with a burner wallet, a "Close Game" button appears when the game reaches the minimum block. Click it and wait.
-
-#### b) Automatically
-
 Run the game recycler bot:
 
 ```sh
 yarn gamerecycler
+```
+
+OR
+
+```sh
+yarn gamerecycler:opSepolia
+```
+
+OR
+
+```sh
+yarn gamerecycler:optimism
 ```
 
 This bot automatically closes eligible games and creates new ones if no public open games exist.

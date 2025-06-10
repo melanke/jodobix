@@ -43,7 +43,7 @@ export const GameCard: React.FC<GameCardProps> = ({ gameId, onNavigate }) => {
           </div>
           <div>
             {!hasAllNumbersBet
-              ? "There are numbers without bets!"
+              ? "There are animals without bets!"
               : timeLeft === BigInt(0)
                 ? game?.bettingPeriodEnded
                   ? `Drawn number: ${game?.drawnNumber}`

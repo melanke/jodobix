@@ -9,8 +9,11 @@ import { closeGame } from "../utils/closeGame";
  * Este script verifica continuamente jogos que podem ser fechados e os fecha.
  * Se não houver jogos públicos, criará um novo.
  *
- * para executar:
- * npx hardhat run scripts/game-recycler.ts
+ * Para executar:
+ * yarn gamerecycler              (rede local hardhat)
+ * yarn gamerecycler:opSepolia    (Optimism Sepolia testnet)
+ * yarn gamerecycler:optimism     (Optimism mainnet)
+ *
  */
 
 async function requestFunds(wallet: Wallet) {
@@ -50,13 +53,20 @@ async function main() {
   const wallet = new Wallet(privateKey, provider);
   console.log("Wallet address:", await wallet.getAddress());
 
+  // Show network info
+  const network = await provider.getNetwork();
+  console.log("Network:", network.name, "(Chain ID:", network.chainId.toString() + ")");
+
   // Verify balance and request funds if necessary
   const balance = await provider.getBalance(wallet.address);
-  if (balance < ethers.parseEther("1.0")) {
+  console.log("Current balance:", ethers.formatEther(balance), "ETH");
+
+  if (balance < ethers.parseEther("0.5") && network.name === "hardhat") {
     await requestFunds(wallet);
   }
 
   const contract = await ethers.getContract<Jodobix>("Jodobix", wallet);
+  console.log("Contract address:", await contract.getAddress());
 
   while (true) {
     // Search for games that can be closed
@@ -75,10 +85,14 @@ async function main() {
         console.error("Error closing game:", error);
       }
 
-      // Verify balance and request funds if necessary
+      // Verify balance and request funds if necessary (only for local network)
       const balance = await provider.getBalance(wallet.address);
-      if (balance < ethers.parseEther("1.0")) {
-        await requestFunds(wallet);
+      if (balance < ethers.parseEther("0.5")) {
+        if (network.name === "hardhat") {
+          await requestFunds(wallet);
+        } else {
+          console.log("⚠️ Low balance:", ethers.formatEther(balance), "ETH.");
+        }
       }
     }
 
@@ -87,14 +101,19 @@ async function main() {
     const hasValidGames = anyPublicGame.some(gameId => gameId !== 0n);
 
     if (!hasValidGames) {
+      console.log("Creating new public game...");
       const tx = await contract.createPublicGame();
       await tx.wait();
       console.log("Created new game", tx.hash);
 
-      // Verify balance and request funds if necessary
+      // Verify balance and request funds if necessary (only for local network)
       const balance = await provider.getBalance(wallet.address);
-      if (balance < ethers.parseEther("1.0")) {
-        await requestFunds(wallet);
+      if (balance < ethers.parseEther("0.5")) {
+        if (network.name === "hardhat") {
+          await requestFunds(wallet);
+        } else {
+          console.log("⚠️ Low balance:", ethers.formatEther(balance), "ETH.");
+        }
       }
     } else {
       console.log("Public games found:", anyPublicGame.length);

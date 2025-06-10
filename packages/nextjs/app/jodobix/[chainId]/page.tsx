@@ -145,8 +145,8 @@ const JodobixClientLogic: React.FC = () => {
         <h2 className="text-xl font-bold mb-2 font-encode-sans">How it works?</h2>
         <p className="mb-2">
           Jodobix is a betting game where you choose one of the 25 available animals. When all animals have received at
-          least one bet and the betting period ends, a number will be drawn and the winners who chose the winning animal
-          will split the prize proportionally to their bets.
+          least one bet and the betting period ends, an number will be drawn and the winners who chose the winning
+          animal will split the prize proportionally to their bets.
         </p>
         <p className="font-bold">
           Click on any game below to see the details and make your bet. The minimum bet is 0.001 ETH.

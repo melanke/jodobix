@@ -59,7 +59,7 @@ export const BetForm: React.FC<BetFormProps> = ({ gameId, selectedNumber, onBetP
       </div>
 
       {!selectedNumber ? (
-        <div className="tooltip tooltip-secondary cursor-not-allowed" data-tip="Select a number first">
+        <div className="tooltip tooltip-secondary cursor-not-allowed" data-tip="Select an animal first">
           <button type="submit" className="btn btn-primary w-full" disabled={true}>
             Place Bet
           </button>

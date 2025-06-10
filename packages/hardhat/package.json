@@ -2,7 +2,9 @@
   "name": "@se-2/hardhat",
   "version": "0.0.1",
   "scripts": {
-    "gamerecycler": "hardhat run scripts/gameRecycler.ts",
+    "gamerecycler": "HARDHAT_NETWORK=hardhat hardhat run scripts/gameRecycler.ts",
+    "gamerecycler:opSepolia": "HARDHAT_NETWORK=optimismSepolia hardhat run scripts/gameRecycler.ts",
+    "gamerecycler:optimism": "HARDHAT_NETWORK=optimism hardhat run scripts/gameRecycler.ts",
     "fillgame": "hardhat fillgame",
     "account": "hardhat run scripts/listAccount.ts",
     "chain": "hardhat node --network hardhat --no-deploy",
