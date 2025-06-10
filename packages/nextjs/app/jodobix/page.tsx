@@ -8,12 +8,16 @@ import { ArrowPathIcon } from "@heroicons/react/24/outline";
 const JodobixPage = () => {
   const router = useRouter();
   const { chain } = useAccount();
-  const { switchChain } = useSwitchChain();
+  const { switchChainAsync } = useSwitchChain();
+
+  const handleSwitchChain = async () => {
+    const defaultChainId = chain?.id || 10;
+    await switchChainAsync?.({ chainId: defaultChainId });
+    router.replace(`/jodobix/${defaultChainId}`);
+  };
 
   useEffect(() => {
-    const defaultChainId = chain?.id || 10;
-    switchChain?.({ chainId: defaultChainId });
-    router.replace(`/jodobix/${defaultChainId}`);
+    handleSwitchChain();
   }, [chain?.id, router]);
 
   return (

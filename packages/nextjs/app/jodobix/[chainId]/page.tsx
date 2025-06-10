@@ -25,7 +25,7 @@ const JodobixClientLogic: React.FC = () => {
   const [isDistributePrizesModalOpen, setIsDistributePrizesModalOpen] = useState(false);
   const [hasUnpaidPrizes, setHasUnpaidPrizes] = useState(false);
   const { data: blockNumber } = useBlockNumber();
-  const { switchChain } = useSwitchChain();
+  const { switchChain, isPending: isSwitchingChain } = useSwitchChain();
   const { chain } = useAccount();
 
   useEffect(() => {
@@ -114,19 +114,19 @@ const JodobixClientLogic: React.FC = () => {
       <div className="flex gap-2 mb-8">
         <button
           onClick={() => handleChainSwitch(10)}
-          className={`rounded-full px-4 py-1 border ${10 === chain?.id ? "bg-base-content border-base-content text-base-100" : "border-base-300"}`}
+          className={`rounded-full px-4 py-1 border ${10 === chainId ? "bg-base-content border-base-content text-base-100" : "border-base-300"}`}
         >
           Play for Real
         </button>
         <button
           onClick={() => handleChainSwitch(11155420)}
-          className={`rounded-full px-4 py-1 border ${10 !== chain?.id ? "bg-base-content border-base-content text-base-100" : "border-base-300"}`}
+          className={`rounded-full px-4 py-1 border ${10 !== chainId ? "bg-base-content border-base-content text-base-100" : "border-base-300"}`}
         >
           Play for Fun
         </button>
       </div>
       <div className="flex flex-wrap justify-between items-center mb-8">
-        <h1 className="text-4xl font-bold font-encode-sans">Jodobix {10 === chain?.id ? "for Real" : "for Fun"}</h1>
+        <h1 className="text-4xl font-bold font-encode-sans">Jodobix {10 === chainId ? "for Real" : "for Fun"}</h1>
         <div className="flex gap-2">
           <button
             onClick={handleCreatePublicGame}

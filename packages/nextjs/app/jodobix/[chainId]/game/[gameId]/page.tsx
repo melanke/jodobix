@@ -28,7 +28,7 @@ const GameDetailsPage = () => {
     address,
   });
   const defaultChainId = useChainId();
-  const { switchChain } = useSwitchChain();
+  const { switchChain, isPending } = useSwitchChain();
   const { chain } = useAccount();
   const router = useRouter();
 

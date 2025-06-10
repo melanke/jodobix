@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useRef, useState } from "react";
 import { Balance } from "../Balance";
 import { AddressInfoDropdown } from "./AddressInfoDropdown";
 import { AddressQRCodeModal } from "./AddressQRCodeModal";
@@ -22,6 +23,7 @@ export const PrivyCustomConnectButton = () => {
   const { login, authenticated, ready, logout } = usePrivy();
   const account = useAccount();
   const chainId = useChainId();
+
   const chain = extractChain({
     chains: wagmiConfig.chains,
     id: chainId as 1 | 10 | 11155420,
@@ -41,10 +43,6 @@ export const PrivyCustomConnectButton = () => {
     },
   });
 
-  if (!ready) {
-    return <span className="loading loading-spinner loading-sm"></span>;
-  }
-
   const handleConnect = async () => {
     // If user is authenticated but has no wallet connected, logout first
     if (authenticated && !account.address) {
@@ -53,12 +51,12 @@ export const PrivyCustomConnectButton = () => {
     await login();
   };
 
-  // Show loading while we don't have a valid wallet address
-  if (!account.address) {
+  if (!ready || account.isConnecting || account.isReconnecting) {
     return <span className="loading loading-spinner loading-sm"></span>;
   }
 
-  if (!authenticated) {
+  // If not authenticated, show connect button
+  if (!authenticated || (authenticated && !account.address)) {
     return (
       <button className="btn btn-primary btn-sm" onClick={handleConnect} type="button">
         Connect Wallet

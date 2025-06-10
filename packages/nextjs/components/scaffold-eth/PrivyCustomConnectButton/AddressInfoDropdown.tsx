@@ -4,6 +4,7 @@ import { usePrivy } from "@privy-io/react-auth";
 import CopyToClipboard from "react-copy-to-clipboard";
 import { getAddress } from "viem";
 import { Address } from "viem";
+import { useDisconnect } from "wagmi";
 import {
   ArrowLeftOnRectangleIcon,
   ArrowTopRightOnSquareIcon,
@@ -32,6 +33,7 @@ export const AddressInfoDropdown = ({
   displayName,
   blockExplorerAddressLink,
 }: AddressInfoDropdownProps) => {
+  const { disconnect } = useDisconnect();
   const { logout } = usePrivy();
   const checkSumAddress = getAddress(address);
 
@@ -44,6 +46,11 @@ export const AddressInfoDropdown = ({
     dropdownRef.current?.removeAttribute("open");
   };
   useOutsideClick(dropdownRef, closeDropdown);
+
+  const logoutHandler = () => {
+    disconnect();
+    logout();
+  };
 
   return (
     <>
@@ -125,7 +132,7 @@ export const AddressInfoDropdown = ({
             <button
               className="menu-item text-error btn-sm !rounded-xl flex gap-3 py-3"
               type="button"
-              onClick={() => logout()}
+              onClick={logoutHandler}
             >
               <ArrowLeftOnRectangleIcon className="h-6 w-4 ml-2 sm:ml-0" /> <span>Disconnect</span>
             </button>
