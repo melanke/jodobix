@@ -1,10 +1,11 @@
-import React from "react";
+import React, { useMemo } from "react";
 import Image from "next/image";
-import { PrizePaymentInfo } from "./PrizePaymentInfo";
 import { formatEther } from "viem";
 import { InformationCircleIcon } from "@heroicons/react/24/outline";
-import { HoverCard, HoverCardContent, HoverCardTrigger } from "~~/components/ui/hover-card";
 import { useScaffoldReadContract, useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
+import { useTargetNetwork } from "~~/hooks/scaffold-eth/useTargetNetwork";
+import { usePrizePayments } from "~~/hooks/usePrizePayments";
+import { getBlockExplorerTxLink } from "~~/utils/scaffold-eth/networks";
 
 interface BetCardProps {
   betId: bigint;
@@ -12,6 +13,8 @@ interface BetCardProps {
 }
 
 export const BetCard: React.FC<BetCardProps> = ({ betId, drawnNumber }) => {
+  const { targetNetwork } = useTargetNetwork();
+
   const { data: bet, refetch: refetchBet } = useScaffoldReadContract({
     contractName: "Jodobix",
     functionName: "getBet",
@@ -29,6 +32,11 @@ export const BetCard: React.FC<BetCardProps> = ({ betId, drawnNumber }) => {
     },
   });
 
+  const { data: prizePaymentedEvents } = usePrizePayments({
+    betId: betId.toString(),
+    enabled: !!betId,
+  });
+
   const { writeContractAsync } = useScaffoldWriteContract("Jodobix");
 
   const requestPrizePayment = async () => {
@@ -38,6 +46,12 @@ export const BetCard: React.FC<BetCardProps> = ({ betId, drawnNumber }) => {
     });
     await refetchBet();
   };
+
+  const explorerLink = useMemo(() => {
+    if (!prizePaymentedEvents || prizePaymentedEvents.length === 0) return "";
+    const { transactionHash } = prizePaymentedEvents[0] as any;
+    return getBlockExplorerTxLink(targetNetwork.id, transactionHash);
+  }, [prizePaymentedEvents, targetNetwork.id]);
 
   return (
     <div className="flex items-center gap-4 bg-base-300">
@@ -74,14 +88,14 @@ export const BetCard: React.FC<BetCardProps> = ({ betId, drawnNumber }) => {
         </button>
       )}
       {bet?.prizeIsPaid && (
-        <HoverCard>
-          <HoverCardTrigger className="cursor-pointer text-sm hover:underline">
-            Prize paid <InformationCircleIcon className="inline h-4 w-4" />
-          </HoverCardTrigger>
-          <HoverCardContent side="left" className="w-50">
-            <PrizePaymentInfo betId={betId} />
-          </HoverCardContent>
-        </HoverCard>
+        <a
+          href={explorerLink}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="cursor-pointer text-sm hover:underline text-primary"
+        >
+          Prize paid <InformationCircleIcon className="inline h-4 w-4" />
+        </a>
       )}
     </div>
   );

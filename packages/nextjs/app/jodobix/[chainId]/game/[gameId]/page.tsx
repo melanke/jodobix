@@ -13,6 +13,7 @@ import { useAccount, useChainId, useSwitchChain } from "wagmi";
 import { ArrowLeftIcon, ArrowPathIcon, InformationCircleIcon, ShareIcon } from "@heroicons/react/24/outline";
 import { Address } from "~~/components/scaffold-eth";
 import { HoverCard, HoverCardContent, HoverCardTrigger } from "~~/components/ui/hover-card";
+import animalNames from "~~/const/animalNames";
 import { useScaffoldReadContract, useWatchBalance } from "~~/hooks/scaffold-eth";
 import { useBetsPlaced } from "~~/hooks/useBetPlaceds";
 
@@ -226,7 +227,7 @@ const GameDetailsPage = () => {
               "Waiting for bets on all animals"
             ) : game?.bettingPeriodEnded ? (
               <span className="font-bold bg-secondary text-secondary-content p-1 rounded-md">
-                Drawn number: {game?.drawnNumber}
+                Drawn animal: {animalNames[game?.drawnNumber as keyof typeof animalNames]}
               </span>
             ) : showCloseBtn ? (
               <button onClick={handleCloseGame} disabled={closingGame} className="btn btn-sm btn-outline btn-primary">

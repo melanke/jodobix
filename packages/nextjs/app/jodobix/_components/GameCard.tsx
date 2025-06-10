@@ -4,6 +4,7 @@ import React from "react";
 import { formatEther } from "viem";
 import { ChevronDoubleRightIcon } from "@heroicons/react/24/outline";
 import { Address } from "~~/components/scaffold-eth";
+import animalNames from "~~/const/animalNames";
 import { useScaffoldReadContract } from "~~/hooks/scaffold-eth";
 
 interface GameCardProps {
@@ -46,7 +47,7 @@ export const GameCard: React.FC<GameCardProps> = ({ gameId, onNavigate }) => {
               ? "There are animals without bets!"
               : timeLeft === BigInt(0)
                 ? game?.bettingPeriodEnded
-                  ? `Drawn number: ${game?.drawnNumber}`
+                  ? `Drawn animal: ${animalNames[game?.drawnNumber as keyof typeof animalNames]}`
                   : "About to end"
                 : `Estimated end: ${timeLeft?.toString()} blocks`}
           </div>

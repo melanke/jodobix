@@ -5,6 +5,7 @@ import { DismissibleAlert } from "./DismissibleAlert";
 import { formatEther } from "viem";
 import { useAccount } from "wagmi";
 import { Address } from "~~/components/scaffold-eth";
+import animalNames from "~~/const/animalNames";
 import { useScaffoldReadContract, useScaffoldWriteContract } from "~~/hooks/scaffold-eth";
 import { useBetsPlaced } from "~~/hooks/useBetPlaceds";
 import { useEndsOfBettingPeriod } from "~~/hooks/useEndsOfBettingPeriod";
@@ -58,7 +59,7 @@ const WinningBetItem: React.FC<{
 
   return (
     <div className={shouldShow ? "block" : "hidden"}>
-      <div className="flex items-center justify-between space-x-4 p-2 border rounded-lg bg-base-200">
+      <div className="flex items-center justify-between space-x-4 p-2 border bg-base-200">
         <div className="flex flex-col">
           <span>Bet ID: {betId.toString()}</span>
           <span>Prize: {formatEther(prize || 0n)} ETH</span>
@@ -117,9 +118,9 @@ const EndedGameItem: React.FC<{
 
   return (
     <div className={shouldShow ? "block" : "hidden"}>
-      <div className="mb-6 p-4 border rounded-xl bg-base-100">
+      <div className="mb-6 p-4 border bg-base-100">
         <h4 className="text-lg font-semibold mb-4 font-encode-sans">
-          Game {gameId.toString()} - Drawn Number: {drawnNumber}
+          Game {gameId.toString()} - Drawn Animal: {animalNames[drawnNumber as keyof typeof animalNames]}
         </h4>
         <div className="space-y-2">
           {validBets.map(bet => (
@@ -188,7 +189,7 @@ export const DistributePrizesModal: React.FC<DistributePrizesModalProps> = ({
           ✕
         </button>
         <h3 className="font-bold text-lg mb-4 font-encode-sans">Distribute Prizes</h3>
-        <DismissibleAlert id="distribute-prizes" className="bg-base-300/50 rounded-lg mb-8 border border-primary/50">
+        <DismissibleAlert id="distribute-prizes" className="bg-base-300/50 mb-8 border border-primary/50">
           <p>This page allows you to distribute prizes to the winners of the games.</p>
           <p>
             The winners can always see and claim their prizes, but sometimes they are distracted and forget to claim
