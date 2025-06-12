@@ -242,8 +242,8 @@ const GameDetailsPage = () => {
                   </HoverCardTrigger>
                   <HoverCardContent className="bg-base-100 text-base-content border-base-300">
                     <div className="w-50">
-                      The game will be closed very soon. Anyone can close the game and receive a reward, but it's an
-                      advanced feature.{" "}
+                      The game will be closed very soon. Anyone can close the game and receive a reward, but it&apos;s
+                      an advanced feature.{" "}
                       <a
                         href="https://github.com/melanke/jodobix?tab=readme-ov-file#6-end-the-betting-period"
                         target="_blank"
