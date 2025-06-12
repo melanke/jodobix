@@ -42,6 +42,9 @@ const JodobixClientLogic: React.FC = () => {
     contractName: "Jodobix",
     functionName: "getPublicAvailableGames",
     watch: true,
+    query: {
+      enabled: !!address,
+    },
   });
 
   const {
@@ -70,11 +73,17 @@ const JodobixClientLogic: React.FC = () => {
     functionName: "getPrivateGameInvitations",
     args: [address],
     watch: true,
+    query: {
+      enabled: !!address,
+    },
   });
 
   const { data: publicAvailableGamesCount } = useScaffoldReadContract({
     contractName: "Jodobix",
     functionName: "publicAvailableGamesCount",
+    query: {
+      enabled: !!address,
+    },
   });
 
   const { data: jodobixContractInfo } = useDeployedContractInfo("Jodobix");
@@ -108,6 +117,12 @@ const JodobixClientLogic: React.FC = () => {
   const handleOpenGame = (gameId: bigint) => {
     router.push(`/jodobix/${chainId}/game/${gameId.toString()}`);
   };
+
+  if (!address) {
+    return (
+      <div className="text-center w-full max-w-7xl mx-auto px-6 lg:px-10 py-8 lg:py-12">Please connect your wallet</div>
+    );
+  }
 
   return (
     <div className="w-full max-w-7xl mx-auto flex flex-col px-6 lg:px-10 py-8 lg:py-12">

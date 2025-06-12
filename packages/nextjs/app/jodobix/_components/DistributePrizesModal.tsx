@@ -137,7 +137,6 @@ export const DistributePrizesModal: React.FC<DistributePrizesModalProps> = ({
   onClose,
   onHasUnpaidPrizesChange,
 }) => {
-  const { chainId } = useAccount();
   const [gamesWithUnpaidBets, setGamesWithUnpaidBets] = React.useState<Set<bigint>>(new Set());
 
   const {
