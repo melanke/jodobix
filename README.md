@@ -1,7 +1,5 @@
 # Jodobix
 
-_(codename, will change)_
-
 ## About
 
 This project is a proof of concept (POC) for a fully decentralized betting game on Ethereum that doesn't rely on external parties.
